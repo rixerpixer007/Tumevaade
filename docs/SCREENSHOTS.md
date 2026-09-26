@@ -1,14 +1,14 @@
-# Sinu Stuudiumi README visuaalid
+# Tumevaate README visuaalid
 
 Staatus: päisebänner, allalaadimisnupud, adaptiivne cross-device seeria ja viie teema galerii on valmis
 
-See dokument on Sinu Stuudiumi README visuaalide kehtiv tootmisspetsifikatsioon. LibreTube'i README-d kasutati ainult hierarhia, rütmi ja varade eesmärgi referentsina. Kõik Sinu Stuudiumi kompositsioonid, tekstid, värvid ja paigutused on originaalsed.
+See dokument on Tumevaate README visuaalide kehtiv tootmisspetsifikatsioon. LibreTube'i README-d kasutati ainult hierarhia, rütmi ja varade eesmärgi referentsina. Kõik Tumevaate kompositsioonid, tekstid, värvid ja paigutused on originaalsed.
 
 ## Varad
 
 | ID      | Fail                                                          | Sisu                                                 | Mõõt        | Maht      |
 | ------- | ------------------------------------------------------------- | ---------------------------------------------------- | ----------- | --------- |
-| VIS-01  | `assets/readme/github-banner.webp`                            | README päisebänner                                   | 3240 × 1080 | 104 434 B |
+| VIS-01  | `assets/readme/github-banner.webp`                            | README päisebänner                                   | 3240 × 1080 | 50 664 B  |
 | VIS-02A | `assets/readme/download-github.png`                           | GitHub Releasesi allalaadimisnupp                    | 646 × 250   | 16 470 B  |
 | VIS-02B | `assets/readme/download-google-play.png`                      | Google Play allalaadimisnupp tulevase poeviite jaoks | 646 × 250   | 16 279 B  |
 | VIS-02C | `assets/readme/download-chrome-web-store.png`                 | Chrome Web Store'i nupp tulevase poeviite jaoks      | 646 × 250   | 15 975 B  |
@@ -16,8 +16,8 @@ See dokument on Sinu Stuudiumi README visuaalide kehtiv tootmisspetsifikatsioon.
 | VIS-02E | `assets/readme/download-safari-extension.png`                 | Safari laienduse nupp tulevase poeviite jaoks        | 646 × 250   | 20 318 B  |
 | VIS-06  | `assets/readme/screenshots/cross-device-home-wide.webp`       | Põhivaade arvutis ja telefonis, lai variant          | 1920 × 1080 | 162 832 B |
 | VIS-07  | `assets/readme/screenshots/cross-device-home-narrow.webp`     | Põhivaade arvutis ja telefonis, kitsas variant       | 1080 × 1520 | 118 160 B |
-| VIS-08  | `assets/readme/screenshots/cross-device-settings-wide.webp`   | Seaded arvutis ja telefonis, lai variant             | 1920 × 1080 | 82 190 B  |
-| VIS-09  | `assets/readme/screenshots/cross-device-settings-narrow.webp` | Seaded arvutis ja telefonis, kitsas variant          | 1080 × 1520 | 65 864 B  |
+| VIS-08  | `assets/readme/screenshots/cross-device-settings-wide.webp`   | Seaded arvutis ja telefonis, lai variant             | 1920 × 1080 | 71 822 B  |
+| VIS-09  | `assets/readme/screenshots/cross-device-settings-narrow.webp` | Seaded arvutis ja telefonis, kitsas variant          | 1080 × 1520 | 56 284 B  |
 | VIS-10  | `assets/readme/gallery/graphite-mint.webp`                    | Grafiit ja münt galerii kaart                        | 1920 × 1200 | 113 860 B |
 | VIS-11  | `assets/readme/gallery/graphite-blue.webp`                    | Grafiit ja sinine galerii kaart                      | 1920 × 1200 | 110 294 B |
 | VIS-12  | `assets/readme/gallery/obsidian-red.webp`                     | Obsidiaan ja punane galerii kaart                    | 1920 × 1200 | 111 830 B |
@@ -26,7 +26,7 @@ See dokument on Sinu Stuudiumi README visuaalide kehtiv tootmisspetsifikatsioon.
 
 Kõik failid on sRGB-värviruumis ja ilma EXIF- või XMP-metaandmeteta. Kinnitatud cross-device seeria kasutab stabiilseid failinimesid. Galerii viis pilti asuvad juurkausta `SCREEN_SHOT.md` lehel ning iga pilt avaneb sealt täissuuruses.
 
-VIS-02B kuni VIS-02E hoitakse valmis tulevaste ametlike poelehtede jaoks. Neid ei lisata README-sse ega lingita enne, kui vastav Sinu Stuudiumi avalik poeleht on päriselt olemas. README kasutab praegu ainult VIS-02A nuppu ja GitHub Releasesi linki.
+VIS-02B kuni VIS-02E hoitakse valmis tulevaste ametlike poelehtede jaoks. Neid ei lisata README-sse ega lingita enne, kui vastav Tumevaate avalik poeleht on päriselt olemas. README kasutab praegu ainult VIS-02A nuppu ja GitHub Releasesi linki.
 
 ## README kompositsioon
 
@@ -160,23 +160,23 @@ Kõigi kaartide põhigradient on 135°, peatustega 0%, 58% ja 100%. Selle peal o
 
 ## Päisebänner
 
-VIS-01 on originaalne 3 : 1 kompositsioon, mis kasutab muutmata faili `assets/brand/sinu-stuudium-mark.png` ning tekste `Sinu Stuudium` ja `Stuudium sinu moodi.`. Bänneril ei ole aktsendi- ega gradientjoont, kuvatõmmiseid, seadmemakette, ametlikku Stuudiumi või TORGi brändingut ega vesimärki.
+VIS-01 on originaalne 3 : 1 kompositsioon, mis kasutab muutmata faili `assets/brand/tumevaade-mark.png` ning tekste `Tumevaade` ja `Tuttav keskkond, uus vaade.`. Bänneril ei ole aktsendi- ega gradientjoont, kuvatõmmiseid, seadmemakette, ametlikku Stuudiumi või TORGi brändingut ega vesimärki.
 
 ## Allalaadimisnupud
 
-Kõik viis nuppu kasutavad sama mõõtu, sisemist rütmi ja tumedat Sinu Stuudiumi stiili. Platvormi märgid säilitavad oma tavapärase kuju ja värvikäsitluse; nende ümber ei lisata valget taustaplaati ega pöörata märgi värve ümber.
+Kõik viis nuppu kasutavad sama mõõtu, sisemist rütmi ja tumedat Tumevaate stiili. Platvormi märgid säilitavad oma tavapärase kuju ja värvikäsitluse; nende ümber ei lisata valget taustaplaati ega pöörata märgi värve ümber.
 
 Nupud on navigeerimisvarad, mitte väide, et rakendus on igas poes juba saadaval. VIS-02B kuni VIS-02E aktiveeritakse alles vastava ametliku poe-URL-i olemasolul.
 
 ## Alt-tekstid
 
-| Vara               | Alt-tekst                                                                  |
-| ------------------ | -------------------------------------------------------------------------- |
-| VIS-01             | `Sinu Stuudium – Stuudium sinu moodi.`                                     |
-| VIS-02A            | `Laadi Sinu Stuudium GitHubist alla`                                       |
-| VIS-06 ja VIS-07   | `Sinu Stuudiumi põhivaade arvutis ja telefonis Graphite Minti kujundusega` |
-| VIS-08 ja VIS-09   | `Sinu Stuudiumi kujunduse valimine arvutis ja telefonis`                   |
-| VIS-10 kuni VIS-14 | `Sinu Stuudiumi põhivaade kujundusega „[teema nimi]”`                      |
+| Vara               | Alt-tekst                                                             |
+| ------------------ | --------------------------------------------------------------------- |
+| VIS-01             | `Tumevaade – tuttav keskkond, uus vaade.`                             |
+| VIS-02A            | `Laadi Tumevaade GitHubist alla`                                      |
+| VIS-06 ja VIS-07   | `Tumevaate põhivaade arvutis ja telefonis Graphite Minti kujundusega` |
+| VIS-08 ja VIS-09   | `Tumevaate kujunduse valimine arvutis ja telefonis`                   |
+| VIS-10 kuni VIS-14 | `Tumevaate põhivaade kujundusega „[teema nimi]”`                      |
 
 Pilt ei tohi olla ainus koht, kus oluline teave esineb. Installimine, saadavus, omadused ja privaatsus peavad jääma README-s ka tavatekstina arusaadavaks.
 

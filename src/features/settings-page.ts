@@ -225,8 +225,8 @@ export function mountSettingsPage({
       setSettingsControlsDisabled(false);
       setStatus(
         settings.enhancementEnabled
-          ? "Sinu Stuudiumi kujundus on sisse lülitatud."
-          : "Sinu Stuudiumi kujundus on välja lülitatud.",
+          ? "Tumevaate kujundus on sisse lülitatud."
+          : "Tumevaate kujundus on välja lülitatud.",
       );
     } catch (error) {
       if (cleanedUp) return;
@@ -270,7 +270,7 @@ export function mountSettingsPage({
         result === "update-available"
           ? "Uus versioon on saadaval."
           : result === "up-to-date"
-            ? "Sinu Stuudium on ajakohane."
+            ? "Tumevaade on ajakohane."
             : "Uuendusi ei õnnestunud kontrollida. Proovi hiljem uuesti.";
     } catch (error) {
       console.error("Unable to check for app updates", error);
@@ -296,8 +296,8 @@ export function mountSettingsPage({
       await settingsStore.set(currentSettings);
       setStatus(
         elements.enabledInput.checked
-          ? "Sinu Stuudiumi kujundus on sisse lülitatud."
-          : "Sinu Stuudiumi kujundus on välja lülitatud.",
+          ? "Tumevaate kujundus on sisse lülitatud."
+          : "Tumevaate kujundus on välja lülitatud.",
       );
     } catch (error) {
       console.error("Unable to save enhancement settings", error);

@@ -1,15 +1,15 @@
-# Sinu Stuudiumi brändijuhis
+# Tumevaate brändijuhis
 
-Staatus: kinnitatud tööbränd esimese beeta ettevalmistamiseks
+Staatus: kinnitatud bränd esimese beeta ettevalmistamiseks
 
-Viimati uuendatud: 2026-09-10
+Viimati uuendatud: 2026-09-26
 
-See fail on Sinu Stuudiumi nime, sõnumite ja avaliku tooni lähtekoht. Kuvatav nimi võib tulevikus muutuda, kuid ülejäänud sõnumid peavad jääma võimalikult nimekindlaks.
+See fail on Tumevaate nime, sõnumite ja avaliku tooni lähtekoht.
 
 ## Brändi alus
 
-- **Nimi:** Sinu Stuudium
-- **Tunnuslause:** Stuudium sinu moodi.
+- **Nimi:** Tumevaade
+- **Tunnuslause:** Tuttav keskkond, uus vaade.
 - **Põhikirjeldus:** Kohanda TORG Stuudium enda moodi – läbimõeldud tume kujundus ja praktilised täiustused.
 - **Loomislugu:** TORGi õpilaselt TORGi õpilastele.
 - **Arendaja:** rixerpixer007
@@ -21,17 +21,17 @@ Androidi rakendus ja brauserilaiendus kasutavad sama kuvatavat nime. Platvormi l
 
 Igapäevane koolikeskkond peaks kohanduma kasutajaga, mitte vastupidi.
 
-Sinu Stuudiumi visioon on Stuudium, mis tundub isiklikum, mugavam ja usaldusväärsem, säilitades samal ajal tuttava põhikogemuse ja austades kasutaja privaatsust.
+Tumevaate visioon on Stuudium, mis tundub isiklikum, mugavam ja usaldusväärsem, säilitades samal ajal tuttava põhikogemuse ja austades kasutaja privaatsust.
 
 ## Sihtrühm
 
-Sinu Stuudium on loodud TORGi õpilastele ja lähtub õpilase igapäevasest Stuudiumi-kogemusest. Lapsevanema ja õpetaja vaateid ei nimetata toetatuks enne nende eraldi kontrollimist.
+Tumevaade on loodud TORGi õpilastele ja lähtub õpilase igapäevasest Stuudiumi-kogemusest. Lapsevanema ja õpetaja vaateid ei nimetata toetatuks enne nende eraldi kontrollimist.
 
 ## Suhe Stuudiumi ja TORGiga
 
 Kasuta avalikes materjalides järgmist selgitust:
 
-> Sinu Stuudium on sõltumatu ja mitteametlik projekt TORG Stuudiumile. See ei ole Stuudiumi ega TORGi ametlik toode.
+> Tumevaade on sõltumatu ja mitteametlik projekt TORG Stuudiumile. See ei ole Stuudiumi ega TORGi ametlik toode.
 
 Ära kasuta ametlikku Stuudiumi või TORGi logo ilma selge loata. Ära nimeta projekti ametlikuks Stuudiumi rakenduseks, uueks Stuudiumi kliendiks ega Stuudiumi asenduseks.
 
@@ -39,11 +39,11 @@ Kasuta avalikes materjalides järgmist selgitust:
 
 ### Brauserilaiendus
 
-Sinu Stuudium on TORGi õpilase loodud mitteametlik brauserilaiendus, mis kohandab päris TORG Stuudiumi välimust ja kasutuskogemust. Vali endale sobiv tume kujundus ning kasuta praktilisi täiustusi otse oma brauseris.
+Tumevaade on TORGi õpilase loodud mitteametlik brauserilaiendus, mis kohandab päris TORG Stuudiumi välimust ja kasutuskogemust. Vali endale sobiv tume kujundus ning kasuta praktilisi täiustusi otse oma brauseris.
 
 ### Android
 
-Sinu Stuudium on TORGi õpilase loodud mitteametlik Androidi rakendus, mis avab päris TORG Stuudiumi tuttavas, kuid kohandatud keskkonnas. Kasuta läbimõeldud tumedat kujundust ja praktilisi täiustusi ka telefonis.
+Tumevaade on TORGi õpilase loodud mitteametlik Androidi rakendus, mis avab päris TORG Stuudiumi tuttavas, kuid kohandatud keskkonnas. Kasuta läbimõeldud tumedat kujundust ja praktilisi täiustusi ka telefonis.
 
 Mõlema platvormi esimene avalik väljalase kannab beetastaatust. Sõna „beeta” ei kuulu tootenime sisse; see kuvatakse väljalaske olekus ja märkmetes.
 
@@ -62,13 +62,13 @@ Avalikus tutvustuses kasuta sellist järjekorda:
 
 Lühike avalik sõnastus:
 
-> Sinu kooliandmeid ei koguta ega saadeta arendajale. Sinu Stuudium salvestab ainult vajalikud seaded sinu seadmesse.
+> Sinu kooliandmeid ei koguta ega saadeta arendajale. Tumevaade salvestab ainult vajalikud seaded sinu seadmesse.
 
 Täielikus selgituses täpsusta, et sisselogimist, lehe sisu ja kooliandmeid töötleb päris Stuudium. Ära väida, et andmed ei lahku kunagi kasutaja seadmest, sest Stuudiumi teenus suhtleb oma serveritega.
 
 ## Hääl ja kirjutamisstiil
 
-Sinu Stuudium on rahulik, läbimõeldud ja inimlik.
+Tumevaade on rahulik, läbimõeldud ja inimlik.
 
 - Kasuta lihtsat ja loomulikku eesti keelt.
 - Ole sõbralik, kuid mitte lapsik.
@@ -84,12 +84,13 @@ Sinu Stuudium on rahulik, läbimõeldud ja inimlik.
 - Kasuta süsteemset sans-serif kirja; eraldi veebifonti ei lisata.
 - Kujundus on puhas, mõõdukalt ümar ja rahulik.
 - Väldi neoonhelendusi, liigseid gradiente, maskotte ja generatiivse tehnoloogia esteetikat.
+- Tumevaate märk koosneb kahest nihutatud ümardatud vaateraamist. Märgile ei lisata tähti ega Stuudiumi või TORGi sümboolikat.
 
-Lõplik märk on projektis kolme 1024 × 1024 PNG-lähtevarana:
+Lõpliku märgi vektorallikas on `assets/brand/tumevaade-mark.svg`. Sellest genereeritakse kolm 1024 × 1024 PNG-lähtevara:
 
-- `assets/brand/sinu-stuudium-dark.png` tumeda taustaga kasutuseks;
-- `assets/brand/sinu-stuudium-light.png` heleda taustaga kasutuseks;
-- `assets/brand/sinu-stuudium-mark.png` läbipaistva taustaga märgina.
+- `assets/brand/tumevaade-dark.png` tumeda taustaga kasutuseks;
+- `assets/brand/tumevaade-light.png` heleda taustaga kasutuseks;
+- `assets/brand/tumevaade-mark.png` läbipaistva taustaga märgina.
 
 Platvormide väiksemad ikoonid genereeritakse nendest lähtevaradest. Märki ei muudeta generatiivse pilditöötlusega ega asendata ametlikku Stuudiumi märki jäljendava variandiga.
 
@@ -103,3 +104,7 @@ Androidi väljalaske ID jääb kuvatavast brändinimest sõltumatuks. Debug-vers
 `.debug` järelliide võimaldab testversiooni ja väljalaskeversiooni samal seadmel
 korraga kasutada. GitHubi repositooriumi nime ei muudeta esimese rebrändimise
 käigus, et säilitada olemasolevad lingid ja uuendusteekond.
+
+Olemasoleva väljalaske allkirjastamise keskkonnamuutujad, võtme alias ja kohalik
+võtmehoidla asukoht jäävad samuti tehnilise järjepidevuse tõttu muutmata. Need ei
+ole kasutajale kuvatav bränding.

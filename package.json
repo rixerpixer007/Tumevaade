@@ -1,8 +1,8 @@
 {
-  "name": "sinu-stuudium",
+  "name": "tumevaade",
   "version": "0.1.0",
   "private": true,
-  "description": "Sinu Stuudiumi jagatud kujundus ning Chromiumi brauserilaiendus.",
+  "description": "Tumevaate jagatud kujundus ning Chromiumi brauserilaiendus.",
   "type": "module",
   "scripts": {
     "postinstall": "node scripts/build-theme.mjs && wxt prepare",

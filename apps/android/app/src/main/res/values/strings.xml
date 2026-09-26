@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Sinu Stuudium</string>
+    <string name="app_name">Tumevaade</string>
     <string name="asset_statements" translatable="false">[{\"include\": \"https://torg.ope.ee/.well-known/assetlinks.json\"}]</string>
     <string name="loading_stuudium">Stuudiumi laadimine…</string>
     <string name="load_error_title">Stuudiumi laadimine ebaõnnestus</string>
     <string name="load_error_body">Kontrolli internetiühendust ja proovi uuesti.</string>
     <string name="retry">Proovi uuesti</string>
     <string name="webview_update_title">WebView vajab uuendamist</string>
-    <string name="webview_update_body">Sinu Stuudium vajab ajakohast Android System WebView’d või Google Chrome’i, et kujundus enne Stuudiumi kuvamist turvaliselt rakendada. Uuenda seda Google Plays ja ava rakendus uuesti.</string>
+    <string name="webview_update_body">Tumevaade vajab ajakohast Android System WebView’d või Google Chrome’i, et kujundus enne Stuudiumi kuvamist turvaliselt rakendada. Uuenda seda Google Plays ja ava rakendus uuesti.</string>
     <string name="app_update_title">Uus versioon on saadaval</string>
-    <string name="app_update_body">Sinu Stuudiumi versioon %1$s on saadaval. Uuenduse allalaadimiseks ava GitHubi allalaadimiste leht.</string>
+    <string name="app_update_body">Tumevaate versioon %1$s on saadaval. Uuenduse allalaadimiseks ava GitHubi allalaadimiste leht.</string>
     <string name="view_update">Vaata uuendust</string>
     <string name="later">Hiljem</string>
     <string name="close">Sulge</string>

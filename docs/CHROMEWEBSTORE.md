@@ -1,6 +1,6 @@
-# Chrome Web Store'i kirje — Sinu Stuudium
+# Chrome Web Store'i kirje — Tumevaade
 
-> Last updated: 2026-09-10
+> Last updated: 2026-09-26
 >
 > Status: Phase 2 draft. Do not submit until every owner-required field and asset below is complete.
 
@@ -11,7 +11,7 @@ This file is the copy-and-review source for the Chrome Web Store dashboard. The 
 
 **Extension name**
 
-Sinu Stuudium
+Tumevaade
 
 **Short description**
 
@@ -19,7 +19,7 @@ Kohanda TORG Stuudium enda moodi – läbimõeldud tume kujundus ja praktilised 
 
 **Detailed description**
 
-Sinu Stuudium on TORGi õpilase loodud mitteametlik brauserilaiendus, mis kohandab päris TORG Stuudiumi välimust ja kasutuskogemust. Vali endale sobiv tume kujundus ning kasuta praktilisi täiustusi otse oma brauseris.
+Tumevaade on TORGi õpilase loodud mitteametlik brauserilaiendus, mis kohandab päris TORG Stuudiumi välimust ja kasutuskogemust. Vali endale sobiv tume kujundus ning kasuta praktilisi täiustusi otse oma brauseris.
 
 OMADUSED
 • Läbimõeldud tume kujundus toetatud TORG Stuudiumi lehtedel.
@@ -34,7 +34,7 @@ KASUTAMINE
 3. Kujunduse valimiseks või täiustuse väljalülitamiseks ava laiendus brauseri tööriistaribalt või vali Stuudiumi peamenüüst „Teema seaded”.
 
 PRIVAATSUS
-Sinu kooliandmeid ei koguta ega saadeta arendajale. Sinu Stuudium salvestab ainult vajalikud seaded sinu seadmesse. Sisselogimist ja kooliandmeid töötleb päris Stuudium.
+Sinu kooliandmeid ei koguta ega saadeta arendajale. Tumevaade salvestab ainult vajalikud seaded sinu seadmesse. Sisselogimist ja kooliandmeid töötleb päris Stuudium.
 
 ÕIGUSED
 • Juurdepääs aadressile torg.ope.ee võimaldab rakendada kujundust ja seadete otseteed ainult toetatud kooli veebilehel.
@@ -60,14 +60,14 @@ Estonian.
 
 ## Graphics and assets
 
-| Asset                  | Required dimensions  | Status      | Planned content                                    |
-| ---------------------- | -------------------- | ----------- | -------------------------------------------------- |
-| Store icon             | 128×128 PNG          | Created     | Approved Sinu Stuudium mark; no Stuudium logo used |
-| Screenshot 1           | 1280×800 or 640×400  | Not created | Themed settings page with no student information   |
-| Screenshot 2           | 1280×800 or 640×400  | Not created | Sanitized or demonstration TORG dashboard          |
-| Screenshot 3           | 1280×800 or 640×400  | Optional    | Sanitized responsive view                          |
-| Small promotional tile | 440×280 PNG or JPEG  | Not created | Sinu Stuudium name, tagline, graphite, and mint    |
-| Marquee image          | 1400×560 PNG or JPEG | Optional    | Approved project branding                          |
+| Asset                  | Required dimensions  | Status      | Planned content                                  |
+| ---------------------- | -------------------- | ----------- | ------------------------------------------------ |
+| Store icon             | 128×128 PNG          | Created     | Approved Tumevaade mark; no Stuudium logo used   |
+| Screenshot 1           | 1280×800 or 640×400  | Not created | Themed settings page with no student information |
+| Screenshot 2           | 1280×800 or 640×400  | Not created | Sanitized or demonstration TORG dashboard        |
+| Screenshot 3           | 1280×800 or 640×400  | Optional    | Sanitized responsive view                        |
+| Small promotional tile | 440×280 PNG or JPEG  | Not created | Tumevaade name, tagline, graphite, and mint      |
+| Marquee image          | 1400×560 PNG or JPEG | Optional    | Approved project branding                        |
 
 The extension package contains separate 16×16, 32×32, 48×48, and 128×128 PNG icons generated from the approved dark logo. Every screenshot must avoid names, grades, attendance, messages, schedules, class membership, authentication details, and other student data.
 
@@ -124,7 +124,7 @@ The published policy must match the source and dashboard answers. It must state 
 
 ## Developer information
 
-- Publisher name: Sinu Stuudium — confirm against the account identity shown by the dashboard.
+- Publisher name: Tumevaade — confirm against the account identity shown by the dashboard.
 - Verified contact email: [OWNER REQUIRED]
 - Support URL or email: [OWNER REQUIRED]
 - Homepage URL: [OWNER REQUIRED]
@@ -133,9 +133,9 @@ Never place store credentials, payment information, recovery codes, identity doc
 
 ## Version history
 
-| Version | Date       | Changes                                                                   | Status |
-| ------- | ---------- | ------------------------------------------------------------------------- | ------ |
-| 0.1.0   | 2026-09-10 | First Sinu Stuudium beta with selectable dark designs and local settings. | Draft  |
+| Version | Date       | Changes                                                               | Status |
+| ------- | ---------- | --------------------------------------------------------------------- | ------ |
+| 0.1.0   | 2026-09-10 | First Tumevaade beta with selectable dark designs and local settings. | Draft  |
 
 ## Review notes
 

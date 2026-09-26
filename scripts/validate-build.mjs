@@ -55,11 +55,11 @@ const expectedIcons = {
 };
 assert(
   JSON.stringify(manifest.icons) === JSON.stringify(expectedIcons),
-  "Manifest icons do not match the approved Sinu Stuudium icon set",
+  "Manifest icons do not match the approved Tumevaade icon set",
 );
 assert(
   JSON.stringify(manifest.action?.default_icon) === JSON.stringify(expectedIcons),
-  "Toolbar icons do not match the approved Sinu Stuudium icon set",
+  "Toolbar icons do not match the approved Tumevaade icon set",
 );
 for (const iconPath of Object.values(expectedIcons)) {
   assert(files.includes(iconPath), `Packaged icon is missing: ${iconPath}`);

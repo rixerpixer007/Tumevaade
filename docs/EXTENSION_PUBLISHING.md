@@ -78,7 +78,7 @@ before upload.
 
 ### Text
 
-- **Name:** `Sinu Stuudium`. The manifest and listing must agree.
+- **Name:** `Tumevaade`. The manifest and listing must agree.
 - **Short description:** at most 132 characters. A suitable current draft is:
   `Kohanda TORG Stuudium enda moodi – läbimõeldud tume kujundus ja praktilised täiustused.`
 - **Detailed description:** explain the single purpose, that it works only on
@@ -225,7 +225,7 @@ The Git commands expose whitespace problems and unreviewed changes.
 For version 0.1.0, upload exactly:
 
 ```text
-.output/sinu-stuudium-0.1.0-chrome.zip
+.output/tumevaade-0.1.0-chrome.zip
 ```
 
 For a later version, the middle number changes to match `package.json`. Never
@@ -236,7 +236,7 @@ The project validator checks the ZIP directory itself and requires it to match
 the production build exactly. For a human-readable second inspection:
 
 ```sh
-unzip -l .output/sinu-stuudium-0.1.0-chrome.zip
+unzip -l .output/tumevaade-0.1.0-chrome.zip
 ```
 
 Confirm that `manifest.json` is at the ZIP root and that the archive contains

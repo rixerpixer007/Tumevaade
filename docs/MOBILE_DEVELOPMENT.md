@@ -203,7 +203,7 @@ apps/android/app/build/outputs/apk/debug/app-debug.apk
 
 This is signed automatically with a local debug key, uses the application ID
 `io.github.rixerpixer007.stuudium.debug`, and appears on the device as
-**Sinu Stuudium [DEBUG]**. It can therefore be installed beside the release app
+**Tumevaade [DEBUG]**. It can therefore be installed beside the release app
 without replacing it or sharing its WebView session and preferences. It is
 suitable only for development. No public release key or store credential
 belongs in this repository.

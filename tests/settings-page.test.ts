@@ -128,7 +128,7 @@ describe("shared settings page", () => {
 
     expect(appUpdates.checkForUpdates).toHaveBeenCalledOnce();
     expect(document.querySelector("#update-check-status")?.textContent).toBe(
-      "Sinu Stuudium on ajakohane.",
+      "Tumevaade on ajakohane.",
     );
     cleanup();
   });

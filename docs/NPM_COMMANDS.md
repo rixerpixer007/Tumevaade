@@ -61,9 +61,9 @@ You normally do not run this command directly.
 
 The three canonical 1024 x 1024 PNG masters are:
 
-- `assets/brand/sinu-stuudium-dark.png`;
-- `assets/brand/sinu-stuudium-light.png`;
-- `assets/brand/sinu-stuudium-mark.png`.
+- `assets/brand/tumevaade-dark.png`;
+- `assets/brand/tumevaade-light.png`;
+- `assets/brand/tumevaade-mark.png`.
 
 Replace the appropriate master files instead of editing smaller platform images
 directly. The transparent mark must retain an alpha channel.
@@ -174,7 +174,7 @@ source, documentation, dependency, environment, or source-map entries.
 The uploadable artifact is:
 
 ```text
-.output/sinu-stuudium-<version>-chrome.zip
+.output/tumevaade-<version>-chrome.zip
 ```
 
 The version comes from `package.json`. Packaging does not publish or upload the
@@ -243,7 +243,7 @@ apps/android/app/build/outputs/apk/debug/app-debug.apk
 
 The APK uses a local debug signature and the application ID
 `io.github.rixerpixer007.stuudium.debug`, and appears as
-**Sinu Stuudium [DEBUG]** so it can be installed beside the release app. It is
+**Tumevaade [DEBUG]** so it can be installed beside the release app. It is
 for development only.
 
 ### `npm run test:android`

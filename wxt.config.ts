@@ -12,7 +12,7 @@ export default defineConfig({
     },
   },
   manifest: {
-    name: "Sinu Stuudium",
+    name: "Tumevaade",
     description:
       "Kohanda TORG Stuudium enda moodi – läbimõeldud tume kujundus ja praktilised täiustused.",
     icons: {
@@ -25,7 +25,7 @@ export default defineConfig({
     permissions: ["storage", "scripting"],
     host_permissions: [...STUUDIUM_MATCHES],
     action: {
-      default_title: "Ava Sinu Stuudiumi seaded",
+      default_title: "Ava Tumevaate seaded",
       default_icon: {
         16: "icons/icon-16.png",
         32: "icons/icon-32.png",
