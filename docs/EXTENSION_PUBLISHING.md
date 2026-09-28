@@ -80,7 +80,7 @@ before upload.
 
 - **Name:** `Tumevaade`. The manifest and listing must agree.
 - **Short description:** at most 132 characters. A suitable current draft is:
-  `Kohanda TORG Stuudium enda moodi – läbimõeldud tume kujundus ja praktilised täiustused.`
+  `Tumevaade on TORG Stuudiumi mitteametlik lisa, mis pakub kohandatavat kujundust.`
 - **Detailed description:** explain the single purpose, that it works only on
   TORG Stuudium, how to open settings, what is stored locally, and the exact
   permissions. Do not advertise automatic system-following or light themes

@@ -10,7 +10,7 @@ See fail on Tumevaate nime, sõnumite ja avaliku tooni lähtekoht.
 
 - **Nimi:** Tumevaade
 - **Tunnuslause:** Tuttav keskkond, uus vaade.
-- **Põhikirjeldus:** Kohanda TORG Stuudium enda moodi – läbimõeldud tume kujundus ja praktilised täiustused.
+- **Põhikirjeldus:** Tumevaade on TORG Stuudiumi mitteametlik lisa, mis pakub kohandatavat kujundust.
 - **Loomislugu:** TORGi õpilaselt TORGi õpilastele.
 - **Arendaja:** rixerpixer007
 - **Keel:** kasutajale suunatud tekst on esialgu eesti keeles

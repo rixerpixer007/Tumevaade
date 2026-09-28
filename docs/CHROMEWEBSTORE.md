@@ -15,7 +15,7 @@ Tumevaade
 
 **Short description**
 
-Kohanda TORG Stuudium enda moodi – läbimõeldud tume kujundus ja praktilised täiustused.
+Tumevaade on TORG Stuudiumi mitteametlik brauserilaiendus, mis lisab kohandatava kujunduse
 
 **Detailed description**
 
