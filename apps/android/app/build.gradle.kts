@@ -44,8 +44,8 @@ android {
         applicationId = "io.github.rixerpixer007.stuudium"
         minSdk = 26
         targetSdk = 37
-        versionCode = 5
-        versionName = "0.1.1"
+        versionCode = 6
+        versionName = "0.1.2"
     }
 
     signingConfigs {
@@ -102,9 +102,6 @@ tasks.named("preBuild").configure {
 dependencies {
     implementation("androidx.activity:activity-ktx:1.13.0")
     implementation("androidx.core:core-ktx:1.19.0")
-    implementation("androidx.credentials:credentials:1.6.0-beta02")
-    implementation("androidx.credentials:credentials-play-services-auth:1.6.0-beta02")
-    implementation("androidx.fragment:fragment:1.9.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0")
     implementation("androidx.webkit:webkit:1.17.0")
 
