@@ -3,7 +3,7 @@ import { applyTheme, clearTheme } from "../../features/theme-selection";
 import { EnhancementRuntime } from "../../shared/lifecycle";
 import { detectStuudiumRoute } from "../../shared/routes";
 import { normalizeSettings, type ExtensionSettings } from "../../shared/settings";
-import { applyMobileDeveloperControls, clearMobileDeveloperControls } from "../developer-controls";
+import { isSignedOutStuudiumAuthenticationDocument } from "../../shared/sites";
 
 const ACTIVATION_ATTRIBUTE = "data-sid-enhancement";
 
@@ -23,7 +23,6 @@ function startMobileBootstrap(): void {
 
   const mobileGlobal = globalThis as MobileBootstrapGlobal;
   mobileGlobal.__sidMobileCleanup?.();
-  applyMobileDeveloperControls(document.documentElement);
 
   let currentSettings: ExtensionSettings = normalizeSettings(
     mobileGlobal.__sidMobileInitialSettings,
@@ -45,6 +44,13 @@ function startMobileBootstrap(): void {
 
   const apply = (): void => {
     if (cleanedUp) return;
+
+    if (isSignedOutStuudiumAuthenticationDocument(document.documentElement, currentUrl)) {
+      settingsMenuRuntime.cleanup();
+      document.documentElement.removeAttribute(ACTIVATION_ATTRIBUTE);
+      clearTheme(document.documentElement);
+      return;
+    }
 
     const route = detectStuudiumRoute(currentUrl);
     if (!route.supported) {
@@ -83,7 +89,6 @@ function startMobileBootstrap(): void {
     window.removeEventListener("hashchange", handleNavigation);
     window.removeEventListener("pagehide", handlePageHide);
     settingsMenuRuntime.cleanup();
-    clearMobileDeveloperControls(document.documentElement);
     document.documentElement.removeAttribute(ACTIVATION_ATTRIBUTE);
     clearTheme(document.documentElement);
 

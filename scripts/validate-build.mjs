@@ -6,6 +6,7 @@ const SCRIPT_DIRECTORY = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(SCRIPT_DIRECTORY, "..");
 const BUILD_DIRECTORY = path.join(PROJECT_ROOT, ".output/chrome-mv3");
 const EXPECTED_MATCH = "https://torg.ope.ee/*";
+const EXPECTED_AUTH_EXCLUDE_MATCH = "https://torg.ope.ee/auth*";
 const packageMetadata = JSON.parse(
   fs.readFileSync(path.join(PROJECT_ROOT, "package.json"), "utf8"),
 );
@@ -73,6 +74,10 @@ assert(
   JSON.stringify(bootstrap.matches) === JSON.stringify([EXPECTED_MATCH]),
   "Bootstrap match pattern is broader than expected",
 );
+assert(
+  JSON.stringify(bootstrap.exclude_matches) === JSON.stringify([EXPECTED_AUTH_EXCLUDE_MATCH]),
+  "Bootstrap must exclude signed-out authentication documents",
+);
 assert(bootstrap.run_at === "document_start", "Bootstrap must run at document_start");
 assert(bootstrap.all_frames !== true, "Bootstrap must not run in child frames");
 assert(
@@ -138,10 +143,20 @@ const bundledJavaScript = files
   .filter((file) => file.endsWith(".js"))
   .map((file) => fs.readFileSync(path.join(BUILD_DIRECTORY, file), "utf8"))
   .join("\n");
+const backgroundJavaScript = fs.readFileSync(
+  path.join(BUILD_DIRECTORY, manifest.background.service_worker),
+  "utf8",
+);
 assert(
   bundledJavaScript.includes("data-sid-settings-state") &&
     /setAttribute\([^,]+,[`'"]ready[`'"]\)/.test(bundledJavaScript),
   "Options page does not release its startup gate",
+);
+assert(
+  backgroundJavaScript.includes("excludeMatches") &&
+    backgroundJavaScript.includes("/auth*") &&
+    bundledJavaScript.includes("data-track-url"),
+  "Early activation does not preserve the authentication-page exclusion",
 );
 
 for (const activationScript of [

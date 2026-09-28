@@ -247,6 +247,11 @@ Only this preference object is stored in `chrome.storage.local`:
 No grades, attendance, messages, page contents, credentials, cookies, or
 authentication data are stored.
 
+Signed-out URLs under `https://torg.ope.ee/auth*` are excluded from both the
+static content script and the registered early-activation script. Tumevaade
+therefore injects neither its CSS nor its feature runtime into Stuudium's login
+document. Authentication fields and their presentation remain entirely native.
+
 ## 10. Inspect errors
 
 Chrome and Brave use nearly identical Chromium developer tools. Chrome's full
@@ -311,6 +316,11 @@ tools or save them in the repository.
 
 The extension must do nothing on another origin such as `https://example.com/`.
 That is the origin-level negative control for the permission boundary.
+
+While signed out, reload `https://torg.ope.ee/` and confirm that the resulting
+authentication document has no `data-sid-enhancement` or `data-sid-theme`
+attribute and no Tumevaade content-script or stylesheet entry in DevTools.
+Do not enter credentials as part of this inspection.
 
 ## 12. Add a future feature without coupling it to Chrome
 

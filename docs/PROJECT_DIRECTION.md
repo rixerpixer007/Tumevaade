@@ -117,7 +117,8 @@ The current theme overrides Stuudium's presentation but still relies on the orig
 
 Prevent the white loading flash with early application instead:
 
-- Inject a tiny critical stylesheet at document start.
+- On authenticated Stuudium documents, inject a tiny critical stylesheet at
+  document start.
 - Set `color-scheme` and the page background before content is displayed.
 - Load the full theme immediately afterward.
 - On mobile, give the native window and WebView the same dark background.
@@ -131,6 +132,9 @@ The enhancement operates on sensitive school pages. Its default security posture
 
 - Limit browser and WebView access to explicitly verified HTTPS Stuudium origins.
 - Let the genuine Stuudium page handle authentication.
+- Exclude signed-out authentication documents from Tumevaate content scripts,
+  styles, feature runtime, and mobile web assets so the native login fields stay
+  entirely under Stuudium's control.
 - Never read, store, proxy, or log passwords.
 - Store preferences, not grades, messages, attendance, or other school data.
 - Do not send analytics or telemetry by default.

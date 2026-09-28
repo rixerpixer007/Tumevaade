@@ -152,6 +152,15 @@ fun buildDocumentStartScript(
         (() => {
           const start = () => {
             const root = document.documentElement;
+            const isSignedOutAuthenticationDocument =
+              root.getAttribute("data-track-url") === "/auth" ||
+              window.location.pathname.startsWith("/auth");
+            if (isSignedOutAuthenticationDocument) {
+              root.removeAttribute("data-sid-enhancement");
+              root.removeAttribute("data-sid-theme");
+              return;
+            }
+
             const settings = JSON.parse($settingsJson);
             window.__sidMobileInitialSettings = settings;
             root.setAttribute("data-sid-theme", settings.theme.themeId);

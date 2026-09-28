@@ -161,16 +161,12 @@ may use passkeys for `torg.ope.ee`; an attempted login can surface this as a
 `NotReadableError`. Browser login is unaffected because a normal browser does
 not need to establish the Android app-to-website association.
 
-Until Stuudium publishes the association, the internal Android control
-`MOBILE_DEVELOPER_CONTROLS.hidePasskeyLoginControls` in
-`src/mobile/developer-controls.ts` is set to `true`. The document-start mobile
-bootstrap then marks the page and `src/mobile/platform.css` hides the WebAuthn
-and remote-device passkey login controls together with the otherwise empty
-mobile `või` divider. This is deliberately not a user setting and does not
-affect the browser extension. A developer can set the control to `false` and
-rebuild the mobile assets when testing the association; the control should only
-remain off for users after both release and debug app identities have matching
-published entries and have been verified on-device.
+Tumevaade does not hide or modify passkey controls on the signed-out page.
+Authentication documents are excluded from the document-start theme, platform
+styles, settings-menu styles, and shared feature bootstrap, leaving the native
+login fields entirely under Stuudium's control. Until Stuudium publishes the
+association, a passkey attempt in Android may therefore still surface the
+native verification failure described above.
 
 ## 5. Build and validate the bundled web assets
 
@@ -321,13 +317,17 @@ open, visit `chrome://inspect/#devices` in desktop Chrome. Under the app's
 WebView, select **inspect**. Use the Console, Elements, Network, and Computed
 panels just as you would for a normal browser tab.
 
-Confirm that `<html>` has:
+On an authenticated Stuudium document, confirm that `<html>` has:
 
 - `data-sid-enhancement="enabled"` when the enhancement is on;
 - either `data-sid-theme="graphite-mint"` or
   `data-sid-theme="graphite-blue"`;
 - style elements named `sid-mobile-critical`, `sid-mobile-theme`, and
   `sid-mobile-settings-menu`.
+
+On the signed-out authentication document, confirm the inverse: none of these
+attributes or style elements may be present, and the native login controls must
+remain unmodified.
 
 Production builds must not enable WebView debugging.
 

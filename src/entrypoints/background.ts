@@ -6,7 +6,12 @@ import {
 } from "../platforms/webextension/open-settings";
 import { getEarlyActivationScript } from "../platforms/webextension/early-activation";
 import { createWebExtensionSettingsStore } from "../platforms/webextension/settings-storage";
-import { isSupportedStuudiumUrl, STUUDIUM_MATCHES, STUUDIUM_ORIGINS } from "../shared/sites";
+import {
+  isSupportedStuudiumUrl,
+  STUUDIUM_AUTH_MATCHES,
+  STUUDIUM_MATCHES,
+  STUUDIUM_ORIGINS,
+} from "../shared/sites";
 import type { ExtensionSettings } from "../shared/settings";
 
 const ACTIVATION_SCRIPT_ID = "sid-early-activation";
@@ -114,6 +119,7 @@ async function reconcileEarlyActivation(settings: ExtensionSettings): Promise<vo
   const registration = {
     id: ACTIVATION_SCRIPT_ID,
     matches: [...STUUDIUM_MATCHES],
+    excludeMatches: [...STUUDIUM_AUTH_MATCHES],
     js: [getEarlyActivationScript(settings.theme.themeId)],
     allFrames: false,
     persistAcrossSessions: true,

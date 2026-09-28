@@ -97,6 +97,12 @@ const bootstrap = fs.readFileSync(path.join(ASSET_DIRECTORY, "injection/bootstra
 if (/\b(?:chrome|browser)\.(?:storage|runtime|tabs)\b/.test(bootstrap)) {
   throw new Error("The mobile bootstrap contains a WebExtension API dependency.");
 }
+if (!bootstrap.includes("data-track-url") || !bootstrap.includes("/auth")) {
+  throw new Error("The mobile bootstrap does not exclude signed-out authentication documents.");
+}
+if (bootstrap.includes("data-sid-hide-passkey-login-controls")) {
+  throw new Error("The mobile bootstrap still modifies signed-out login controls.");
+}
 
 const manifest = JSON.parse(
   fs.readFileSync(path.join(ASSET_DIRECTORY, "asset-manifest.json"), "utf8"),

@@ -8,7 +8,11 @@ import { openExtensionSettings } from "../../platforms/webextension/open-setting
 import { createWebExtensionSettingsStore } from "../../platforms/webextension/settings-storage";
 import { EnhancementRuntime } from "../../shared/lifecycle";
 import { detectStuudiumRoute } from "../../shared/routes";
-import { STUUDIUM_MATCHES } from "../../shared/sites";
+import {
+  isSignedOutStuudiumAuthenticationDocument,
+  STUUDIUM_AUTH_MATCHES,
+  STUUDIUM_MATCHES,
+} from "../../shared/sites";
 import type { ExtensionSettings } from "../../shared/settings";
 
 const ACTIVATION_ATTRIBUTE = "data-sid-enhancement";
@@ -19,6 +23,7 @@ type BootstrapGlobal = typeof globalThis & {
 
 export default defineContentScript({
   matches: [...STUUDIUM_MATCHES],
+  excludeMatches: [...STUUDIUM_AUTH_MATCHES],
   runAt: "document_start",
   allFrames: false,
   world: "ISOLATED",
@@ -41,6 +46,13 @@ export default defineContentScript({
 
     const apply = (): void => {
       if (cleanedUp || currentSettings === undefined) return;
+
+      if (isSignedOutStuudiumAuthenticationDocument(document.documentElement, currentUrl)) {
+        settingsMenuRuntime.cleanup();
+        document.documentElement.removeAttribute(ACTIVATION_ATTRIBUTE);
+        clearTheme(document.documentElement);
+        return;
+      }
 
       const route = detectStuudiumRoute(currentUrl);
       if (route.supported) {
