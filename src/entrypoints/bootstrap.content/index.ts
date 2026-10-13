@@ -12,6 +12,7 @@ import {
   isSignedOutStuudiumAuthenticationDocument,
   STUUDIUM_AUTH_MATCHES,
   STUUDIUM_MATCHES,
+  STUUDIUM_REGISTRATION_EMBED_MATCHES,
 } from "../../shared/sites";
 import type { ExtensionSettings } from "../../shared/settings";
 
@@ -23,7 +24,7 @@ type BootstrapGlobal = typeof globalThis & {
 
 export default defineContentScript({
   matches: [...STUUDIUM_MATCHES],
-  excludeMatches: [...STUUDIUM_AUTH_MATCHES],
+  excludeMatches: [...STUUDIUM_AUTH_MATCHES, ...STUUDIUM_REGISTRATION_EMBED_MATCHES],
   runAt: "document_start",
   allFrames: false,
   world: "ISOLATED",

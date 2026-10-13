@@ -88,6 +88,24 @@
   border-radius: var(--sid-radius-sm) !important;
 }
 
+.absences_popover .student-absences-on-date-options-added-notice {
+  color: var(--sid-text-2) !important;
+  background-color: var(--sid-surface-2) !important;
+  border-color: var(--sid-border-strong) !important;
+}
+
+.absences_popover .absence_advance_notice_v2023 .bl-field-label {
+  color: var(--sid-text-3) !important;
+}
+
+.absences_popover .absence_advance_notice_v2023 .advance-notice-will-excuse-absence {
+  color: var(--sid-warning) !important;
+}
+
+.absences_popover .absence_advance_notice_v2023 .advance-notice-withdrawn {
+  color: var(--sid-danger) !important;
+}
+
 .absences_popover .st-toggle-control label > span {
   color: var(--sid-text-2) !important;
 }

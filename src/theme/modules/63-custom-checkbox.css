@@ -1,10 +1,12 @@
 /* Shared custom-checkbox paint; feature-specific geometry and motion stay local. */
 .section.todos .custom-checkbox-v2,
+.section.student-not-completed .custom-checkbox-v2,
 .page_subjectplans_plan .custom-checkbox-v2 {
   accent-color: var(--sid-accent) !important;
 }
 
 .section.todos .custom-checkbox-v2 + em,
+.section.student-not-completed .custom-checkbox-v2 + em,
 .page_subjectplans_plan .custom-checkbox-v2 + em {
   box-sizing: border-box !important;
   background-color: var(--sid-control) !important;
@@ -15,6 +17,7 @@
 }
 
 .section.todos .custom-checkbox-v2:checked + em,
+.section.student-not-completed .custom-checkbox-v2:checked + em,
 .page_subjectplans_plan .custom-checkbox-v2:checked + em {
   background-color: var(--sid-accent) !important;
   background-image: url("https://assets.stuudium.net/img/check-custom-v2-white.png") !important;
@@ -23,6 +26,7 @@
 }
 
 .section.todos .custom-checkbox-v2:focus-visible + em,
+.section.student-not-completed .custom-checkbox-v2:focus-visible + em,
 .page_subjectplans_plan .custom-checkbox-v2:focus-visible + em {
   outline: 2px solid var(--sid-accent) !important;
   outline-offset: 2px !important;

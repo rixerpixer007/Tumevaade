@@ -12,6 +12,14 @@
   border-color: var(--sid-border) !important;
 }
 
+.st-absences_excuses-calendar .week a .absence_counts .advance_notice {
+  color: var(--sid-warning) !important;
+}
+
+.st-absences_excuses-calendar .week a:hover .absence_counts .advance_notice {
+  color: var(--sid-accent-ink) !important;
+}
+
 .st-absences_excuses-calendar .week a:hover {
   color: var(--sid-accent-ink) !important;
   background: var(--sid-accent) !important;

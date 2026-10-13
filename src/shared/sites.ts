@@ -2,6 +2,9 @@ export const STUUDIUM_ORIGINS = ["https://torg.ope.ee"] as const;
 
 export const STUUDIUM_MATCHES = STUUDIUM_ORIGINS.map((origin) => `${origin}/*`);
 export const STUUDIUM_AUTH_MATCHES = STUUDIUM_ORIGINS.map((origin) => `${origin}/auth*`);
+export const STUUDIUM_REGISTRATION_EMBED_MATCHES = STUUDIUM_ORIGINS.map(
+  (origin) => `${origin}/api/embed/registration/*`,
+);
 
 type DocumentRootMetadata = Pick<Element, "getAttribute">;
 

@@ -1,4 +1,12 @@
 /* Exercises, homework and tests */
+.section.todos .scheduled_date_container + .scheduled_date_container {
+  border-top-color: var(--sid-border) !important;
+}
+
+.section.todos .scheduled-items a.show-more.show-future {
+  border-color: var(--sid-border) !important;
+}
+
 .section.todos .todo_container {
   color: var(--sid-text-2) !important;
   background: transparent !important;
@@ -21,6 +29,10 @@
   color: var(--sid-text-3) !important;
 }
 
+.section.student-not-completed .stream-entry-context small {
+  color: var(--sid-text-3) !important;
+}
+
 .section.todos .todo_container.is_marked :where(.todo, .todo_content) {
   color: var(--sid-text-3) !important;
 }
@@ -31,7 +43,8 @@
   text-decoration-thickness: 1px !important;
 }
 
-.section.todos .custom-checkbox-v2 + em {
+.section.todos .custom-checkbox-v2 + em,
+.section.student-not-completed .custom-checkbox-v2 + em {
   width: 16px !important;
   height: 16px !important;
   transform: scale(1) !important;
@@ -42,7 +55,8 @@
     transform 0.18s cubic-bezier(0.2, 1.55, 0.4, 1) !important;
 }
 
-.section.todos .todo label:active .custom-checkbox-v2 + em {
+.section.todos .todo label:active .custom-checkbox-v2 + em,
+.section.student-not-completed .stream-entry-action label:active .custom-checkbox-v2 + em {
   transform: scale(0.76) !important;
 }
 
@@ -133,13 +147,13 @@ body.page_dashboard_recent
   color: var(--sid-accent) !important;
 }
 
-:where(.daily-summaries, .page_dashboard_subjects) .ng-param-wrapper .grade-param {
+:where(.daily-summaries, .page_dashboard_subjects, .student-not-completed) .ng-param-wrapper .grade-param {
   color: var(--sid-warning) !important;
   background: var(--sid-warning-soft) !important;
   border-color: var(--sid-warning-border) !important;
 }
 
-:where(.daily-summaries, .page_dashboard_subjects) .ng-param-wrapper .grade-param:is(
+:where(.daily-summaries, .page_dashboard_subjects, .student-not-completed) .ng-param-wrapper .grade-param:is(
   .grade-param-is_notify,
   .grade-param-is_absent,
   .grade-param-is_not_completed,
@@ -150,7 +164,7 @@ body.page_dashboard_recent
   border-color: var(--sid-danger-border) !important;
 }
 
-:where(.daily-summaries, .page_dashboard_subjects) .ng-param-wrapper .grade-param:is(
+:where(.daily-summaries, .page_dashboard_subjects, .student-not-completed) .ng-param-wrapper .grade-param:is(
   .grade-param-is_excused,
   .grade-param-is_absent-excused,
   .grade-param-interest-present

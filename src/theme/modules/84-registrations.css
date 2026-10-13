@@ -1,4 +1,69 @@
 /* Registrations */
+.content-embeds .grade-embed iframe[src*="/api/embed/registration/"] {
+  border-color: var(--sid-border) !important;
+}
+
+/* Embedded registrations have their own document; preserve their compact typography. */
+html[data-sid-registration-embed] body {
+  min-height: 0;
+  background: var(--sid-surface) !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-size: 12px !important;
+  line-height: 17px !important;
+}
+
+#registration-embed {
+  color: var(--sid-text-2) !important;
+  background: var(--sid-surface) !important;
+  border-color: var(--sid-border) !important;
+}
+
+#registration-embed .collection-embed-banner {
+  color: var(--sid-accent) !important;
+  background: var(--sid-surface-2) !important;
+  border-color: var(--sid-border) !important;
+}
+
+#registration-embed .collection-embed-contents,
+#registration-embed .option {
+  color: var(--sid-text-2) !important;
+  background: var(--sid-surface) !important;
+  border-color: var(--sid-border) !important;
+}
+
+#registration-embed h2 {
+  color: var(--sid-accent) !important;
+}
+
+#registration-embed .option-registration-count {
+  color: var(--sid-text-3) !important;
+  background: var(--sid-surface-3) !important;
+}
+
+#registration-embed .st-badge {
+  color: var(--sid-warning) !important;
+  background: var(--sid-warning-soft) !important;
+  border-color: var(--sid-warning-border) !important;
+}
+
+#registration-embed .st-badge.st-badge-green {
+  color: var(--sid-accent-strong) !important;
+  background: var(--sid-accent-soft) !important;
+  border-color: var(--sid-accent-border) !important;
+}
+
+#registration-embed .st-badge.st-badge-subtlered {
+  color: var(--sid-danger) !important;
+  background: var(--sid-danger-soft) !important;
+  border-color: var(--sid-danger-border) !important;
+}
+
+#registration-embed .st-badge.st-badge-inactive {
+  color: var(--sid-text-3) !important;
+  background: var(--sid-surface-2) !important;
+  border-color: var(--sid-border-strong) !important;
+}
+
 :where(#registration_index, #registration_collection) {
   background-image: radial-gradient(circle at 58% 0, var(--sid-accent-glow), transparent 34rem) !important;
   background-repeat: no-repeat !important;

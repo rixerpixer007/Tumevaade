@@ -7,6 +7,7 @@ const PROJECT_ROOT = path.resolve(SCRIPT_DIRECTORY, "..");
 const BUILD_DIRECTORY = path.join(PROJECT_ROOT, ".output/chrome-mv3");
 const EXPECTED_MATCH = "https://torg.ope.ee/*";
 const EXPECTED_AUTH_EXCLUDE_MATCH = "https://torg.ope.ee/auth*";
+const EXPECTED_REGISTRATION_EMBED_MATCH = "https://torg.ope.ee/api/embed/registration/*";
 const packageMetadata = JSON.parse(
   fs.readFileSync(path.join(PROJECT_ROOT, "package.json"), "utf8"),
 );
@@ -46,7 +47,7 @@ assert(
 assert(manifest.options_ui?.page === "options.html", "Options page is not registered");
 assert(manifest.background?.service_worker !== undefined, "MV3 service worker is missing");
 assert(Array.isArray(manifest.content_scripts), "Bootstrap content script is missing");
-assert(manifest.content_scripts.length === 1, "Expected exactly one static content script");
+assert(manifest.content_scripts.length === 2, "Expected bootstrap and registration embed scripts");
 
 const expectedIcons = {
   16: "icons/icon-16.png",
@@ -69,14 +70,18 @@ for (const iconPath of Object.values(expectedIcons)) {
   assert(builtIcon.equals(sourceIcon), `Packaged icon is stale: ${iconPath}`);
 }
 
-const bootstrap = manifest.content_scripts[0];
+const bootstrap = manifest.content_scripts.find((script) =>
+  script.matches.includes(EXPECTED_MATCH),
+);
+assert(bootstrap !== undefined, "Bootstrap content script is missing");
 assert(
   JSON.stringify(bootstrap.matches) === JSON.stringify([EXPECTED_MATCH]),
   "Bootstrap match pattern is broader than expected",
 );
 assert(
-  JSON.stringify(bootstrap.exclude_matches) === JSON.stringify([EXPECTED_AUTH_EXCLUDE_MATCH]),
-  "Bootstrap must exclude signed-out authentication documents",
+  JSON.stringify([...(bootstrap.exclude_matches ?? [])].sort()) ===
+    JSON.stringify([EXPECTED_AUTH_EXCLUDE_MATCH, EXPECTED_REGISTRATION_EMBED_MATCH].sort()),
+  "Bootstrap must exclude authentication documents and dedicated registration embeds",
 );
 assert(bootstrap.run_at === "document_start", "Bootstrap must run at document_start");
 assert(bootstrap.all_frames !== true, "Bootstrap must not run in child frames");
@@ -86,6 +91,19 @@ assert(
 );
 assert(Array.isArray(bootstrap.css) && bootstrap.css.length > 0, "Theme CSS is missing");
 assert(Array.isArray(bootstrap.js) && bootstrap.js.length === 1, "Bootstrap JS is missing");
+const embed = manifest.content_scripts.find((script) =>
+  script.matches.includes(EXPECTED_REGISTRATION_EMBED_MATCH),
+);
+assert(embed !== undefined, "Registration embed script is missing");
+assert(
+  JSON.stringify(embed.matches) === JSON.stringify([EXPECTED_REGISTRATION_EMBED_MATCH]),
+  "Registration embed script must match only the verified registration endpoint",
+);
+assert(embed.all_frames === true, "Registration embed script must run in matching child frames");
+assert(embed.run_at === "document_start", "Registration embed script must run at document_start");
+assert(embed.world === undefined || embed.world === "ISOLATED", "Embed script must be isolated");
+assert(Array.isArray(embed.css) && embed.css.length > 0, "Registration embed CSS is missing");
+assert(Array.isArray(embed.js) && embed.js.length === 1, "Registration embed JS is missing");
 assert(manifest.web_accessible_resources === undefined, "No web-accessible resources are expected");
 
 const optionsHtml = fs.readFileSync(path.join(BUILD_DIRECTORY, "options.html"), "utf8");
