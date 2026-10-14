@@ -188,7 +188,7 @@ describe("generated theme", () => {
     );
   });
 
-  it("leaves dashboard timeline heading box geometry to Stuudium", () => {
+  it("keeps dashboard timeline headings opaque and leaves their box geometry to Stuudium", () => {
     const css = fs.readFileSync(path.join(projectRoot, "src/generated/theme.css"), "utf8");
     let headingColorRule: postcss.Rule | undefined;
     let framedHeadingRule: postcss.Rule | undefined;
@@ -226,7 +226,7 @@ describe("generated theme", () => {
       border: "1px solid var(--sid-border)",
     });
     expect(dashboardDeclarations).toEqual({
-      "background-color": { value: "transparent", important: true },
+      "background-color": { value: "var(--sid-surface-2)", important: true },
     });
   });
 

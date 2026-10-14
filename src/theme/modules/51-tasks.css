@@ -121,7 +121,8 @@ body.page_dashboard_recent
     .daily-summaries-segment > h3,
     .daily-summaries-segment-block > h3
   ) {
-  background-color: transparent !important;
+  /* Opaque surfaces keep scrolling entries behind Stuudium's sticky labels. */
+  background-color: var(--sid-surface-2) !important;
 }
 
 :where(.ng-grade-is-summary-wrapper, .ng-grade-is-important-wrapper) {
