@@ -9,7 +9,7 @@
 
 <div align="center" style="width:100%">
   <a href="https://gitlab.com/rixerpixer007/tumevaade/-/releases">
-    <img src="assets/readme/download.svg" alt="Laadi Tumevaade GitLabist alla" width="258">
+    <img src="assets/readme/download.svg" alt="Laadi Tumevaade Androidile alla" width="258">
   </a>
     <a href="https://chromewebstore.google.com/detail/tumevaade/kiehioimhdfibljnljfghimnmjckdoio">
     <img src="assets/readme/download-chrome-web-store.png" alt="Laadi Tumevaade Chrome Webstore-ist alla" width="258">

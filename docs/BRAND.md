@@ -110,3 +110,12 @@ saaks sama allkirjastamisvõtmega uuendada.
 Olemasoleva väljalaske allkirjastamise keskkonnamuutujad, võtme alias ja kohalik
 võtmehoidla asukoht jäävad samuti tehnilise järjepidevuse tõttu muutmata. Need ei
 ole kasutajale kuvatav bränding.
+
+## Androidi allalaadimisnupu omistus
+
+README Androidi nupus (`assets/readme/download.svg`) on kasutatud Google'i
+[Androidi roboti vektorgraafikat](https://developer.android.com/static/images/brand/android-head_flat.svg),
+mille värv on muudetud teiste allalaadimisnuppudega sobivaks.
+Androidi robot on reprodutseeritud või muudetud Google'i loodud ja jagatud teosest
+ning seda kasutatakse [Creative Commons 3.0 omistamislitsentsi](https://creativecommons.org/licenses/by/3.0/)
+tingimustel. Vaata ka [Androidi brändijuhist](https://developer.android.com/distribute/marketing-tools/brand-guidelines#android-robot).
