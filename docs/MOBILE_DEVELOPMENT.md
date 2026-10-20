@@ -398,14 +398,14 @@ Platform code should remain small:
 Do not add a general bridge because a future feature might need it. Add one
 validated command only when that feature has a specific native requirement.
 
-## 14. GitHub update notification
+## 14. GitLab update notification
 
 The Android shell checks for a new public version after the first Stuudium page
 becomes visible. It performs this check at most once every 24 hours, never blocks
 startup, and remains silent when the device is offline or the update metadata is
 unavailable. When a higher numeric `versionCode` is published, the app shows a
 native **Later** / **View update** dialog. **View update** opens the allowlisted
-GitHub Releases page in the system browser; the app does not download or install
+GitLab Releases page in the system browser; the app does not download or install
 packages itself and therefore does not request package-install or storage
 permissions.
 
@@ -413,17 +413,15 @@ The metadata source is the small machine-readable `release/android.json` file,
 served directly from the public repository at:
 
 ```text
-https://raw.githubusercontent.com/rixerpixer007/TORG-stuudium-theme/main/release/android.json
+https://gitlab.com/rixerpixer007/tumevaade/-/raw/main/release/android.json
 ```
 
-This does not require GitHub Pages and does not publish the development
-documentation as a website. Until the first signed public release, the
-checked-in file deliberately contains `"published": false`, so installed builds
-do not advertise a nonexistent APK.
+This does not require GitLab Pages or a separately hosted website. Set
+`"published": true` only when the matching signed APK, checksum, and release
+notes are available on GitLab. Keep it `false` while preparing a release.
 
-Android betas may be marked as GitHub prereleases. The updater reads this
-explicit metadata rather than GitHub's `releases/latest` endpoint, which omits
-prereleases.
+The updater reads this explicit metadata so the maintainer can choose which
+stable or beta Android release to offer independently of the newest tag.
 
 For a real release, publish metadata in this shape:
 
@@ -433,7 +431,7 @@ For a real release, publish metadata in this shape:
   "published": true,
   "versionCode": 2,
   "versionName": "0.1.1-beta",
-  "releaseUrl": "https://github.com/rixerpixer007/TORG-stuudium-theme/releases/tag/android-v0.1.1-beta",
+  "releaseUrl": "https://gitlab.com/rixerpixer007/tumevaade/-/releases/android-v0.1.1-beta",
   "sha256": "the-lowercase-64-character-sha256-of-the-signed-apk"
 }
 ```
@@ -442,14 +440,14 @@ Release in this order so users are never directed to an incomplete download:
 
 1. Increment `versionCode` and update the human-facing `versionName`.
 2. Build, sign, and validate the release APK with the permanent release key.
-3. Create the GitHub Release and upload the signed APK, checksum, and notes.
+3. Create the GitLab Release and upload the signed APK, checksum, and notes.
 4. Download the uploaded APK and confirm its application ID, version, signing
    certificate, and SHA-256 digest.
 5. Change `published` to `true`, copy the exact values and release URL into the
    metadata file, and deploy that small metadata change last.
 
 The update checker accepts only HTTPS release URLs under this repository's
-`/releases` path, validates the manifest schema and checksum shape, and compares
+`/rixerpixer007/tumevaade/-/releases` path, validates the manifest schema and checksum shape, and compares
 numeric version codes rather than version-name strings. The remote file cannot
 inject scripts or change app behavior.
 
@@ -457,6 +455,11 @@ Debug and release APKs have separate application IDs, so they install beside
 each other and never update one another. Release APKs update the release app
 normally as long as `io.github.rixerpixer007.stuudium`, the release signing
 identity, and the increasing version-code sequence remain unchanged.
+
+Builds installed before this migration still use the old GitHub metadata URL
+and release allowlist. They need a manually installed, signed migration build
+with the same application ID and signing key to start checking GitLab. Updating
+only the GitLab manifest cannot redirect those installed builds.
 
 Test the complete browser handoff on Android 16 and the eventual minimum Android
 version. Confirm that the system presents **Update**, preserves the WebView

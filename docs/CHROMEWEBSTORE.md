@@ -42,7 +42,7 @@ Sinu kooliandmeid ei koguta ega saadeta arendajale. Tumevaade salvestab ainult v
 • Skripti registreerimine võimaldab salvestatud valiku rakendada toetatud lehe laadimise alguses.
 
 TUGI
-https://github.com/rixerpixer007/TORG-stuudium-theme/issues
+https://gitlab.com/rixerpixer007/tumevaade/-/boards#/
 
 Versioon 0.1.0 — esimene avalik beeta.
 
@@ -109,9 +109,17 @@ The code recognizes supported routes and the navigation location used for its se
 
 ## Privacy policy
 
-**Public privacy-policy URL:** `https://github.com/rixerpixer007/TORG-stuudium-theme/blob/main/docs/PRIVACY.md`
+**Public privacy-policy URL:** `https://gitlab.com/rixerpixer007/tumevaade/-/blob/main/docs/PRIVACY.md`
 
 The published policy must match the source and dashboard answers. It must state what the local preference is, that no school or authentication data is collected or transmitted, how uninstalling removes extension-local storage, and how to contact the maintainer. Verify that the final URL is public and not behind a login before submission.
+
+### GitLab migration follow-up
+
+The public support board is available at the GitLab URL above. The repository,
+privacy-policy page, and support board were publicly accessible on 2026-10-20.
+
+Update the Chrome Web Store dashboard's support and privacy-policy URLs to the
+GitLab URLs above. Editing this document does not change the published listing.
 
 ## Distribution
 

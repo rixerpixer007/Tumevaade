@@ -30,7 +30,7 @@ const MARK_SOURCE_PATH = path.join(BRAND_DIRECTORY, "tumevaade-mark.svg");
 const DARK_MASTER_PATH = path.join(BRAND_DIRECTORY, "tumevaade-dark.png");
 const LIGHT_MASTER_PATH = path.join(BRAND_DIRECTORY, "tumevaade-light.png");
 const MARK_MASTER_PATH = path.join(BRAND_DIRECTORY, "tumevaade-mark.png");
-const README_BANNER_PATH = path.join(README_DIRECTORY, "github-banner.webp");
+const README_BANNER_PATH = path.join(README_DIRECTORY, "banner.webp");
 
 function logoMasterSvg({ light = false } = {}) {
   const surface = light ? "#ffffff" : "#171c19";

@@ -88,7 +88,7 @@ class AppUpdatePreferences(context: Context) {
 object AppUpdateClient {
     private val manifestUri =
         URI(
-            "https://raw.githubusercontent.com/rixerpixer007/TORG-stuudium-theme/main/release/android.json",
+            "https://gitlab.com/rixerpixer007/tumevaade/-/raw/main/release/android.json",
         )
 
     fun check(installedVersionCode: Long): AppUpdateCheckResult {
@@ -211,10 +211,10 @@ object AppUpdateClient {
     internal fun isTrustedReleaseUrl(rawUrl: String): Boolean =
         try {
             val uri = URI(rawUrl)
-            val expectedPrefix = "/rixerpixer007/TORG-stuudium-theme/releases"
+            val expectedPrefix = "/rixerpixer007/tumevaade/-/releases"
             val path = uri.path
             uri.scheme.equals("https", ignoreCase = true) &&
-                uri.host.equals("github.com", ignoreCase = true) &&
+                uri.host.equals("gitlab.com", ignoreCase = true) &&
                 uri.userInfo == null &&
                 uri.port == -1 &&
                 uri.query == null &&

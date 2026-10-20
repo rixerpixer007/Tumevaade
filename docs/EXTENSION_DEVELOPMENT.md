@@ -54,12 +54,11 @@ are declared in `package.json`, so npm warns when an older runtime is used.
 If the repository is not on your computer yet:
 
 ```sh
-git clone REPOSITORY_URL
-cd TORG-stuudium-theme
+git clone https://gitlab.com/rixerpixer007/tumevaade.git
+cd tumevaade
 ```
 
-Replace `REPOSITORY_URL` with this repository's clone URL. `git clone` makes a
-local copy; `cd` makes it the current working folder.
+`git clone` makes a local copy; `cd` makes it the current working folder.
 
 Install the exact dependency versions from the lockfile:
 

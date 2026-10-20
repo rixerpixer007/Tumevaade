@@ -229,7 +229,7 @@ For version 0.1.0, upload exactly:
 ```
 
 For a later version, the middle number changes to match `package.json`. Never
-upload the repository ZIP from GitHub, `.output/chrome-mv3`, or the
+upload the repository ZIP from GitLab, `.output/chrome-mv3`, or the
 `-sources.zip` artifact WXT may produce for other workflows.
 
 The project validator checks the ZIP directory itself and requires it to match

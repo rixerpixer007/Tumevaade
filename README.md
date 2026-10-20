@@ -1,15 +1,15 @@
 # Tumevaade
 
 <div align="center">
-  <img src="assets/readme/github-banner.webp" alt="Tumevaade – tuttav keskkond, uus vaade." width="100%">
+  <img src="assets/readme/banner.webp" alt="Tumevaade – tuttav keskkond, uus vaade." width="100%">
   <p><strong>TORGi õpilaselt TORGi õpilastele.</strong></p>
 </div>
 
 ## Installimine
 
 <div align="center" style="width:100%">
-  <a href="https://github.com/rixerpixer007/TORG-stuudium-theme/releases">
-    <img src="assets/readme/download-github.png" alt="Laadi Tumevaade GitHubist alla" width="258">
+  <a href="https://gitlab.com/rixerpixer007/tumevaade/-/releases">
+    <img src="assets/readme/download.svg" alt="Laadi Tumevaade GitLabist alla" width="258">
   </a>
     <a href="https://chromewebstore.google.com/detail/tumevaade/kiehioimhdfibljnljfghimnmjckdoio">
     <img src="assets/readme/download-chrome-web-store.png" alt="Laadi Tumevaade Chrome Webstore-ist alla" width="258">
@@ -49,11 +49,11 @@ Projekt sündis minu igapäevasest kogemusest TORGi õpilasena. Tahtsin, et tutt
 
 ## Saadavus
 
-| Platvorm             | Saadavus        | Kontrollitud keskkond |
-| -------------------- | --------------- | --------------------- |
-| Android              | Saadaval        | Android 16            |
-| Chrome ja Brave      | Saadaval | Chrome ja Brave       |
-| Firefox, Safari, iOS | Pole toetatud   | —                     |
+| Platvorm             | Saadavus      | Kontrollitud keskkond |
+| -------------------- | ------------- | --------------------- |
+| Android              | Saadaval      | Android 16            |
+| Chrome ja Brave      | Saadaval      | Chrome ja Brave       |
+| Firefox, Safari, iOS | Pole toetatud | —                     |
 
 ## Privaatsus ja sõltumatus
 
@@ -65,7 +65,7 @@ Täpsem selgitus on [privaatsuspoliitikas](docs/PRIVACY.md).
 
 ## Tagasiside ja panustamine
 
-Probleemidest ja ettepanekutest saab teada anda [GitHub Issuesi kaudu](https://github.com/rixerpixer007/TORG-stuudium-theme/issues).
+Probleemidest ja ettepanekutest saab teada anda [GitLabi probleemide tahvli kaudu](https://gitlab.com/rixerpixer007/tumevaade/-/boards#/).
 
 <details>
   <summary>Arendajale</summary>

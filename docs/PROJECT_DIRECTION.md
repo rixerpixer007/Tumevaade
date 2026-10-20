@@ -189,7 +189,7 @@ opened; it cannot read preferences or call general native methods. The settings
 page has a separate, exact-origin bridge for reading and writing the same small
 preference contract used by the extension.
 
-If Android distribution is approved after the prototype, GitHub Releases will
+If Android distribution is approved after the prototype, GitLab Releases will
 provide signed APKs. All releases must retain the same application ID and
 signing key so Android accepts them as updates. The initial updater may simply
 notify users and open the release page; a later version can download the APK and
@@ -239,10 +239,10 @@ Development can use free personal-device signing. Public distribution waits for 
   console health on the Samsung S25. **Pending physical-device testing.**
 - Check Android 8 with a maintained System WebView before preserving that public
   minimum; raise to Android 10 instead of building a disproportionate fallback.
-- Establish signed GitHub releases and the update flow only after the prototype
-  is accepted. **Native notification flow, release signing, and the first
-  GitHub prerelease are implemented; end-to-end update verification is
-  pending.**
+- Establish signed GitLab releases and the update flow only after the prototype
+  is accepted. **Native notification flow and release signing are implemented.
+  The first beta was distributed through GitHub; migrating release assets to
+  GitLab and end-to-end update verification are pending.**
 
 ### Phase 5: iOS preparation and release
 

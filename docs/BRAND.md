@@ -98,12 +98,14 @@ Platvormide väiksemad ikoonid genereeritakse nendest lähtevaradest. Märki ei 
 
 - **Android release application ID:** `io.github.rixerpixer007.stuudium`
 - **Android debug application ID:** `io.github.rixerpixer007.stuudium.debug`
-- **GitHubi repositoorium:** `rixerpixer007/TORG-stuudium-theme`
+- **GitLabi repositoorium:** [`rixerpixer007/tumevaade`](https://gitlab.com/rixerpixer007/tumevaade)
 
 Androidi väljalaske ID jääb kuvatavast brändinimest sõltumatuks. Debug-versiooni
 `.debug` järelliide võimaldab testversiooni ja väljalaskeversiooni samal seadmel
-korraga kasutada. GitHubi repositooriumi nime ei muudeta esimese rebrändimise
-käigus, et säilitada olemasolevad lingid ja uuendusteekond.
+korraga kasutada. Projekti lähtekood asub nüüd GitLabis; sinna kolitakse ka
+väljalasked.
+`io.github` osa Androidi rakenduse ID-s säilib, et olemasolevaid paigaldusi
+saaks sama allkirjastamisvõtmega uuendada.
 
 Olemasoleva väljalaske allkirjastamise keskkonnamuutujad, võtme alias ja kohalik
 võtmehoidla asukoht jäävad samuti tehnilise järjepidevuse tõttu muutmata. Need ei

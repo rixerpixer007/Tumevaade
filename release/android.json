@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "published": true,
-  "versionCode": 7,
-  "versionName": "0.1.3",
-  "releaseUrl": "https://github.com/rixerpixer007/Tumevaade/releases/tag/android-v0.1.3",
-  "sha256": "fad85019efcc440d3f0b8a45d562b4ccf40accdc3f77e95613d3231445084f1d"
+  "versionCode": 8,
+  "versionName": "0.1.4",
+  "releaseUrl": "https://gitlab.com/rixerpixer007/tumevaade/-/releases/android-v0.1.4",
+  "sha256": "b98412ab992b3701797eff81bcdd88da840150dfe0dbd8373278ec938ceabc11"
 }
