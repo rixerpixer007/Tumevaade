@@ -1,8 +1,6 @@
 /* Dashboard, diary and dynamically loaded older entries */
-body.page_dashboard_recent :is(
-  .section.todos,
-  .section.student_absences_excuses
-) > .section-infomessage {
+body.page_dashboard_recent .section.todos > .section-infomessage,
+body.page_dashboard_recent .section.student_absences_excuses > .section-infomessage:has(a) {
   display: none !important;
 }
 

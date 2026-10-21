@@ -1,4 +1,18 @@
 /* Absence calendar */
+/* Keep Stuudium's live totals while the dashboard hides the help-link block. */
+body.page_dashboard_recent .student_absences_excuses > .section-infomessage:not(:has(a)) {
+  margin-top: 14px !important;
+  padding: 10px 12px !important;
+  color: var(--sid-text) !important;
+  background: var(--sid-surface-2) !important;
+  border: 1px solid var(--sid-border) !important;
+  border-radius: var(--sid-radius-sm) !important;
+  font-size: 13px !important;
+  font-weight: 500;
+  line-height: 1.5 !important;
+  font-variant-numeric: tabular-nums;
+}
+
 .st-absences_excuses-calendar .monthname {
   margin-bottom: 6px !important;
   color: var(--sid-accent) !important;
