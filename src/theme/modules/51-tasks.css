@@ -114,6 +114,11 @@ body:not(.page_dashboard_recent)
   border-radius: var(--sid-radius-sm) !important;
 }
 
+/* Match the timeline surface to its opaque sticky labels at every scroll position. */
+body.page_dashboard_recent .daily-summaries {
+  background: var(--sid-surface-2) !important;
+}
+
 body.page_dashboard_recent
   .daily-summaries
   :where(
@@ -224,8 +229,11 @@ body.page_dashboard_recent
 
 :where(.daily-summaries-segment-block-lessons-collapsed-title, .daily-summaries .new_button.flat) {
   color: var(--sid-text-3) !important;
-  background: var(--sid-surface) !important;
   border-color: var(--sid-border) !important;
+}
+
+:where(.daily-summaries .new_button.flat) {
+  background: var(--sid-surface) !important;
 }
 
 .daily-summaries
