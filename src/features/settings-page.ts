@@ -11,6 +11,7 @@ export interface SettingsPageDependencies {
   cacheTheme?: (themeId: ThemeId) => void;
   returnToStuudium?: () => void;
   appUpdates?: AppUpdates;
+  getCurrentVersion?: () => string | Promise<string>;
 }
 
 interface SettingsPageElements {
@@ -87,6 +88,7 @@ export function mountSettingsPage({
   cacheTheme = () => undefined,
   returnToStuudium = () => undefined,
   appUpdates,
+  getCurrentVersion = () => appUpdates?.getCurrentVersion() ?? "Teadmata",
 }: SettingsPageDependencies): () => void {
   const elements = queryElements(document);
   let activeCategory = "all";
@@ -242,14 +244,10 @@ export function mountSettingsPage({
   }
 
   async function initializeAppUpdates(): Promise<void> {
-    if (appUpdates === undefined) {
-      elements.appVersion.textContent = "0.0.0";
-      elements.updateCheckButton.disabled = true;
-      return;
-    }
+    elements.updateCheckButton.disabled = appUpdates === undefined;
 
     try {
-      const version = await appUpdates.getCurrentVersion();
+      const version = await getCurrentVersion();
       if (!cleanedUp) elements.appVersion.textContent = version;
     } catch (error) {
       console.error("Unable to read the installed app version", error);

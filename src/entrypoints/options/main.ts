@@ -1,3 +1,6 @@
+import { browser } from "wxt/browser";
+
+import { version as previewVersion } from "../../../package.json";
 import { mountSettingsPage } from "../../features/settings-page";
 import { createWebExtensionSettingsStore } from "../../platforms/webextension/settings-storage";
 import { returnToStuudium } from "../../platforms/webextension/open-settings";
@@ -49,6 +52,9 @@ const cleanup = mountSettingsPage({
   document,
   settingsStore,
   cacheTheme,
+  getCurrentVersion: isLocalPreview
+    ? () => previewVersion
+    : () => browser.runtime.getManifest().version,
   returnToStuudium: isLocalPreview
     ? () => undefined
     : () => {

@@ -99,12 +99,43 @@ describe("shared settings page", () => {
     cleanup();
   });
 
-  it("uses extension placeholders without enabling update checks", async () => {
+  it("shows an unknown version when no platform version reader is available", async () => {
     const cleanup = mountSettingsPage({ document, settingsStore: createStore() });
     await Promise.resolve();
 
-    expect(document.querySelector("#app-version")?.textContent).toBe("0.0.0");
+    expect(document.querySelector("#app-version")?.textContent).toBe("Teadmata");
     expect(document.querySelector<HTMLButtonElement>("#check-for-updates")?.disabled).toBe(true);
+    cleanup();
+  });
+
+  it("shows the installed extension version without enabling Android update checks", async () => {
+    const getCurrentVersion = vi.fn(() => "2.3.4");
+    const cleanup = mountSettingsPage({
+      document,
+      settingsStore: createStore(),
+      getCurrentVersion,
+    });
+    await Promise.resolve();
+
+    expect(getCurrentVersion).toHaveBeenCalledOnce();
+    expect(document.querySelector("#app-version")?.textContent).toBe("2.3.4");
+    expect(document.querySelector<HTMLButtonElement>("#check-for-updates")?.disabled).toBe(true);
+    cleanup();
+  });
+
+  it("keeps settings usable when reading the installed version fails", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const cleanup = mountSettingsPage({
+      document,
+      settingsStore: createStore(),
+      getCurrentVersion: () => {
+        throw new Error("Extension context invalidated.");
+      },
+    });
+    await Promise.resolve();
+
+    expect(document.querySelector("#app-version")?.textContent).toBe("Teadmata");
+    expect(document.querySelector<HTMLInputElement>("#enhancement-enabled")?.disabled).toBe(false);
     cleanup();
   });
 
