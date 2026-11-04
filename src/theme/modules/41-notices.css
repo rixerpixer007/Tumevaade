@@ -1,4 +1,35 @@
 /* Notices */
+/* Legacy dashboard confirmations use humanMsg instead of Suhtlus toast markup. */
+#humanMsg.type_ok {
+  box-sizing: border-box;
+  top: 12px !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: 50% !important;
+  width: max-content !important;
+  max-width: calc(100% - 24px) !important;
+  margin: 0 !important;
+  padding: 12px 20px !important;
+  color: var(--sid-accent-ink) !important;
+  background: var(--sid-accent) !important;
+  border: 1px solid var(--sid-accent-border) !important;
+  border-radius: var(--sid-radius-pill) !important;
+  box-shadow: var(--sid-shadow) !important;
+  font-size: 16px !important;
+  line-height: 1.25 !important;
+  text-align: center !important;
+  overflow-wrap: anywhere;
+  transform: translateX(-50%);
+}
+
+#humanMsg.type_ok > p {
+  margin: 0 !important;
+  padding: 0 !important;
+  color: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
 :where(.section-infomessage, .st-message, .message-help, .inline-help-message, .help-message, .new_message.info) {
   box-sizing: border-box;
   padding: 6px 8px !important;

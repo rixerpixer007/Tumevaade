@@ -1,4 +1,10 @@
 /* Exercises, homework and tests */
+.section.todos .scheduled_task_edit {
+  border-color: var(--sid-border) !important;
+  border-radius: var(--sid-radius-sm) !important;
+  box-shadow: none !important;
+}
+
 .section.todos .scheduled_date_container + .scheduled_date_container {
   border-top-color: var(--sid-border) !important;
 }
