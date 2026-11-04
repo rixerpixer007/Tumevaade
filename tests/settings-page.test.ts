@@ -45,6 +45,8 @@ describe("shared settings page", () => {
         <section data-settings-section="updates">
           <div data-setting-item data-search-terms="version update">
             <span id="app-version">Laadimine…</span>
+          </div>
+          <div data-setting-item data-app-updates data-search-terms="android" hidden>
             <button id="check-for-updates" type="button">Kontrolli</button>
             <p id="update-check-status"></p>
           </div>
@@ -104,7 +106,7 @@ describe("shared settings page", () => {
     await Promise.resolve();
 
     expect(document.querySelector("#app-version")?.textContent).toBe("Teadmata");
-    expect(document.querySelector<HTMLButtonElement>("#check-for-updates")?.disabled).toBe(true);
+    expect(document.querySelector<HTMLElement>("[data-app-updates]")?.hidden).toBe(true);
     cleanup();
   });
 
@@ -119,7 +121,25 @@ describe("shared settings page", () => {
 
     expect(getCurrentVersion).toHaveBeenCalledOnce();
     expect(document.querySelector("#app-version")?.textContent).toBe("2.3.4");
-    expect(document.querySelector<HTMLButtonElement>("#check-for-updates")?.disabled).toBe(true);
+    expect(document.querySelector<HTMLElement>("[data-app-updates]")?.hidden).toBe(true);
+    cleanup();
+  });
+
+  it("keeps Android update checks hidden when filtering browser settings", () => {
+    const cleanup = mountSettingsPage({ document, settingsStore: createStore() });
+    const search = document.querySelector<HTMLInputElement>("#settings-search");
+    if (search === null) throw new Error("Search control is missing");
+
+    for (const query of ["android", "version", ""]) {
+      search.value = query;
+      search.dispatchEvent(new Event("input"));
+      expect(document.querySelector<HTMLElement>("[data-app-updates]")?.hidden).toBe(true);
+      expect(document.querySelector<HTMLElement>('[data-settings-section="updates"]')?.hidden).toBe(
+        query === "android",
+      );
+    }
+    document.querySelector<HTMLButtonElement>('[data-category="updates"]')?.click();
+    expect(document.querySelector<HTMLElement>("[data-app-updates]")?.hidden).toBe(true);
     cleanup();
   });
 
@@ -153,6 +173,7 @@ describe("shared settings page", () => {
     await Promise.resolve();
 
     expect(document.querySelector("#app-version")?.textContent).toBe("0.1.0-beta");
+    expect(document.querySelector<HTMLElement>("[data-app-updates]")?.hidden).toBe(false);
     document.querySelector<HTMLButtonElement>("#check-for-updates")?.click();
     await Promise.resolve();
     await Promise.resolve();
