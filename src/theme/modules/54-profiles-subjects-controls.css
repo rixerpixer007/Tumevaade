@@ -17,6 +17,19 @@
   border-color: var(--sid-accent-border) !important;
 }
 
+/* Course-category badges are shared by subject headings and grading guides. */
+.st-badge.st-badge-semantic-si-category {
+  color: var(--sid-accent-strong) !important;
+  background: var(--sid-accent-soft) !important;
+  border-color: var(--sid-accent-border) !important;
+  border-radius: var(--sid-radius-xs) !important;
+  box-shadow: none !important;
+}
+
+.st-badge.st-badge-semantic-si-category.st-badge-semantic-dimmed {
+  color: var(--sid-text-2) !important;
+}
+
 .page_dashboard_subjects .dashboard-subjects-journal {
   color: var(--sid-text-2) !important;
   background: var(--sid-surface) !important;
