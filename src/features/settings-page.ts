@@ -25,6 +25,7 @@ interface SettingsPageElements {
   themeOptions: HTMLElement;
   colorSchemeMeta: HTMLMetaElement;
   appVersion: HTMLElement;
+  updateCheckRow: HTMLElement;
   updateCheckButton: HTMLButtonElement;
   updateCheckStatus: HTMLElement;
 }
@@ -46,6 +47,7 @@ function queryElements(document: Document): SettingsPageElements {
   const themeOptions = document.querySelector<HTMLElement>("#theme-options");
   const colorSchemeMeta = document.querySelector<HTMLMetaElement>('meta[name="color-scheme"]');
   const appVersion = document.querySelector<HTMLElement>("#app-version");
+  const updateCheckRow = document.querySelector<HTMLElement>("[data-app-updates]");
   const updateCheckButton = document.querySelector<HTMLButtonElement>("#check-for-updates");
   const updateCheckStatus = document.querySelector<HTMLElement>("#update-check-status");
 
@@ -60,6 +62,7 @@ function queryElements(document: Document): SettingsPageElements {
     themeOptions === null ||
     colorSchemeMeta === null ||
     appVersion === null ||
+    updateCheckRow === null ||
     updateCheckButton === null ||
     updateCheckStatus === null
   ) {
@@ -77,6 +80,7 @@ function queryElements(document: Document): SettingsPageElements {
     themeOptions,
     colorSchemeMeta,
     appVersion,
+    updateCheckRow,
     updateCheckButton,
     updateCheckStatus,
   };
@@ -244,6 +248,7 @@ export function mountSettingsPage({
   }
 
   async function initializeAppUpdates(): Promise<void> {
+    elements.updateCheckRow.hidden = appUpdates === undefined;
     elements.updateCheckButton.disabled = appUpdates === undefined;
 
     try {
@@ -324,7 +329,8 @@ export function mountSettingsPage({
         const searchableText = `${settingItem.dataset.searchTerms ?? ""} ${settingItem.textContent}`
           .toLocaleLowerCase()
           .trim();
-        const matchesSearch = query.length === 0 || searchableText.includes(query);
+        const isAvailable = settingItem !== elements.updateCheckRow || appUpdates !== undefined;
+        const matchesSearch = isAvailable && (query.length === 0 || searchableText.includes(query));
 
         settingItem.hidden = !matchesSearch;
         if (matchesSearch) hasMatchingItem = true;

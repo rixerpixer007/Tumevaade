@@ -561,6 +561,11 @@ h2 {
   padding-block: 0 1rem;
 }
 
+.setting-row--compact:has(+ [data-app-updates][hidden]) {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
 .setting-row--action {
   min-height: 0;
   padding-block: 1rem 0;
