@@ -66,14 +66,17 @@
   transform: scale(0.76) !important;
 }
 
-.section.todos .scheduled-type-badge {
+.section.todos .scheduled-type-badge,
+.section.todos .recent-scheduled-calendar .event-item {
   color: var(--sid-accent) !important;
   background: var(--sid-accent-soft) !important;
   border-color: var(--sid-accent-border) !important;
   opacity: 1 !important;
 }
 
-.section.todos .scheduled-type-badge-hw {
+.section.todos .scheduled-type-badge-hw,
+.section.todos .recent-scheduled-calendar .event-item[data-ev-type="homework"],
+.section.todos .recent-scheduled-calendar .event-item[data-ev-type="homework:lesson"] {
   color: var(--sid-warning) !important;
   background: var(--sid-warning-soft) !important;
   border-color: var(--sid-warning-border) !important;
@@ -81,6 +84,96 @@
 
 .section.todos .todo_container.is_marked .scheduled-type-badge {
   opacity: 0.65 !important;
+}
+
+/* Stuudium's scheduled calendar owns its layout and exposes local colour tokens. */
+.section.todos .recent-scheduled-calendar {
+  --border-color: var(--sid-border-strong);
+  --border-color-muted: var(--sid-border);
+  --bg-main: var(--sid-surface);
+  --bg-weekend: var(--sid-canvas-soft);
+  --bg-header: var(--sid-surface-2);
+  --text-main: var(--sid-text-2);
+  --text-muted: var(--sid-text-3);
+  --day-number-color: var(--sid-text-2);
+  --day-number-color-new-month: var(--sid-text);
+  --day-number-color-muted: var(--sid-text-3);
+  --bg-current-week: var(--sid-surface-3);
+  --bg-current-week-weekend: var(--sid-surface-3);
+  --today-accent: var(--sid-accent);
+  --today-bg: var(--sid-accent-soft);
+  color: var(--sid-text-2) !important;
+}
+
+.section.todos .recent-scheduled-calendar .day-cell {
+  border-radius: var(--sid-radius-xs) !important;
+}
+
+.section.todos .recent-scheduled-calendar .day-cell.today {
+  border-color: var(--sid-accent-border) !important;
+}
+
+.section.todos .recent-scheduled-calendar .day-cell.today .day-number {
+  color: var(--sid-accent) !important;
+}
+
+.section.todos .recent-scheduled-calendar .day-cell[data-is-expanded] {
+  position: relative;
+  background-image: none !important;
+  border-color: var(--sid-accent) !important;
+}
+
+.section.todos .recent-scheduled-calendar .day-cell[data-is-expanded]::after {
+  position: absolute;
+  bottom: 3px;
+  left: calc(50% - 3px);
+  width: 5px;
+  height: 5px;
+  content: "";
+  border: solid var(--sid-accent);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+.section.todos .recent-scheduled-calendar .event-item {
+  border: 1px solid var(--sid-accent-border);
+  border-radius: var(--sid-radius-xs) !important;
+}
+
+.section.todos .recent-scheduled-calendar .event-item[data-ev-is-marked="1"] {
+  color: var(--sid-text-3) !important;
+  background: var(--sid-surface-3) !important;
+  border-color: var(--sid-border-strong) !important;
+  border-style: dashed;
+}
+
+.section.todos .recent-scheduled-calendar .after-week-container .scheduled_date_container {
+  background: var(--sid-surface-2) !important;
+  border: 1px solid var(--sid-border) !important;
+  border-radius: var(--sid-radius-sm) !important;
+  box-shadow: none !important;
+}
+
+.section.todos .recent-scheduled-calendar .day-cell[data-has-events]:hover {
+  border-color: var(--sid-accent) !important;
+}
+
+/* Use the same token colours and checkmark as the existing theme controls. */
+.section.todos [data-role="student-dashboard-scheduled-view-switcher"] label > span {
+  color: var(--sid-text-2) !important;
+}
+
+.section.todos [data-role="student-dashboard-scheduled-view-switcher"] input:checked ~ span {
+  color: var(--sid-accent) !important;
+}
+
+.section.todos [data-role="student-dashboard-scheduled-view-switcher"] label > em {
+  border-color: var(--sid-border-strong) !important;
+}
+
+.section.todos [data-role="student-dashboard-scheduled-view-switcher"] input:checked ~ em {
+  background-image: var(--sid-checkmark-image) !important;
 }
 
 :where(
