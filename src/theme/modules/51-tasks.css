@@ -118,7 +118,22 @@
 }
 
 .section.todos .recent-scheduled-calendar .day-cell[data-is-expanded] {
+  position: relative;
+  background-image: none !important;
   border-color: var(--sid-accent) !important;
+}
+
+.section.todos .recent-scheduled-calendar .day-cell[data-is-expanded]::after {
+  position: absolute;
+  bottom: 3px;
+  left: calc(50% - 3px);
+  width: 5px;
+  height: 5px;
+  content: "";
+  border: solid var(--sid-accent);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  pointer-events: none;
 }
 
 .section.todos .recent-scheduled-calendar .event-item {
