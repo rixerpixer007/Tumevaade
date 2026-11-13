@@ -57,7 +57,7 @@
 
     <main class="settings-page">
       <div class="settings-return-row">
-        <button class="settings-return" type="button" data-return-to-stuudium>
+        <button class="settings-return settings-quiet-button" type="button" data-return-to-stuudium>
           <svg aria-hidden="true" viewBox="0 0 20 20">
             <path d="M16.25 10H3.75m5-5-5 5 5 5" />
           </svg>
@@ -118,45 +118,22 @@
             data-settings-section="appearance"
             data-search-terms="välimus grafiit münt sinine obsidiaan punane samet lillakas kesköö merevaik värvipalett värv kujundus stuudium sees väljas"
           >
-            <h2 id="appearance-heading">Välimus</h2>
-
-            <div class="settings-card-list">
-              <div
-                class="setting-row"
-                data-setting-item
-                data-search-terms="tumevaade tume kujundus sees väljas lubatud keelatud"
-              >
-                <div class="setting-copy">
-                  <label for="enhancement-enabled">Kasuta Tumevaate kujundust</label>
-                  <p id="enhancement-enabled-description">
-                    Rakenda toetatud TORGi lehtedel tume kujundus.
-                  </p>
-                </div>
-
-                <label class="setting-checkbox" for="enhancement-enabled">
-                  <input
-                    id="enhancement-enabled"
-                    name="enhancement-enabled"
-                    type="checkbox"
-                    aria-describedby="enhancement-enabled-description"
-                  />
-                  <span class="setting-checkbox__box" aria-hidden="true"></span>
-                </label>
-              </div>
-            </div>
-
-            <fieldset
-              class="theme-picker"
+            <div
               data-setting-item
-              data-search-terms="kujundus värv värvipalett grafiit münt sinine obsidiaan punane samet lillakas kesköö merevaik"
-              aria-describedby="theme-picker-description"
+              data-search-terms="kujundus originaal tume münt sinine punane lillakas merevaik"
             >
-              <legend>Kujundus</legend>
-              <p id="theme-picker-description">
-                Vali Stuudiumis kasutatav värvipalett. Muudatus rakendub kohe.
+              <h2 id="appearance-heading">Välimus</h2>
+              <p class="appearance-intro">
+                Vali Stuudiumi kujundus.
+                <button id="use-original" class="appearance-original" type="button" disabled>
+                  Või kasuta Stuudiumi originaali</button
+                >.
               </p>
-              <div id="theme-options" class="theme-options"></div>
-            </fieldset>
+              <fieldset class="theme-picker">
+                <legend class="setting-label">Tumedad</legend>
+                <div id="theme-options" class="theme-options"></div>
+              </fieldset>
+            </div>
 
             <p
               id="status"

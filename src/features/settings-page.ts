@@ -16,7 +16,7 @@ export interface SettingsPageDependencies {
 
 interface SettingsPageElements {
   returnControls: HTMLButtonElement[];
-  enabledInput: HTMLInputElement;
+  originalButton: HTMLButtonElement;
   status: HTMLElement;
   searchInput: HTMLInputElement;
   categoryControls: HTMLButtonElement[];
@@ -34,7 +34,7 @@ function queryElements(document: Document): SettingsPageElements {
   const returnControls = Array.from(
     document.querySelectorAll<HTMLButtonElement>("[data-return-to-stuudium]"),
   );
-  const enabledInput = document.querySelector<HTMLInputElement>("#enhancement-enabled");
+  const originalButton = document.querySelector<HTMLButtonElement>("#use-original");
   const status = document.querySelector<HTMLElement>("#status");
   const searchInput = document.querySelector<HTMLInputElement>("#settings-search");
   const categoryControls = Array.from(
@@ -53,7 +53,7 @@ function queryElements(document: Document): SettingsPageElements {
 
   if (
     returnControls.length === 0 ||
-    enabledInput === null ||
+    originalButton === null ||
     status === null ||
     searchInput === null ||
     categoryControls.length === 0 ||
@@ -71,7 +71,7 @@ function queryElements(document: Document): SettingsPageElements {
 
   return {
     returnControls,
-    enabledInput,
+    originalButton,
     status,
     searchInput,
     categoryControls,
@@ -121,12 +121,17 @@ export function mountSettingsPage({
     document.body.setAttribute("aria-busy", "false");
   }
 
-  function setThemeControls(themeId: ThemeId): void {
-    const controls =
-      elements.themeOptions.querySelectorAll<HTMLInputElement>('input[type="radio"]');
-    controls.forEach((control) => {
-      control.checked = control.value === themeId;
-    });
+  function setAppearanceControls(): void {
+    const { enhancementEnabled, theme } = currentSettings;
+    elements.originalButton.textContent = enhancementEnabled
+      ? "Või kasuta Stuudiumi originaali"
+      : "Originaal on kasutusel";
+    elements.originalButton.disabled = !enhancementEnabled;
+    elements.themeOptions
+      .querySelectorAll<HTMLInputElement>('input[type="radio"]')
+      .forEach((control) => {
+        control.checked = enhancementEnabled && control.value === theme.themeId;
+      });
   }
 
   function setThemeControlsDisabled(disabled: boolean): void {
@@ -138,34 +143,33 @@ export function mountSettingsPage({
   }
 
   function setSettingsControlsDisabled(disabled: boolean): void {
-    elements.enabledInput.disabled = disabled;
+    elements.originalButton.disabled = disabled || !currentSettings.enhancementEnabled;
     setThemeControlsDisabled(disabled);
   }
 
-  async function saveThemePreference(themeId: ThemeId): Promise<void> {
-    const previousThemeId = currentSettings.theme.themeId;
+  async function saveAppearance(nextSettings: ExtensionSettings): Promise<void> {
+    const previousSettings = currentSettings;
+    currentSettings = nextSettings;
+    setAppearanceControls();
     setSettingsControlsDisabled(true);
-    currentSettings = {
-      ...currentSettings,
-      theme: { mode: "manual", themeId },
-    };
-    applySettingsTheme(themeId);
-    setStatus(`Kujunduse „${getTheme(themeId).name}“ rakendamine…`, "saving");
+    applySettingsTheme(currentSettings.theme.themeId);
+    setStatus("Salvestamine…", "saving");
 
     try {
       await settingsStore.set(currentSettings);
-      cacheTheme(themeId);
-      setStatus(`Valitud on kujundus „${getTheme(themeId).name}“.`);
+      cacheTheme(currentSettings.theme.themeId);
+      setStatus(
+        currentSettings.enhancementEnabled
+          ? `Valitud on kujundus „${getTheme(currentSettings.theme.themeId).shortName}“.`
+          : "Kasutusel on Stuudiumi originaal.",
+      );
     } catch (error) {
-      console.error("Unable to save theme preference", error);
-      currentSettings = {
-        ...currentSettings,
-        theme: { mode: "manual", themeId: previousThemeId },
-      };
-      setThemeControls(previousThemeId);
-      applySettingsTheme(previousThemeId);
-      setStatus("Kujunduse eelistust ei õnnestunud salvestada.", "error");
+      console.error("Unable to save appearance preference", error);
+      currentSettings = previousSettings;
+      applySettingsTheme(previousSettings.theme.themeId);
+      setStatus("Välimuse eelistust ei õnnestunud salvestada. Proovi uuesti.", "error");
     } finally {
+      setAppearanceControls();
       setSettingsControlsDisabled(false);
     }
   }
@@ -182,7 +186,7 @@ export function mountSettingsPage({
       input.type = "radio";
       input.name = "theme";
       input.value = theme.id;
-      input.setAttribute("aria-label", theme.name);
+      input.setAttribute("aria-label", theme.shortName);
 
       const preview = document.createElement("span");
       preview.className = "theme-option__preview";
@@ -201,6 +205,7 @@ export function mountSettingsPage({
       const selectedMark = document.createElement("span");
       selectedMark.className = "theme-option__selected";
       selectedMark.textContent = "✓";
+      selectedMark.setAttribute("aria-hidden", "true");
       preview.append(sampleSurface, sampleLine, sampleAccent, selectedMark);
 
       const name = document.createElement("span");
@@ -209,7 +214,11 @@ export function mountSettingsPage({
 
       input.addEventListener("change", () => {
         if (!input.checked) return;
-        void saveThemePreference(theme.id);
+        void saveAppearance({
+          ...currentSettings,
+          enhancementEnabled: true,
+          theme: { mode: "manual", themeId: theme.id },
+        });
       });
 
       label.append(input, preview, name);
@@ -224,8 +233,7 @@ export function mountSettingsPage({
       const settings = await settingsStore.get();
       if (cleanedUp) return;
       currentSettings = settings;
-      elements.enabledInput.checked = settings.enhancementEnabled;
-      setThemeControls(settings.theme.themeId);
+      setAppearanceControls();
       applySettingsTheme(settings.theme.themeId);
       cacheTheme(settings.theme.themeId);
       setSettingsControlsDisabled(false);
@@ -237,8 +245,7 @@ export function mountSettingsPage({
     } catch (error) {
       if (cleanedUp) return;
       console.error("Unable to read enhancement settings", error);
-      elements.enabledInput.checked = currentSettings.enhancementEnabled;
-      setThemeControls(currentSettings.theme.themeId);
+      setAppearanceControls();
       applySettingsTheme(currentSettings.theme.themeId);
       cacheTheme(currentSettings.theme.themeId);
       setStatus("Salvestatud eelistust ei õnnestunud lugeda.", "error");
@@ -286,35 +293,6 @@ export function mountSettingsPage({
     }
   }
 
-  async function saveEnabledPreference(): Promise<void> {
-    const previousEnabled = currentSettings.enhancementEnabled;
-    setSettingsControlsDisabled(true);
-    setStatus("Salvestamine…", "saving");
-
-    try {
-      currentSettings = {
-        ...currentSettings,
-        enhancementEnabled: elements.enabledInput.checked,
-      };
-      await settingsStore.set(currentSettings);
-      setStatus(
-        elements.enabledInput.checked
-          ? "Tumevaate kujundus on sisse lülitatud."
-          : "Tumevaate kujundus on välja lülitatud.",
-      );
-    } catch (error) {
-      console.error("Unable to save enhancement settings", error);
-      currentSettings = {
-        ...currentSettings,
-        enhancementEnabled: previousEnabled,
-      };
-      elements.enabledInput.checked = previousEnabled;
-      setStatus("Eelistust ei õnnestunud salvestada.", "error");
-    } finally {
-      setSettingsControlsDisabled(false);
-    }
-  }
-
   function filterSettings(): void {
     const query = elements.searchInput.value.trim().toLocaleLowerCase();
     let visibleSections = 0;
@@ -352,8 +330,8 @@ export function mountSettingsPage({
     elements.emptyState.hidden = visibleSections > 0;
   }
 
-  const handleEnabledChange = (): void => {
-    void saveEnabledPreference();
+  const handleOriginalClick = (): void => {
+    void saveAppearance({ ...currentSettings, enhancementEnabled: false });
   };
   const handleHomeClick = (): void => {
     returnToStuudium();
@@ -383,7 +361,7 @@ export function mountSettingsPage({
   elements.returnControls.forEach((control) => {
     control.addEventListener("click", handleHomeClick);
   });
-  elements.enabledInput.addEventListener("change", handleEnabledChange);
+  elements.originalButton.addEventListener("click", handleOriginalClick);
   elements.searchInput.addEventListener("input", handleSearchInput);
   elements.updateCheckButton.addEventListener("click", handleUpdateCheck);
   renderThemeOptions();
@@ -397,7 +375,7 @@ export function mountSettingsPage({
     elements.returnControls.forEach((control) => {
       control.removeEventListener("click", handleHomeClick);
     });
-    elements.enabledInput.removeEventListener("change", handleEnabledChange);
+    elements.originalButton.removeEventListener("click", handleOriginalClick);
     elements.searchInput.removeEventListener("input", handleSearchInput);
     elements.updateCheckButton.removeEventListener("click", handleUpdateCheck);
     categoryHandlers.forEach(({ control, handler }) => {

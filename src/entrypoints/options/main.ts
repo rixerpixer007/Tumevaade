@@ -63,3 +63,10 @@ const cleanup = mountSettingsPage({
 });
 
 window.addEventListener("pagehide", cleanup, { once: true });
+
+// Illustrative categories belong only to the localhost design preview.
+if (isLocalPreview) {
+  void import("./preview-themes").then(({ renderPreviewThemes }) => {
+    renderPreviewThemes(document);
+  });
+}

@@ -140,7 +140,7 @@ body {
   padding: 14px 3px 0;
 }
 
-.settings-return {
+.settings-quiet-button {
   display: inline-flex;
   min-height: 30px;
   align-items: center;
@@ -173,18 +173,18 @@ body {
   stroke-width: 1.75;
 }
 
-.settings-return:hover {
+.settings-quiet-button:hover:not(:disabled) {
   color: var(--sid-text);
   background: var(--sid-surface);
 }
 
-.settings-return:focus-visible {
+.settings-quiet-button:focus-visible {
   outline: 2px solid var(--sid-accent);
   outline-offset: 2px;
   box-shadow: var(--sid-focus);
 }
 
-.settings-return:active {
+.settings-quiet-button:active:not(:disabled) {
   color: var(--sid-accent-strong);
 }
 
@@ -312,23 +312,57 @@ h2 {
   display: grid;
 }
 
+.appearance-intro,
+.privacy p {
+  margin: 0;
+  color: var(--sid-text-3);
+  font-size: 0.875rem;
+}
+
+.appearance-original {
+  display: inline;
+  padding: 0;
+  color: var(--sid-text-2);
+  background: transparent;
+  border: 0;
+  border-radius: var(--sid-radius-xs);
+  font: inherit;
+  text-align: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.appearance-original:hover:not(:disabled) {
+  color: var(--sid-text);
+}
+
+.appearance-original:focus-visible {
+  outline: 2px solid var(--sid-accent);
+  outline-offset: 3px;
+  box-shadow: var(--sid-focus);
+}
+
+.appearance-original:active:not(:disabled) {
+  color: var(--sid-accent-strong);
+}
+
+.appearance-original:disabled {
+  color: inherit;
+  text-decoration: none;
+  cursor: default;
+}
+
 .theme-picker {
   min-width: 0;
   padding: 0;
-  margin: 1.5rem 0 0;
+  margin: 1rem 0 0;
   border: 0;
 }
 
 .theme-picker legend {
   padding: 0;
-  color: var(--sid-text);
-  font-weight: 650;
-}
-
-.theme-picker > p {
-  margin: 0.25rem 0 0.9rem;
-  color: var(--sid-text-3);
-  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
 }
 
 .theme-options {
@@ -476,6 +510,7 @@ h2 {
 .setting-copy label,
 .setting-label {
   color: var(--sid-text);
+  font-size: 1rem;
   font-weight: 650;
 }
 
@@ -489,6 +524,7 @@ h2 {
   font-size: 0.9rem;
 }
 
+/* Reusable checkbox: markup and usage in docs/SETTINGS_UI_COMPONENTS.md. */
 .setting-checkbox {
   position: relative;
   display: grid;
@@ -604,10 +640,9 @@ h2 {
   cursor: not-allowed;
 }
 
-.privacy p {
-  margin: 0;
-  color: var(--sid-text-3);
-  font-size: 0.875rem;
+.settings-quiet-button:disabled {
+  color: var(--sid-text-disabled);
+  cursor: default;
 }
 
 .settings-empty {

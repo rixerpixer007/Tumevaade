@@ -37,7 +37,7 @@ describe("shared settings page", () => {
         <input id="settings-search">
         <section data-settings-section="appearance">
           <div data-setting-item data-search-terms="theme">
-            <input id="enhancement-enabled" type="checkbox">
+            <button id="use-original" type="button"></button>
             <div id="theme-options"></div>
           </div>
         </section>
@@ -65,7 +65,7 @@ describe("shared settings page", () => {
     const themeInputs = document.querySelectorAll<HTMLInputElement>('input[name="theme"]');
     expect(themeInputs).toHaveLength(5);
     expect(themeInputs[1]?.checked).toBe(true);
-    expect(themeInputs[1]?.getAttribute("aria-label")).toBe("Grafiit ja sinine");
+    expect(themeInputs[1]?.getAttribute("aria-label")).toBe("Sinine");
     expect(document.documentElement.dataset.sidTheme).toBe("graphite-blue");
     expect(document.documentElement.dataset.sidSettingsState).toBe("ready");
 
@@ -76,15 +76,81 @@ describe("shared settings page", () => {
     await Promise.resolve();
     expect(store.value.theme.themeId).toBe("graphite-mint");
 
-    const enabled = document.querySelector<HTMLInputElement>("#enhancement-enabled");
-    if (enabled === null) throw new Error("Enable control is missing");
-    enabled.checked = false;
-    enabled.dispatchEvent(new Event("change"));
+    const original = document.querySelector<HTMLButtonElement>("#use-original");
+    if (original === null) throw new Error("Original control missing");
+    original.click();
     await Promise.resolve();
     expect(store.value.enhancementEnabled).toBe(false);
+    expect(store.value.theme.themeId).toBe("graphite-mint");
+    expect(original.textContent).toBe("Originaal on kasutusel");
+    expect(original.disabled).toBe(true);
+    expect([...themeInputs].every((input) => !input.checked)).toBe(true);
+
+    // Selecting even the remembered theme must enable it again.
+    mint.checked = true;
+    mint.dispatchEvent(new Event("change"));
+    await Promise.resolve();
+    expect(store.value.enhancementEnabled).toBe(true);
+    expect(original.disabled).toBe(false);
+    expect(original.textContent).toBe("Või kasuta Stuudiumi originaali");
 
     cleanup();
   });
+
+  it("preserves a disabled saved appearance across remounts and enables a new selection", async () => {
+    const store = createStore();
+    store.value.enhancementEnabled = false;
+    let cleanup = mountSettingsPage({ document, settingsStore: store });
+    await Promise.resolve();
+    expect(document.querySelector("input:checked")).toBeNull();
+    expect(store.value.theme.themeId).toBe("graphite-blue");
+    cleanup();
+    cleanup = mountSettingsPage({ document, settingsStore: store });
+    await Promise.resolve();
+    expect(document.querySelector("input:checked")).toBeNull();
+    const red = document.querySelector<HTMLInputElement>('input[value="obsidian-red"]');
+    if (red === null) throw new Error("Red control missing");
+    red.checked = true;
+    red.dispatchEvent(new Event("change"));
+    await Promise.resolve();
+    expect(store.value).toEqual({
+      enhancementEnabled: true,
+      theme: { mode: "manual", themeId: "obsidian-red" },
+    });
+    cleanup();
+    cleanup = mountSettingsPage({ document, settingsStore: store });
+    await Promise.resolve();
+    expect(document.querySelector<HTMLInputElement>('input[value="obsidian-red"]')?.checked).toBe(
+      true,
+    );
+    cleanup();
+  });
+
+  it.each([true, false])(
+    "restores the entire previous appearance after a failed save (enabled=%s)",
+    async (enabled) => {
+      vi.spyOn(console, "error").mockImplementation(() => undefined);
+      const store = createStore();
+      store.value.enhancementEnabled = enabled;
+      store.set = vi.fn().mockRejectedValue(new Error("Storage unavailable"));
+      const cleanup = mountSettingsPage({ document, settingsStore: store });
+      await Promise.resolve();
+      if (enabled) {
+        document.querySelector<HTMLButtonElement>("#use-original")?.click();
+      } else {
+        const mint = document.querySelector<HTMLInputElement>('input[value="graphite-mint"]');
+        if (mint === null) throw new Error("Mint control missing");
+        mint.checked = true;
+        mint.dispatchEvent(new Event("change"));
+      }
+      await Promise.resolve();
+      expect(document.querySelector<HTMLButtonElement>("#use-original")?.disabled).toBe(!enabled);
+      expect(document.documentElement.dataset.sidTheme).toBe("graphite-blue");
+      expect(document.querySelector("#status")?.getAttribute("data-state")).toBe("error");
+      expect(document.querySelectorAll("input:checked")).toHaveLength(enabled ? 1 : 0);
+      cleanup();
+    },
+  );
 
   it("returns to Stuudium from both back controls", () => {
     const returnToStuudium = vi.fn();
@@ -155,7 +221,7 @@ describe("shared settings page", () => {
     await Promise.resolve();
 
     expect(document.querySelector("#app-version")?.textContent).toBe("Teadmata");
-    expect(document.querySelector<HTMLInputElement>("#enhancement-enabled")?.disabled).toBe(false);
+    expect(document.querySelector<HTMLButtonElement>("#use-original")?.disabled).toBe(false);
     cleanup();
   });
 

@@ -210,10 +210,16 @@ running in an open web page; the page refresh is important.
 
 ## 9. Open the settings
 
-The settings page has a master **Enable the dark theme** switch and visual cards
-for **Graphite Mint**, **Graphite Blue**, **Obsidian Red**, **Velvet Mauve**, and
-**Midnight Amber**. Selecting a card changes the complete color palette
-immediately. The card grid wraps automatically as themes are added.
+The settings page has visual cards for **Graphite Mint**, **Graphite Blue**,
+**Obsidian Red**, **Velvet Mauve**, and **Midnight Amber**. Selecting a card enables
+and applies that theme immediately. The inline **Või kasuta Stuudiumi originaali**
+action restores Stuudium's original appearance and clears the selected card,
+while retaining the remembered theme preference. The card grid wraps automatically
+as themes are added.
+
+The previous checkbox design remains available in the shared settings stylesheet;
+see [Settings UI components](SETTINGS_UI_COMPONENTS.md) for its copyable markup.
+It is not currently displayed on the settings page.
 
 Open it in any of these ways:
 
@@ -223,7 +229,7 @@ Open it in any of these ways:
 - On an authenticated TORG Stuudium page, open the main hamburger menu and
   select **Teema seaded** (or **Theme settings** on an English page).
 
-Turn the switch off and return to the Stuudium tab. The root activation marker
+Select **Või kasuta Stuudiumi originaali** and return to the Stuudium tab. The root activation marker
 is removed, which immediately deactivates both the critical and complete theme
 without attempting to undo hundreds of CSS properties individually. The
 in-page settings shortcut remains in Stuudium's native appearance so the dark

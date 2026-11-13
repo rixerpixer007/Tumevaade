@@ -1,0 +1,30 @@
+.theme-preview-category {
+  margin-top: 1.75rem;
+}
+
+.theme-preview-category h3 {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 0 0 1rem;
+}
+
+.theme-option--placeholder {
+  cursor: default;
+}
+
+.theme-option--placeholder:hover .theme-option__preview {
+  transform: none;
+}
+
+.theme-option--minecraft .theme-option__preview,
+.theme-option--minecraft .theme-option__surface,
+.theme-option--minecraft .theme-option__accent {
+  border-radius: 0;
+}
+
+.theme-option--minecraft .theme-option__preview {
+  background: repeating-linear-gradient(90deg, transparent 0 16px, #ffffff08 16px 32px), #20291b;
+  border-bottom: 8px solid #665036;
+}
