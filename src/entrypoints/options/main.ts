@@ -38,7 +38,7 @@ const settingsStore = isLocalPreview
   : createWebExtensionSettingsStore();
 const themeCacheKey = document.documentElement.dataset.sidThemeCacheKey;
 
-function cacheTheme(themeId: ThemeId): void {
+function cacheTheme(themeId: ThemeId | "original"): void {
   if (themeCacheKey === undefined) return;
 
   try {

@@ -8,7 +8,7 @@ const SETTINGS_STATE_ATTRIBUTE = "data-sid-settings-state";
 export interface SettingsPageDependencies {
   document: Document;
   settingsStore: SettingsStore;
-  cacheTheme?: (themeId: ThemeId) => void;
+  cacheTheme?: (themeId: ThemeId | "original") => void;
   returnToStuudium?: () => void;
   appUpdates?: AppUpdates;
   getCurrentVersion?: () => string | Promise<string>;
@@ -107,11 +107,20 @@ export function mountSettingsPage({
     elements.status.dataset.state = state;
   }
 
-  function applySettingsTheme(themeId: ThemeId): void {
-    const theme = getTheme(themeId);
-    applyTheme(document.documentElement, themeId);
-    elements.colorSchemeMeta.content = theme.colorScheme;
-    document.documentElement.style.colorScheme = theme.colorScheme;
+  function settingsThemeId(settings: ExtensionSettings): ThemeId | "original" {
+    return settings.enhancementEnabled ? settings.theme.themeId : "original";
+  }
+
+  function applySettingsTheme(settings: ExtensionSettings): void {
+    const themeId = settingsThemeId(settings);
+    const colorScheme = themeId === "original" ? "light" : getTheme(themeId).colorScheme;
+    if (themeId === "original") {
+      document.documentElement.setAttribute("data-sid-theme", themeId);
+    } else {
+      applyTheme(document.documentElement, themeId);
+    }
+    elements.colorSchemeMeta.content = colorScheme;
+    document.documentElement.style.colorScheme = colorScheme;
   }
 
   function revealSettingsPage(): void {
@@ -123,9 +132,12 @@ export function mountSettingsPage({
 
   function setAppearanceControls(): void {
     const { enhancementEnabled, theme } = currentSettings;
-    elements.originalButton.textContent = enhancementEnabled
+    const originalLabel = document.createElement("span");
+    originalLabel.className = "appearance-original__label";
+    originalLabel.textContent = enhancementEnabled
       ? "Või kasuta Stuudiumi originaali"
       : "Originaal on kasutusel";
+    elements.originalButton.replaceChildren(originalLabel);
     elements.originalButton.disabled = !enhancementEnabled;
     elements.themeOptions
       .querySelectorAll<HTMLInputElement>('input[type="radio"]')
@@ -152,12 +164,12 @@ export function mountSettingsPage({
     currentSettings = nextSettings;
     setAppearanceControls();
     setSettingsControlsDisabled(true);
-    applySettingsTheme(currentSettings.theme.themeId);
+    applySettingsTheme(currentSettings);
     setStatus("Salvestamine…", "saving");
 
     try {
       await settingsStore.set(currentSettings);
-      cacheTheme(currentSettings.theme.themeId);
+      cacheTheme(settingsThemeId(currentSettings));
       setStatus(
         currentSettings.enhancementEnabled
           ? `Valitud on kujundus „${getTheme(currentSettings.theme.themeId).shortName}“.`
@@ -166,7 +178,7 @@ export function mountSettingsPage({
     } catch (error) {
       console.error("Unable to save appearance preference", error);
       currentSettings = previousSettings;
-      applySettingsTheme(previousSettings.theme.themeId);
+      applySettingsTheme(previousSettings);
       setStatus("Välimuse eelistust ei õnnestunud salvestada. Proovi uuesti.", "error");
     } finally {
       setAppearanceControls();
@@ -234,8 +246,8 @@ export function mountSettingsPage({
       if (cleanedUp) return;
       currentSettings = settings;
       setAppearanceControls();
-      applySettingsTheme(settings.theme.themeId);
-      cacheTheme(settings.theme.themeId);
+      applySettingsTheme(settings);
+      cacheTheme(settingsThemeId(settings));
       setSettingsControlsDisabled(false);
       setStatus(
         settings.enhancementEnabled
@@ -246,8 +258,8 @@ export function mountSettingsPage({
       if (cleanedUp) return;
       console.error("Unable to read enhancement settings", error);
       setAppearanceControls();
-      applySettingsTheme(currentSettings.theme.themeId);
-      cacheTheme(currentSettings.theme.themeId);
+      applySettingsTheme(currentSettings);
+      cacheTheme(settingsThemeId(currentSettings));
       setStatus("Salvestatud eelistust ei õnnestunud lugeda.", "error");
     } finally {
       if (!cleanedUp) revealSettingsPage();

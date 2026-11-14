@@ -4,9 +4,47 @@
 
 :root {
   min-width: 320px;
-  color-scheme: dark;
+  color-scheme: var(--sid-color-scheme);
   background: var(--sid-canvas);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}
+
+/* Original Stuudium appearance belongs only to this local settings surface.
+ * It is not a selectable enhancement palette for the genuine site. */
+:root[data-sid-theme="original"] {
+  --sid-color-scheme: light;
+  --sid-canvas: #fafafa;
+  --sid-header-background: #203852;
+  --sid-surface: #fff;
+  --sid-control: #fff;
+  --sid-border: #e6e6e6;
+  --sid-border-strong: #ccc;
+  --sid-text: #111;
+  --sid-text-2: #111;
+  --sid-text-3: #555;
+  --sid-text-disabled: #777;
+  --sid-accent: #428bca;
+  --sid-accent-strong: #2a6496;
+  --sid-accent-ink: #fff;
+  --sid-accent-soft: #d9e8f4;
+  --sid-accent-border: #b1d0e9;
+  --sid-radius-xs: 4px;
+  --sid-radius-sm: 4px;
+  --sid-radius: 6px;
+  --sid-shadow: 0 0 3px 1px rgb(167 165 165 / 30%);
+  --sid-focus: 0 0 0 3px rgb(66 139 202 / 20%);
+  --sid-settings-canvas-text: #111;
+  --sid-settings-canvas-link: #428bca;
+}
+
+/* Match Suhtlus's native partial dark mode: white panels remain light. */
+@media (prefers-color-scheme: dark) and (min-width: 900px) {
+  :root[data-sid-theme="original"] {
+    --sid-canvas: #222;
+    --sid-shadow: 0 0 3px 1px transparent;
+    --sid-settings-canvas-text: #fff;
+    --sid-settings-canvas-link: #b9d4ec;
+  }
 }
 
 ::-webkit-scrollbar {
@@ -50,6 +88,11 @@ body {
   background: var(--sid-header-background);
   border-bottom: 1px solid var(--sid-border);
   backdrop-filter: blur(18px) saturate(135%);
+}
+
+:root[data-sid-theme="original"] .app-header {
+  border-bottom-color: transparent;
+  backdrop-filter: none;
 }
 
 .app-header__content {
@@ -130,6 +173,13 @@ body {
   line-height: 16.1px;
 }
 
+:root[data-sid-theme="original"] .app-navigation__current {
+  color: #111;
+  background: rgb(255 255 255 / 92%);
+  border-color: #203852;
+  box-shadow: none;
+}
+
 .settings-page {
   width: min(100%, 800px);
   margin-inline: auto;
@@ -188,6 +238,19 @@ body {
   color: var(--sid-accent-strong);
 }
 
+:root[data-sid-theme="original"] .settings-return {
+  color: var(--sid-settings-canvas-link);
+}
+
+:root[data-sid-theme="original"] .settings-return svg {
+  stroke: currentColor;
+}
+
+:root[data-sid-theme="original"] .settings-return:hover {
+  color: var(--sid-settings-canvas-text);
+  background: rgb(0 0 0 / 3%);
+}
+
 .settings-categories {
   display: flex;
   height: 40px;
@@ -243,11 +306,31 @@ body {
   box-shadow: inset 0 -3px 0 var(--sid-accent);
 }
 
+:root[data-sid-theme="original"] .settings-category {
+  color: var(--sid-settings-canvas-link);
+}
+
+:root[data-sid-theme="original"] .settings-category:hover {
+  background: rgb(0 0 0 / 3%);
+}
+
+:root[data-sid-theme="original"] .settings-category.is-active {
+  color: var(--sid-text);
+  background: var(--sid-accent-soft);
+  border-color: var(--sid-accent-border);
+  border-radius: 4px;
+  box-shadow: none;
+}
+
 .settings-sheet {
   background: var(--sid-surface);
   border: 1px solid var(--sid-border);
   border-radius: var(--sid-radius);
   box-shadow: var(--sid-shadow);
+}
+
+:root[data-sid-theme="original"] .settings-sheet {
+  border-color: transparent;
 }
 
 .settings-search {
@@ -273,6 +356,12 @@ body {
     "system-ui",
     "Segoe UI",
     sans-serif;
+}
+
+:root[data-sid-theme="original"] .settings-search input {
+  color: #000;
+  border-color: #dce1e3;
+  letter-spacing: normal;
 }
 
 .settings-search input::placeholder {
@@ -308,6 +397,10 @@ h2 {
   text-transform: uppercase;
 }
 
+:root[data-sid-theme="original"] h2 {
+  color: var(--sid-text);
+}
+
 .settings-card-list {
   display: grid;
 }
@@ -320,7 +413,9 @@ h2 {
 }
 
 .appearance-original {
-  display: inline;
+  display: inline-grid;
+  max-width: 100%;
+  grid-template-areas: "label";
   padding: 0;
   color: var(--sid-text-2);
   background: transparent;
@@ -331,6 +426,25 @@ h2 {
   text-decoration: underline;
   text-underline-offset: 3px;
   cursor: pointer;
+}
+
+/* Reserve the longer label's footprint so selecting Original cannot reflow the page. */
+.appearance-original__label,
+.appearance-original::after {
+  grid-area: label;
+}
+
+.appearance-original::after {
+  content: "Või kasuta Stuudiumi originaali";
+  visibility: hidden;
+}
+
+:root[data-sid-theme="original"] .appearance-original {
+  color: var(--sid-accent);
+}
+
+:root[data-sid-theme="original"] .appearance-original:disabled {
+  color: inherit;
 }
 
 .appearance-original:hover:not(:disabled) {
@@ -625,6 +739,15 @@ h2 {
 .settings-button:hover:not(:disabled) {
   background: var(--sid-accent-strong);
   border-color: var(--sid-accent-strong);
+}
+
+:root[data-sid-theme="original"] .settings-button:not(:disabled) {
+  border-color: #2a6496;
+}
+
+:root[data-sid-theme="original"] .settings-button:hover:not(:disabled) {
+  background: #4e92cd;
+  border-color: #4d4d4d;
 }
 
 .settings-button:focus-visible {

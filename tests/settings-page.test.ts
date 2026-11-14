@@ -85,6 +85,11 @@ describe("shared settings page", () => {
     expect(original.textContent).toBe("Originaal on kasutusel");
     expect(original.disabled).toBe(true);
     expect([...themeInputs].every((input) => !input.checked)).toBe(true);
+    expect(document.documentElement.dataset.sidTheme).toBe("original");
+    expect(document.documentElement.style.colorScheme).toBe("light");
+    expect(document.querySelector('meta[name="color-scheme"]')?.getAttribute("content")).toBe(
+      "light",
+    );
 
     // Selecting even the remembered theme must enable it again.
     mint.checked = true;
@@ -92,6 +97,8 @@ describe("shared settings page", () => {
     await Promise.resolve();
     expect(store.value.enhancementEnabled).toBe(true);
     expect(original.disabled).toBe(false);
+    expect(document.documentElement.dataset.sidTheme).toBe("graphite-mint");
+    expect(document.documentElement.style.colorScheme).toBe("dark");
     expect(original.textContent).toBe("Või kasuta Stuudiumi originaali");
 
     cleanup();
@@ -100,10 +107,13 @@ describe("shared settings page", () => {
   it("preserves a disabled saved appearance across remounts and enables a new selection", async () => {
     const store = createStore();
     store.value.enhancementEnabled = false;
-    let cleanup = mountSettingsPage({ document, settingsStore: store });
+    const cacheTheme = vi.fn();
+    let cleanup = mountSettingsPage({ document, settingsStore: store, cacheTheme });
     await Promise.resolve();
     expect(document.querySelector("input:checked")).toBeNull();
     expect(store.value.theme.themeId).toBe("graphite-blue");
+    expect(document.documentElement.dataset.sidTheme).toBe("original");
+    expect(cacheTheme).toHaveBeenLastCalledWith("original");
     cleanup();
     cleanup = mountSettingsPage({ document, settingsStore: store });
     await Promise.resolve();
@@ -145,7 +155,10 @@ describe("shared settings page", () => {
       }
       await Promise.resolve();
       expect(document.querySelector<HTMLButtonElement>("#use-original")?.disabled).toBe(!enabled);
-      expect(document.documentElement.dataset.sidTheme).toBe("graphite-blue");
+      expect(document.documentElement.dataset.sidTheme).toBe(
+        enabled ? "graphite-blue" : "original",
+      );
+      expect(document.documentElement.style.colorScheme).toBe(enabled ? "dark" : "light");
       expect(document.querySelector("#status")?.getAttribute("data-state")).toBe("error");
       expect(document.querySelectorAll("input:checked")).toHaveLength(enabled ? 1 : 0);
       cleanup();
