@@ -121,6 +121,6 @@
 }
 
 .grade_is_summary {
-  background: var(--sid-warning-soft) !important;
-  border-color: var(--sid-warning-border) !important;
+  background: var(--sid-emphasis-soft) !important;
+  border-color: var(--sid-emphasis-border) !important;
 }

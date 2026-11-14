@@ -238,6 +238,7 @@ describe("generated theme", () => {
       ["obsidian-red", "#0d0d0f", "#ff6b7a", "#f5f0f2"],
       ["velvet-mauve", "#11111b", "#cba6f7", "#cdd6f4"],
       ["midnight-amber", "#11100d", "#f2b84b", "#f3ead7"],
+      ["light-mint", "#edf4ef", "#267458", "#263c32"],
     ] as const;
 
     expect(css).toContain("--sid-accent: #65d6b1");
@@ -262,6 +263,98 @@ describe("generated theme", () => {
       ).toBe(true);
     });
     expect(mintFallback).toBeDefined();
+  });
+
+  it("gives Light Mint its own complete color system and a matching early surface", () => {
+    const base = postcss.parse(
+      fs.readFileSync(path.join(projectRoot, "src/theme/modules/01-tokens.css"), "utf8"),
+    );
+    const palettes = fs.readFileSync(
+      path.join(projectRoot, "src/theme/modules/02-palettes.css"),
+      "utf8",
+    );
+    const light = findRule(palettes, '[data-sid-theme="light-mint"]');
+    const tokens = new Map<string, string>();
+    light?.walkDecls((decl) => {
+      tokens.set(decl.prop, decl.value);
+    });
+    base.walkDecls(/^--sid-/, (decl) => {
+      if (/^--sid-(radius|z-)/.test(decl.prop)) return;
+      expect(tokens.has(decl.prop), `Light Mint must own ${decl.prop}`).toBe(true);
+    });
+    const critical = findRule(
+      fs.readFileSync(path.join(projectRoot, "src/theme/critical.css"), "utf8"),
+      '[data-sid-theme="light-mint"]',
+    );
+    critical?.walkDecls((decl) => {
+      expect(tokens.get(decl.prop)).toBe(decl.value);
+    });
+    expect(critical).toBeDefined();
+    expect(tokens.get("--sid-color-scheme")).toBe("light");
+
+    function luminance(token: string): number {
+      const hex = tokens.get(token);
+      if (hex === undefined) throw new Error(`Missing color: ${token}`);
+      return [0.2126, 0.7152, 0.0722].reduce((sum, weight, index) => {
+        const value = parseInt(hex.slice(1 + index * 2, 3 + index * 2), 16) / 255;
+        const linear = value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+        return sum + linear * weight;
+      }, 0);
+    }
+    function contrast(a: string, b: string): number {
+      const x = luminance(a);
+      const y = luminance(b);
+      return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+    }
+    for (const text of [
+      "--sid-text",
+      "--sid-text-2",
+      "--sid-text-3",
+      "--sid-accent",
+      "--sid-danger",
+      "--sid-warning",
+    ]) {
+      for (const background of [
+        "--sid-canvas",
+        "--sid-surface",
+        "--sid-surface-2",
+        "--sid-surface-3",
+      ]) {
+        expect(contrast(text, background), `${text} on ${background}`).toBeGreaterThanOrEqual(4.5);
+      }
+    }
+    expect(contrast("--sid-accent-ink", "--sid-accent")).toBeGreaterThanOrEqual(4.5);
+    expect(contrast("--sid-accent-ink", "--sid-accent-strong")).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it("uses the reading surface for expanded messages and their read-more fade", () => {
+    const css = fs.readFileSync(path.join(projectRoot, "src/generated/theme.css"), "utf8");
+    const expanded = findRule(css, ".suhtlus .post-in-list.post-expanded");
+    const fade = findRule(css, ".post-body.block-collapsed .block-collapsed-expander");
+    expect(expanded?.nodes).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          prop: "background",
+          value: "var(--sid-post-surface)",
+          important: true,
+        }),
+      ]),
+    );
+    expect(
+      fade?.nodes.some(
+        (node) =>
+          node.type === "decl" &&
+          node.prop === "background-image" &&
+          node.value.includes("var(--sid-post-surface-transparent)") &&
+          node.value.includes("var(--sid-post-surface) 72%"),
+      ),
+    ).toBe(true);
+    const light = findRule(css, '[data-sid-theme="light-mint"]');
+    expect(light?.nodes).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ prop: "--sid-post-surface", value: "var(--sid-surface)" }),
+      ]),
+    );
   });
 
   it("keeps Mint-specific accent values inside palette modules", () => {

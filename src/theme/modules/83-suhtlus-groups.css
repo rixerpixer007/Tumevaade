@@ -120,6 +120,11 @@
   border-color: var(--sid-border) !important;
 }
 
+/* Date separators sit on our canvas, independent of Stuudium's OS dark mode. */
+.suhtlus .post-list .post-list-date-divider {
+  color: var(--sid-accent) !important;
+}
+
 .suhtlus :where(.post-list-end, .generic-divider) {
   border-color: var(--sid-border) !important;
 }
@@ -130,8 +135,13 @@
   border-color: var(--sid-border-strong) !important;
 }
 
-.suhtlus :where(.post-in-list:hover, .post-in-list.post-expanded, .post-in-list.highlighted) {
+.suhtlus :where(.post-in-list:hover, .post-in-list.highlighted) {
   background: var(--sid-surface-interactive) !important;
+}
+
+/* Reading a message is a persistent surface, not a row hover state. */
+.suhtlus .post-in-list.post-expanded {
+  background: var(--sid-post-surface) !important;
 }
 
 .suhtlus :where(.post-title, .post-title-main, .post-author) {
@@ -212,7 +222,7 @@
 }
 
 .suhtlus .post-in-list.post-is-favorite {
-  border-color: var(--sid-warning) !important;
+  border-color: var(--sid-emphasis-border-strong) !important;
   border-image: none !important;
 }
 
@@ -223,7 +233,7 @@
   width: 16px;
   height: 16px;
   content: "";
-  background: var(--sid-warning) !important;
+  background: var(--sid-emphasis) !important;
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3.1-5.8 3.1 1.1-6.5-4.7-4.6 6.5-.9L12 2.8Z'/%3E%3C/svg%3E") center / contain no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3.1-5.8 3.1 1.1-6.5-4.7-4.6 6.5-.9L12 2.8Z'/%3E%3C/svg%3E") center / contain no-repeat;
   pointer-events: none;
@@ -264,8 +274,8 @@
 .suhtlus .post-body.block-collapsed .block-collapsed-expander {
   background-image: linear-gradient(
     to bottom,
-    var(--sid-surface-interactive-transparent),
-    var(--sid-surface-interactive) 72%
+    var(--sid-post-surface-transparent),
+    var(--sid-post-surface) 72%
   ) !important;
 }
 
@@ -402,26 +412,29 @@
 
 .suhtlus .button-icon-unfav {
   color: var(--sid-warning) !important;
-  background: var(--sid-warning-soft) !important;
-  border-color: var(--sid-warning-border) !important;
+  background: var(--sid-emphasis-soft) !important;
+  border-color: var(--sid-emphasis-border) !important;
 }
 
 .suhtlus .button-icon-unfav::before {
-  background: var(--sid-warning) !important;
+  background: var(--sid-emphasis) !important;
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3.1-5.8 3.1 1.1-6.5-4.7-4.6 6.5-.9L12 2.8Z'/%3E%3C/svg%3E") center / contain no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3.1-5.8 3.1 1.1-6.5-4.7-4.6 6.5-.9L12 2.8Z'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .suhtlus .post-in-list.post-is-favorite .button-icon-unfav:hover {
-  color: var(--sid-accent-ink) !important;
-  background: var(--sid-warning) !important;
-  border-color: var(--sid-warning) !important;
+  color: var(--sid-emphasis-ink) !important;
+  background: var(--sid-emphasis) !important;
+  border-color: var(--sid-emphasis) !important;
 }
 
 .suhtlus .button-icon-fav:hover::before,
-.suhtlus .button-icon-fav:focus-visible::before,
-.suhtlus .button-icon-unfav:hover::before {
+.suhtlus .button-icon-fav:focus-visible::before {
   background: var(--sid-accent-ink) !important;
+}
+
+.suhtlus .button-icon-unfav:hover::before {
+  background: var(--sid-emphasis-ink) !important;
 }
 
 .suhtlus .post-responses-add-toggle > span {

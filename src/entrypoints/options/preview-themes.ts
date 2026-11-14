@@ -2,19 +2,12 @@ import "./preview-themes.css";
 
 // Visual placeholders only: never registered in the theme catalog or settings store.
 export function renderPreviewThemes(document: Document): void {
-  const appearance = document.querySelector(".theme-picker")?.parentElement;
-  if (appearance === null || appearance === undefined) return;
+  const appearance = document.querySelector("#theme-options");
+  if (appearance === null) return;
   const groups = [
     {
       title: "Heledad",
       themes: [
-        {
-          name: "Hele münt",
-          canvas: "#edf4ef",
-          surface: "#ffffff",
-          accent: "#35876d",
-          text: "#263c32",
-        },
         {
           name: "Hele sinine",
           canvas: "#edf1f8",
@@ -68,6 +61,11 @@ export function renderPreviewThemes(document: Document): void {
       grid.append(card);
     }
     section.append(heading, grid);
-    appearance.append(section);
+    const lightGrid = appearance.querySelector('[data-theme-family="light"] .theme-options');
+    if (group.title === "Heledad" && lightGrid !== null) {
+      lightGrid.append(...grid.children);
+    } else {
+      appearance.append(section);
+    }
   }
 }

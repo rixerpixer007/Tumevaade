@@ -189,6 +189,26 @@ export function mountSettingsPage({
   function renderThemeOptions(): void {
     const fragment = document.createDocumentFragment();
 
+    const grids = new Map<string, HTMLElement>();
+    for (const [family, title] of [
+      ["dark", "Tumedad"],
+      ["light", "Heledad"],
+    ] as const) {
+      const themes = THEMES.filter((theme) => theme.colorScheme === family);
+      if (themes.length === 0) continue;
+      const fieldset = document.createElement("fieldset");
+      fieldset.className = "theme-picker";
+      fieldset.dataset.themeFamily = family;
+      const legend = document.createElement("legend");
+      legend.className = "setting-label";
+      legend.textContent = title;
+      const grid = document.createElement("div");
+      grid.className = "theme-options";
+      fieldset.append(legend, grid);
+      fragment.append(fieldset);
+      grids.set(family, grid);
+    }
+
     THEMES.forEach((theme) => {
       const label = document.createElement("label");
       label.className = "theme-option";
@@ -234,7 +254,7 @@ export function mountSettingsPage({
       });
 
       label.append(input, preview, name);
-      fragment.append(label);
+      grids.get(theme.colorScheme)?.append(label);
     });
 
     elements.themeOptions.replaceChildren(fragment);

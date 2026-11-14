@@ -6,6 +6,7 @@ const EARLY_ACTIVATION_SCRIPT_BY_THEME = {
   "obsidian-red": "activation-obsidian-red.js",
   "velvet-mauve": "activation-velvet-mauve.js",
   "midnight-amber": "activation-midnight-amber.js",
+  "light-mint": "activation-light-mint.js",
 } as const satisfies Record<ThemeId, string>;
 
 export function getEarlyActivationScript(themeId: ThemeId): string {

@@ -27,6 +27,8 @@ describe("theme catalog", () => {
     expect(isThemeId("obsidian-red")).toBe(true);
     expect(isThemeId("velvet-mauve")).toBe(true);
     expect(isThemeId("midnight-amber")).toBe(true);
+    expect(isThemeId("light-mint")).toBe(true);
+    expect(getTheme("light-mint").colorScheme).toBe("light");
     expect(isThemeId("unknown-theme")).toBe(false);
   });
 
@@ -37,6 +39,7 @@ describe("theme catalog", () => {
       "activation-obsidian-red.js",
       "activation-velvet-mauve.js",
       "activation-midnight-amber.js",
+      "activation-light-mint.js",
     ]);
   });
 });

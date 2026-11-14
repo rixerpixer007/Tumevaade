@@ -63,7 +63,7 @@ describe("shared settings page", () => {
     await Promise.resolve();
 
     const themeInputs = document.querySelectorAll<HTMLInputElement>('input[name="theme"]');
-    expect(themeInputs).toHaveLength(5);
+    expect(themeInputs).toHaveLength(6);
     expect(themeInputs[1]?.checked).toBe(true);
     expect(themeInputs[1]?.getAttribute("aria-label")).toBe("Sinine");
     expect(document.documentElement.dataset.sidTheme).toBe("graphite-blue");
@@ -101,6 +101,41 @@ describe("shared settings page", () => {
     expect(document.documentElement.style.colorScheme).toBe("dark");
     expect(original.textContent).toBe("Või kasuta Stuudiumi originaali");
 
+    cleanup();
+  });
+
+  it("groups Light Mint separately, persists it, and restores its light scheme on remount", async () => {
+    const store = createStore();
+    const cacheTheme = vi.fn();
+    let cleanup = mountSettingsPage({ document, settingsStore: store, cacheTheme });
+    await Promise.resolve();
+    const light = document.querySelector<HTMLInputElement>('input[value="light-mint"]');
+    if (light === null) throw new Error("Light Mint control missing");
+    expect(light.closest("fieldset")?.querySelector("legend")?.textContent).toBe("Heledad");
+    expect(document.querySelectorAll('[data-theme-family="dark"] input')).toHaveLength(5);
+    light.checked = true;
+    light.dispatchEvent(new Event("change"));
+    await Promise.resolve();
+    expect(store.value.theme.themeId).toBe("light-mint");
+    expect(document.documentElement.dataset.sidTheme).toBe("light-mint");
+    expect(document.documentElement.style.colorScheme).toBe("light");
+    expect(document.querySelector('meta[name="color-scheme"]')?.getAttribute("content")).toBe(
+      "light",
+    );
+    expect(cacheTheme).toHaveBeenLastCalledWith("light-mint");
+    cleanup();
+    cleanup = mountSettingsPage({ document, settingsStore: store });
+    await Promise.resolve();
+    expect(document.querySelector<HTMLInputElement>('input[value="light-mint"]')?.checked).toBe(
+      true,
+    );
+    expect(document.documentElement.style.colorScheme).toBe("light");
+    const dark = document.querySelector<HTMLInputElement>('input[value="graphite-mint"]');
+    if (dark === null) throw new Error("Dark Mint control missing");
+    dark.checked = true;
+    dark.dispatchEvent(new Event("change"));
+    await Promise.resolve();
+    expect(document.documentElement.style.colorScheme).toBe("dark");
     cleanup();
   });
 

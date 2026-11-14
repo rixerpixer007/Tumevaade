@@ -17,6 +17,8 @@
   --sid-surface-3: #202824;
   --sid-surface-interactive: #191f1b;
   --sid-surface-interactive-transparent: rgb(25 31 27 / 0%);
+  --sid-post-surface: var(--sid-surface-interactive);
+  --sid-post-surface-transparent: var(--sid-surface-interactive-transparent);
   --sid-bg-overlay: var(--sid-surface-2);
   --sid-panel-translucent: rgb(23 28 25 / 88%);
   --sid-panel-translucent-strong: rgb(23 28 25 / 96%);
@@ -52,6 +54,12 @@
   --sid-warning: #efc873;
   --sid-warning-soft: rgb(239 200 115 / 11%);
   --sid-warning-border: rgb(239 200 115 / 42%);
+  /* Saved items and course summaries use emphasis, independently of warnings. */
+  --sid-emphasis: var(--sid-warning);
+  --sid-emphasis-ink: var(--sid-accent-ink);
+  --sid-emphasis-soft: var(--sid-warning-soft);
+  --sid-emphasis-border: var(--sid-warning-border);
+  --sid-emphasis-border-strong: var(--sid-warning);
   --sid-radius-xs: 4px;
   --sid-radius-sm: 7px;
   --sid-radius: 11px;

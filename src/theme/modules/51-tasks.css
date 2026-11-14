@@ -282,8 +282,8 @@ body.page_dashboard_recent
 .stream-entry.ng-grade-is-summary-wrapper {
   position: relative !important;
   padding-right: 40px !important;
-  background: var(--sid-warning-soft) !important;
-  border-color: var(--sid-warning-border) !important;
+  background: var(--sid-emphasis-soft) !important;
+  border-color: var(--sid-emphasis-border) !important;
 }
 
 .stream-entry.ng-grade-is-summary-wrapper > .stream-entry-avatar {

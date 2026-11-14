@@ -27,3 +27,9 @@
   --sid-canvas: #11100d;
   --sid-text-2: #cec2aa;
 }
+
+:root:where([data-sid-enhancement="enabled"][data-sid-theme="light-mint"]) {
+  --sid-color-scheme: light;
+  --sid-canvas: #edf4ef;
+  --sid-text-2: #40584c;
+}

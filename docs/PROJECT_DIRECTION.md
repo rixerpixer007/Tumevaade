@@ -106,6 +106,9 @@ amber color systems. Component rules use the same semantic tokens in every
 theme. The catalog records a theme's
 light/dark color-scheme family so a future light theme can replace every
 required token without changing the selection UI or stored preference shape.
+Light Mint (Hele münt) is the first light palette. It owns the complete color
+system, including semantic states, icons, shadows, and the early startup
+surface. Settings group available themes into dark and light families.
 Selection is manual and remembered; a future system-following mode can be added
 alongside the current `manual` mode without changing existing saved choices.
 
@@ -275,8 +278,8 @@ These choices remain intentionally unresolved:
   the `.debug` suffix and debug signing remains development-only.
 - The organization and governance of the eventual Apple developer account.
 - The post-theme-switching feature roadmap.
-- Which future theme should first exercise full light-palette overrides and
-  whether automatic system-following belongs in that same phase.
+- Whether automatic system-following should be added after the manually selected
+  Light Mint palette; additional light palettes remain separate follow-up work.
 
 Resolve each through the smallest relevant prototype and live Stuudium verification rather than selecting technology from feature lists alone.
 

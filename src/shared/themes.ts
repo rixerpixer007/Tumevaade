@@ -82,6 +82,19 @@ export const THEMES = [
       text: "#f3ead7",
     },
   },
+  {
+    id: "light-mint",
+    name: "Hele münt",
+    shortName: "Hele münt",
+    description: "Pehme rohekashall taust, valged kaardid ja sügavrohelised aktsendid.",
+    colorScheme: "light",
+    preview: {
+      canvas: "#edf4ef",
+      surface: "#ffffff",
+      accent: "#267458",
+      text: "#263c32",
+    },
+  },
 ] as const satisfies readonly ThemeDefinition[];
 
 export type ThemeId = (typeof THEMES)[number]["id"];
