@@ -5,6 +5,8 @@
   "description": "Tumevaate jagatud kujundus ning Chromiumi brauserilaiendus.",
   "type": "module",
   "scripts": {
+    "browser": "node scripts/browser-cli.mjs",
+    "test:browser": "node scripts/browser-smoke.mjs",
     "postinstall": "node scripts/build-theme.mjs && wxt prepare",
     "dev": "npm run build:brand && node scripts/build-theme.mjs && concurrently --kill-others-on-fail --names theme,extension \"node scripts/watch-theme.mjs\" \"wxt -b chrome\"",
     "watch:theme": "node scripts/watch-theme.mjs",
@@ -39,6 +41,7 @@
     "eslint": "10.9.1",
     "globals": "17.12.0",
     "happy-dom": "20.14.0",
+    "playwright": "1.65.1",
     "postcss": "8.5.28",
     "postcss-selector-parser": "7.1.6",
     "prettier": "3.9.6",

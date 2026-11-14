@@ -1,8 +1,8 @@
 # Extension development
 
 This guide starts from a computer that has never built a browser extension. It
-covers the Phase 2 Chromium extension for Google Chrome and other Chromium-based browsers. The extension
-changes only pages under `https://torg.ope.ee/`, stores an enable/disable choice
+covers the Chromium extension for Google Chrome and other Chromium-based
+browsers. The extension changes only pages under `https://torg.ope.ee/`, stores an enable/disable choice
 and a selected theme, and does not read or store student information.
 
 ## What the tools do
@@ -134,6 +134,10 @@ The development folder is:
 > in the browser. Check the extension card's **Loaded from** path before testing.
 
 WXT intentionally does not launch a personal browser profile for this project.
+Agents use the default headless workflow in
+[Background browser testing](BACKGROUND_BROWSER_TESTING.md). Its interactive
+commands load the watched development folder by default.
+
 Load that folder manually in a dedicated development browser profile or
 session. Keep the terminal command running while editing. Press `Control+C` in
 the terminal to stop it cleanly.
@@ -189,8 +193,7 @@ described in [How can I add extensions to Brave?](https://support.brave.com/hc/e
    `.output/chrome-mv3` only when testing the result of `npm run build`.
 6. Confirm that **Tumevaade** appears without an error badge.
 
-Published users of Brave can later install the same listing from the Chrome Web
-Store; they do not need a separate Brave package.
+Brave users can install the same listing from the Chrome Web Store; they do not need a separate Brave package.
 
 ## 8. Reload after a code or CSS change
 

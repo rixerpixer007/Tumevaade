@@ -1,11 +1,11 @@
-# Android prototype development
+# Android development
 
 This guide starts from a Mac that has never built an Android application. It
-covers the Phase 4 feasibility prototype: a native Kotlin shell around the
-genuine TORG Stuudium site. The prototype is not a published or signed public
-release.
+covers the native Kotlin WebView app, its shared web assets, debug testing,
+release signing, and GitLab update notifications. Release availability is
+tracked by the README and release metadata; verify each exact APK separately.
 
-## What the prototype does
+## What the app does
 
 The Android app contains two deliberately separate WebViews:
 
@@ -55,7 +55,7 @@ Open **Tools → SDK Manager** and verify these components:
 - **SDK Tools:** Android SDK Build-Tools, Android SDK Platform-Tools, and Android
   SDK Command-line Tools (latest).
 - **Android Emulator:** optional. The physical Samsung S25 is the primary
-  prototype device, but an emulator is useful for Android 8 and Android 10
+  test device, but an emulator is useful for Android 8 and Android 10
   compatibility checks later.
 
 The exact latest tool revision can change. Recheck the official Android Studio
@@ -274,7 +274,7 @@ The phone should be listed as `device`. `unauthorized` means the confirmation
 dialog is still waiting on the phone. An empty list usually means the cable is
 charge-only or USB debugging is disabled.
 
-## 9. Install and run the prototype
+## 9. Install and run the debug app
 
 In Android Studio, select the Samsung device in the device menu and press the
 green **Run** button.
@@ -320,8 +320,7 @@ panels just as you would for a normal browser tab.
 On an authenticated Stuudium document, confirm that `<html>` has:
 
 - `data-sid-enhancement="enabled"` when the enhancement is on;
-- either `data-sid-theme="graphite-mint"` or
-  `data-sid-theme="graphite-blue"`;
+- `data-sid-theme` matching the selected ID in `src/shared/themes.ts`;
 - style elements named `sid-mobile-critical`, `sid-mobile-theme`, and
   `sid-mobile-settings-menu`.
 
@@ -331,7 +330,7 @@ remain unmodified.
 
 Production builds must not enable WebView debugging.
 
-## 11. Prototype verification checklist
+## 11. Device verification checklist
 
 Use a real existing Stuudium account, but never copy its credentials into source
 code, test files, screenshots, logs, or issue descriptions.
@@ -352,7 +351,7 @@ Test at minimum:
 8. A normal internal Stuudium link and a client-side navigation.
 9. A foreign top-level link, which must open outside the app.
 10. A file-upload control, including cancellation.
-11. A download link. The prototype currently hands downloads to the system
+11. A download link. The app currently hands downloads to the system
     browser; confirm whether authenticated Stuudium downloads survive that
     boundary before designing a native download adapter.
 12. Embedded Tera or Office content as a cross-origin negative control. It must
@@ -476,7 +475,7 @@ Long-press the app icon on the phone and choose **Uninstall**, or run:
 ~/Library/Android/sdk/platform-tools/adb uninstall io.github.rixerpixer007.stuudium.debug
 ```
 
-Uninstalling removes the prototype's WebView session and stored preferences. It
+Uninstalling removes the debug app's WebView session and stored preferences. It
 does not remove or alter the release app or the normal Chrome browser's Stuudium
 session.
 
@@ -521,5 +520,5 @@ debugging authorizations, reconnect the cable, and approve the new fingerprint.
 ### The app requests a WebView update
 
 Update **Android System WebView** and **Google Chrome** in Google Play, reboot the
-phone if Android requests it, and reopen the app. The prototype deliberately
+phone if Android requests it, and reopen the app. The app deliberately
 does not use the unsafe legacy bridge as a fallback.

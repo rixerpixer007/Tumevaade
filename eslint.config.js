@@ -10,6 +10,8 @@ export default defineConfig(
     "apps/android/app/src/main/assets/mobile/**",
     "apps/android/**/build/**",
     "node_modules/**",
+    ".local/browser/**",
+    ".playwright-cli/**",
     "src/generated/**",
   ]),
   {

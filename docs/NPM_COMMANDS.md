@@ -1,7 +1,7 @@
 # Project npm commands
 
-This is the canonical reference for the npm commands defined by Sinu
-Stuudium. Run them from the repository root, where `package.json` is located.
+This is the canonical reference for the npm commands defined by Tumevaade.
+Run them from the repository root, where `package.json` is located.
 The extension and Android development guides explain the surrounding browser,
 device, and release workflows without repeating this command reference.
 
@@ -45,6 +45,34 @@ the current checkout.
 | Build a debug APK                               | `npm run build:android:debug`                             |
 | Run the complete Android debug validation       | `npm run validate:android`                                |
 | Build a signed release APK                      | `npm run build:android:release`                           |
+
+## Background browser commands
+
+See [Background browser testing](BACKGROUND_BROWSER_TESTING.md) for setup,
+private profile handling, and the visible-login/headless-testing workflow.
+
+### `npm run browser -- <command>`
+
+Runs the pinned local Playwright CLI in a worktree-specific session. `open`
+requires the downloaded full Chromium browser, a running `npm run dev` watcher,
+and its `.output/chrome-mv3-dev/` output. It loads that development build
+headlessly and creates a private profile, generated CLI configuration, and output under `.local/browser/`. `login`
+opens a visible window on genuine Stuudium using that same profile; `close`
+stops only this session. Set `TUMEVADE_BROWSER_BUILD=production` when opening to
+load `.output/chrome-mv3/` from a prior `npm run build` instead; the development
+server is then unnecessary. Other arguments are forwarded to the CLI. These
+calls do not start a watcher or rebuild the extension. Commands on a signed-in
+session can access or change real school data; use inspection and non-mutating interactions only.
+
+### `npm run test:browser`
+
+Requires a production `npm run build` output and the browser download,
+independently of the interactive development default. Runs a deterministic headless
+smoke check using a temporary profile and fictional intercepted pages. Tests
+the actual extension settings and content injection, auth/origin exclusions,
+and profile persistence across restarts. Saves screenshots and a JSON report
+under `.local/browser/smoke-results/` and removes its temporary profile even
+on failure. It does not access live Stuudium or the persistent login profile.
 
 ## Setup lifecycle
 
@@ -129,7 +157,7 @@ generated stylesheet is missing or stale and should be regenerated with
 
 ### `npm run dev`
 
-Performs one theme build, then runs two long-lived processes together:
+Builds the brand assets and theme, then runs two long-lived processes together:
 
 - the theme watcher;
 - WXT's Chrome development builder.
@@ -146,8 +174,8 @@ from `.output/chrome-mv3/` will not pick up development output.
 
 ### `npm run build`
 
-Regenerates the theme outputs, then creates the unpacked Chrome Manifest V3
-production extension with WXT at:
+Regenerates brand assets and theme outputs, then creates the unpacked Chrome
+Manifest V3 production extension with WXT at:
 
 ```text
 .output/chrome-mv3/
@@ -183,13 +211,7 @@ extension.
 ### Update the project version
 
 `npm version <version> --no-git-tag-version` updates the version in both
-`package.json` and `package-lock.json` without creating a Git commit or tag. For
-example:
-
-```sh
-npm version 0.1.1 --no-git-tag-version
-```
-
+`package.json` and `package-lock.json` without creating a Git commit or tag.
 Use only an approved release version and inspect both changed files before
 building. This is an npm utility command used by this project's extension
 release workflow, not a named script from `package.json`.
@@ -201,8 +223,8 @@ Android bundles generated web assets under the ignored directory
 
 ### `npm run build:mobile:web`
 
-Runs the theme build, then recreates Android's bundled bootstrap, critical and
-complete theme CSS, platform CSS, settings-menu CSS, settings page, shared
+Builds brand assets and theme CSS, then recreates Android's bundled bootstrap,
+critical and complete theme CSS, platform CSS, settings-menu CSS, settings page, shared
 configuration, and SHA-256 asset manifest.
 
 Run it after changing shared TypeScript, settings UI, supported sites, themes,
@@ -339,37 +361,14 @@ active until stopped with `Control+C`.
 
 ### `npm run validate`
 
-Runs the main extension and shared-code validation in this order:
-
-1. generated theme CSS freshness;
-2. Android web-asset freshness and reproducibility;
-3. Android web-asset safety and structure;
-4. Prettier formatting;
-5. ESLint;
-6. TypeScript type checking;
-7. the complete Vitest suite;
-8. a production Chromium extension build;
-9. production extension validation.
+Runs generated brand/theme/mobile freshness checks, mobile asset validation,
+formatting, linting, type checking, all unit tests, a production extension build,
+and production build validation. `package.json` owns the exact sequence.
 
 This command may create or replace `.output/chrome-mv3/` through its production
 build step. It does not run Android lint or Kotlin tests, assemble an APK,
 create the Chrome ZIP, build a signed Android release, or perform browser/device
 testing.
 
-Use the validation tier that matches the change:
-
-| Change                                             | Minimum project command set                                                                 |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Documentation only                                 | No build required; run `npm run format:check`                                               |
-| Brand master or generated platform image           | `npm run build:brand`, then `npm run check:brand`                                           |
-| Canonical theme CSS                                | `npm run build:theme`, then `npm run check:theme` and relevant tests                        |
-| TypeScript or extension behavior                   | Relevant test, `npm run typecheck`, and `npm run lint`                                      |
-| Extension manifest, entrypoint, or build structure | `npm run build`, then `npm run validate:build`                                              |
-| Broad shared or extension work                     | `npm run validate`                                                                          |
-| Android shared web code or assets                  | `npm run check:mobile:web` and `npm run validate:mobile:web`, plus normal TypeScript checks |
-| Android Kotlin, resources, manifest, or Gradle     | `npm run validate:android`                                                                  |
-| Chrome release packaging                           | `npm run package`                                                                           |
-
-The npm checks do not replace `git diff --check`, review of the complete diff,
-or the live browser and physical-device checks required by the development
-guides.
+Choose the minimum checks from [VERIFICATION.md](VERIFICATION.md). Those tiers
+are authoritative; this document defines the commands, not a second check matrix.
