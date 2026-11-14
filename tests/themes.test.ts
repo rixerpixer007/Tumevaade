@@ -28,6 +28,10 @@ describe("theme catalog", () => {
     expect(isThemeId("velvet-mauve")).toBe(true);
     expect(isThemeId("midnight-amber")).toBe(true);
     expect(isThemeId("light-mint")).toBe(true);
+    for (const themeId of ["light-blue", "sand", "light-mauve"] as const) {
+      expect(isThemeId(themeId)).toBe(true);
+      expect(getTheme(themeId).colorScheme).toBe("light");
+    }
     expect(getTheme("light-mint").colorScheme).toBe("light");
     expect(isThemeId("unknown-theme")).toBe(false);
   });
@@ -40,6 +44,9 @@ describe("theme catalog", () => {
       "activation-velvet-mauve.js",
       "activation-midnight-amber.js",
       "activation-light-mint.js",
+      "activation-light-blue.js",
+      "activation-sand.js",
+      "activation-light-mauve.js",
     ]);
   });
 });

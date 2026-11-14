@@ -95,6 +95,45 @@ export const THEMES = [
       text: "#263c32",
     },
   },
+  {
+    id: "light-blue",
+    name: "Hele sinine",
+    shortName: "Hele sinine",
+    description: "Jahe sinakashall taust, valged kaardid ja sügavsinised aktsendid.",
+    colorScheme: "light",
+    preview: {
+      canvas: "#edf1f8",
+      surface: "#ffffff",
+      accent: "#315fa3",
+      text: "#26354b",
+    },
+  },
+  {
+    id: "sand",
+    name: "Liiv",
+    shortName: "Liiv",
+    description: "Soe elevandiluukarva taust, kreemikad kaardid ja pronksikarva aktsendid.",
+    colorScheme: "light",
+    preview: {
+      canvas: "#f5efdf",
+      surface: "#fffaf0",
+      accent: "#7d592b",
+      text: "#493e2d",
+    },
+  },
+  {
+    id: "light-mauve",
+    name: "Hele lillakas",
+    shortName: "Hele lillakas",
+    description: "Õrn roosakas-lilla taust, heledad kaardid ja sügavad lillakasroosad aktsendid.",
+    colorScheme: "light",
+    preview: {
+      canvas: "#f6eef5",
+      surface: "#fffafd",
+      accent: "#864c86",
+      text: "#443146",
+    },
+  },
 ] as const satisfies readonly ThemeDefinition[];
 
 export type ThemeId = (typeof THEMES)[number]["id"];

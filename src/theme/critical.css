@@ -33,3 +33,21 @@
   --sid-canvas: #edf4ef;
   --sid-text-2: #40584c;
 }
+
+:root:where([data-sid-enhancement="enabled"][data-sid-theme="light-blue"]) {
+  --sid-color-scheme: light;
+  --sid-canvas: #edf1f8;
+  --sid-text-2: #40536c;
+}
+
+:root:where([data-sid-enhancement="enabled"][data-sid-theme="sand"]) {
+  --sid-color-scheme: light;
+  --sid-canvas: #f5efdf;
+  --sid-text-2: #5f513c;
+}
+
+:root:where([data-sid-enhancement="enabled"][data-sid-theme="light-mauve"]) {
+  --sid-color-scheme: light;
+  --sid-canvas: #f6eef5;
+  --sid-text-2: #624e65;
+}

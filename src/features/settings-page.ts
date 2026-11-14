@@ -212,7 +212,6 @@ export function mountSettingsPage({
     THEMES.forEach((theme) => {
       const label = document.createElement("label");
       label.className = "theme-option";
-      label.title = theme.description;
 
       const input = document.createElement("input");
       input.type = "radio";

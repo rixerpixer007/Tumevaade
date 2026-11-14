@@ -6,19 +6,6 @@ export function renderPreviewThemes(document: Document): void {
   if (appearance === null) return;
   const groups = [
     {
-      title: "Heledad",
-      themes: [
-        {
-          name: "Hele sinine",
-          canvas: "#edf1f8",
-          surface: "#ffffff",
-          accent: "#4779c2",
-          text: "#26354b",
-        },
-        { name: "Liiv", canvas: "#f5efdf", surface: "#fffaf0", accent: "#b28638", text: "#493e2d" },
-      ],
-    },
-    {
       title: "Erikujundused",
       themes: [
         {
@@ -61,11 +48,6 @@ export function renderPreviewThemes(document: Document): void {
       grid.append(card);
     }
     section.append(heading, grid);
-    const lightGrid = appearance.querySelector('[data-theme-family="light"] .theme-options');
-    if (group.title === "Heledad" && lightGrid !== null) {
-      lightGrid.append(...grid.children);
-    } else {
-      appearance.append(section);
-    }
+    appearance.append(section);
   }
 }

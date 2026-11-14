@@ -4,6 +4,8 @@ import path from "node:path";
 import postcss from "postcss";
 import { describe, expect, it } from "vitest";
 
+import { THEMES } from "../src/shared/themes";
+
 describe("generated theme", () => {
   const projectRoot = path.resolve(import.meta.dirname, "..");
 
@@ -239,6 +241,9 @@ describe("generated theme", () => {
       ["velvet-mauve", "#11111b", "#cba6f7", "#cdd6f4"],
       ["midnight-amber", "#11100d", "#f2b84b", "#f3ead7"],
       ["light-mint", "#edf4ef", "#267458", "#263c32"],
+      ["light-blue", "#edf1f8", "#315fa3", "#26354b"],
+      ["sand", "#f5efdf", "#7d592b", "#493e2d"],
+      ["light-mauve", "#f6eef5", "#864c86", "#443146"],
     ] as const;
 
     expect(css).toContain("--sid-accent: #65d6b1");
@@ -265,67 +270,80 @@ describe("generated theme", () => {
     expect(mintFallback).toBeDefined();
   });
 
-  it("gives Light Mint its own complete color system and a matching early surface", () => {
-    const base = postcss.parse(
-      fs.readFileSync(path.join(projectRoot, "src/theme/modules/01-tokens.css"), "utf8"),
-    );
-    const palettes = fs.readFileSync(
-      path.join(projectRoot, "src/theme/modules/02-palettes.css"),
-      "utf8",
-    );
-    const light = findRule(palettes, '[data-sid-theme="light-mint"]');
-    const tokens = new Map<string, string>();
-    light?.walkDecls((decl) => {
-      tokens.set(decl.prop, decl.value);
-    });
-    base.walkDecls(/^--sid-/, (decl) => {
-      if (/^--sid-(radius|z-)/.test(decl.prop)) return;
-      expect(tokens.has(decl.prop), `Light Mint must own ${decl.prop}`).toBe(true);
-    });
-    const critical = findRule(
-      fs.readFileSync(path.join(projectRoot, "src/theme/critical.css"), "utf8"),
-      '[data-sid-theme="light-mint"]',
-    );
-    critical?.walkDecls((decl) => {
-      expect(tokens.get(decl.prop)).toBe(decl.value);
-    });
-    expect(critical).toBeDefined();
-    expect(tokens.get("--sid-color-scheme")).toBe("light");
+  it.each(THEMES.filter((theme) => theme.colorScheme === "light"))(
+    "$id owns a complete, accessible color system without geometry overrides",
+    (theme) => {
+      const base = postcss.parse(
+        fs.readFileSync(path.join(projectRoot, "src/theme/modules/01-tokens.css"), "utf8"),
+      );
+      const palettes = fs.readFileSync(
+        path.join(projectRoot, "src/theme/modules/02-palettes.css"),
+        "utf8",
+      );
+      const light = findRule(palettes, `[data-sid-theme="${theme.id}"]`);
+      const tokens = new Map<string, string>();
+      light?.walkDecls((decl) => {
+        tokens.set(decl.prop, decl.value);
+      });
+      base.walkDecls(/^--sid-/, (decl) => {
+        if (/^--sid-(radius|z-)/.test(decl.prop)) return;
+        expect(tokens.has(decl.prop), `${theme.id} must own ${decl.prop}`).toBe(true);
+      });
+      const colorTokens: string[] = [];
+      base.walkDecls(/^--sid-/, (decl) => {
+        if (!/^--sid-(radius|z-)/.test(decl.prop)) colorTokens.push(decl.prop);
+      });
+      expect([...tokens.keys()].sort()).toEqual(colorTokens.sort());
+      expect(light?.nodes.every((node) => node.type === "decl")).toBe(true);
+      expect(tokens.get("--sid-post-surface")).toBe("var(--sid-surface)");
+      expect(tokens.get("--sid-emphasis")).toBe("#f7ca50");
+      const critical = findRule(
+        fs.readFileSync(path.join(projectRoot, "src/theme/critical.css"), "utf8"),
+        `[data-sid-theme="${theme.id}"]`,
+      );
+      critical?.walkDecls((decl) => {
+        expect(tokens.get(decl.prop)).toBe(decl.value);
+      });
+      expect(critical).toBeDefined();
+      expect(tokens.get("--sid-color-scheme")).toBe("light");
 
-    function luminance(token: string): number {
-      const hex = tokens.get(token);
-      if (hex === undefined) throw new Error(`Missing color: ${token}`);
-      return [0.2126, 0.7152, 0.0722].reduce((sum, weight, index) => {
-        const value = parseInt(hex.slice(1 + index * 2, 3 + index * 2), 16) / 255;
-        const linear = value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
-        return sum + linear * weight;
-      }, 0);
-    }
-    function contrast(a: string, b: string): number {
-      const x = luminance(a);
-      const y = luminance(b);
-      return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
-    }
-    for (const text of [
-      "--sid-text",
-      "--sid-text-2",
-      "--sid-text-3",
-      "--sid-accent",
-      "--sid-danger",
-      "--sid-warning",
-    ]) {
-      for (const background of [
-        "--sid-canvas",
-        "--sid-surface",
-        "--sid-surface-2",
-        "--sid-surface-3",
-      ]) {
-        expect(contrast(text, background), `${text} on ${background}`).toBeGreaterThanOrEqual(4.5);
+      function luminance(token: string): number {
+        const hex = tokens.get(token);
+        if (hex === undefined) throw new Error(`Missing color: ${token}`);
+        return [0.2126, 0.7152, 0.0722].reduce((sum, weight, index) => {
+          const value = parseInt(hex.slice(1 + index * 2, 3 + index * 2), 16) / 255;
+          const linear = value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+          return sum + linear * weight;
+        }, 0);
       }
-    }
-    expect(contrast("--sid-accent-ink", "--sid-accent")).toBeGreaterThanOrEqual(4.5);
-    expect(contrast("--sid-accent-ink", "--sid-accent-strong")).toBeGreaterThanOrEqual(4.5);
-  });
+      function contrast(a: string, b: string): number {
+        const x = luminance(a);
+        const y = luminance(b);
+        return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+      }
+      for (const text of [
+        "--sid-text",
+        "--sid-text-2",
+        "--sid-text-3",
+        "--sid-accent",
+        "--sid-danger",
+        "--sid-warning",
+      ]) {
+        for (const background of [
+          "--sid-canvas",
+          "--sid-surface",
+          "--sid-surface-2",
+          "--sid-surface-3",
+        ]) {
+          expect(contrast(text, background), `${text} on ${background}`).toBeGreaterThanOrEqual(
+            4.5,
+          );
+        }
+      }
+      expect(contrast("--sid-accent-ink", "--sid-accent")).toBeGreaterThanOrEqual(4.5);
+      expect(contrast("--sid-accent-ink", "--sid-accent-strong")).toBeGreaterThanOrEqual(4.5);
+    },
+  );
 
   it("uses the reading surface for expanded messages and their read-more fade", () => {
     const css = fs.readFileSync(path.join(projectRoot, "src/generated/theme.css"), "utf8");
