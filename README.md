@@ -71,6 +71,7 @@ Probleemidest ja ettepanekutest saab teada anda [GitLabi probleemide tahvli kaud
   <summary>Arendajale</summary>
 
 - [Brauserilaienduse arendamine](docs/EXTENSION_DEVELOPMENT.md)
+- [Agentide taustal töötav testbrauser](docs/BACKGROUND_BROWSER_TESTING.md)
 - [Androidi rakenduse ehitamine ja testimine](docs/MOBILE_DEVELOPMENT.md)
 - [Projekti npm-käsud](docs/NPM_COMMANDS.md)
 

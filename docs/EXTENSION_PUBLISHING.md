@@ -12,28 +12,24 @@ or trader declarations, listing approval, payment, upload, and final submission
 must be performed by the project owner in the relevant store dashboard.
 
 The dashboard-ready draft text, permission justifications, asset status, and
-owner-required fields are tracked in [`CHROMEWEBSTORE.md`](../CHROMEWEBSTORE.md).
+owner-required fields are tracked in [`CHROMEWEBSTORE.md`](CHROMEWEBSTORE.md).
 Review that file together with this guide before every submission or update.
 
 Store forms and policies change. Items marked **RECHECK BEFORE PUBLISH** were
 verified against official documentation on 2026-09-04 but must be checked again
 immediately before a real submission.
 
-## What is and is not release-ready after Phase 2
+## Release readiness
 
-The build is a valid local Manifest V3 extension and produces a validated ZIP.
-Before the first public submission, the owner must still approve branding,
-create final PNG icons and listing images, choose public support/privacy URLs,
-and complete the store account. Do not upload a placeholder icon or a screenshot
-that exposes student information.
+This guide applies to new submissions and updates. Check the current publisher
+dashboard, source version, production package, branding and public support/
+privacy URLs for the requested release. Do not treat old first-submission
+checklists as evidence that an account, assets or publication do not exist.
+Never upload screenshots exposing student information.
 
-The extension's single purpose is:
-
-> Improve the appearance and local usability of TORG Stuudium while the user
-> continues to use the genuine Stuudium site.
-
-Phase 2 provides five selectable dark palettes with a local master enable
-setting and remembered manual selection. It does not proxy Stuudium, collect
+The extension's single purpose is to improve the appearance and local usability
+of genuine TORG Stuudium. The current theme catalog is `src/shared/themes.ts`;
+selection is manual and remembered. It does not proxy Stuudium, collect
 analytics, execute remote code, or store student data.
 
 ## 1. Create and secure the Chrome Web Store account

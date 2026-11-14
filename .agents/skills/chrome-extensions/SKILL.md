@@ -1,43 +1,33 @@
 ---
 name: chrome-extensions
-description: Build, modify, debug, or prepare this Chromium Manifest V3 extension when work involves manifests, permissions, browser APIs, service workers, messaging, storage, lifecycle, build artifacts, or Chrome Web Store publication. Do not use for pure presentation maintenance inside an established injected DOM component.
+description: Maintain this Manifest V3 extension's manifest, permissions, browser APIs, service worker, messaging, storage, lifecycle and build artifacts, or prepare requested store work. Skip pure styling changes inside an established component.
 ---
 
-# Chrome extensions
+# Chromium extension maintenance
 
-Apply current Manifest V3 constraints without loading guidance for unrelated extension capabilities.
+Inspect the relevant source, tests and emitted manifest/bundles. Ownership is
+in [ARCHITECTURE.md](../../../docs/ARCHITECTURE.md); product/security decisions
+are in [PROJECT_DIRECTION.md](../../../docs/PROJECT_DIRECTION.md). Use current
+Context7 docs for library APIs and first-party Chrome docs for changing
+browser/store rules.
 
-## Start with the actual project
+- Keep permissions and verified host access minimal. Bundle executable code;
+  do not add remote code or page-to-native/extension capability bridges for convenience.
+- Store preferences only. Keep platform APIs behind adapters and bootstrap/
+  feature mounting idempotent with explicit cleanup.
+- Service workers are ephemeral: persist required preferences rather than
+  relying on global variables. Test relevant install/reload, disable/re-enable,
+  client navigation and preference-change behavior.
+- Validate emitted files, activation scripts, resources and exclusions rather
+  than assuming source configuration equals the artifact.
 
-- Read the repository `AGENTS.md`, `docs/PROJECT_DIRECTION.md`, and the relevant source and tests.
-- Inspect the generated manifest or bundle when behavior depends on emitted configuration.
-- Use Context7 for WXT or other library-specific questions. Use current first-party Chrome documentation for browser and store requirements that may have changed.
-- Preserve the current project phase and do not add permissions, publication work, telemetry, or new extension surfaces unless the request requires them.
+Use the [default browser skill](../verify-stuudium-extension-ui/SKILL.md) for
+rendered work, including extension settings. It owns development artifact
+identity, browser operation and production review handoff. Select automated
+checks from [VERIFICATION.md](../../../docs/VERIFICATION.md).
 
-## Development artifact identity
-
-- `npm run dev` writes and watches `.output/chrome-mv3-dev/`.
-- `npm run build` writes `.output/chrome-mv3/` once.
-- Confirm which exact folder the browser loaded before debugging stale behavior. Reloading a production instance cannot pick up the development folder's changes.
-- Disable duplicate extension instances during extension-only verification.
-
-## Core invariants
-
-- Use Manifest V3 and bundle executable code with the extension. Do not add remote executable code, `eval()`, or inline scripts.
-- Keep permissions and host access at the minimum verified scope. Do not request broad browsing access for convenience.
-- Put browser APIs behind the existing platform adapter boundary when shared feature code must remain reusable.
-- Treat service workers as ephemeral. Persist only state that must survive shutdown, and store preferences rather than Stuudium data.
-- Keep content bootstrap and feature mounting idempotent, with explicit activation, navigation, invalidation, and cleanup behavior.
-- Reference only files that exist in the generated extension. Validate the emitted artifact instead of assuming source configuration was reproduced correctly.
-- Do not mutate live school data to construct a test state without explicit approval.
-
-## Verification routing
-
-- For an injected Stuudium UI build, use `../verify-stuudium-extension-ui/SKILL.md` after the targeted automated checks.
-- For a manifest, entrypoint, permission, or build-configuration change, inspect the emitted manifest and run the build-validation tier from `AGENTS.md`.
-- For a narrowly scoped adapter or feature change, prefer targeted tests plus type checking and linting over packaging the extension.
-- Exercise install or initial load, reload, disable and re-enable, client-side navigation, preference changes, and cleanup when the affected lifecycle crosses those states.
-
-## Store work
-
-Enter the store workflow only when the user asks to publish, prepare a release or listing, or address a review issue. Follow `docs/EXTENSION_PUBLISHING.md`, validate the package, and keep store-facing claims consistent with actual permissions and data handling.
+Enter store work only when requested. Read
+[EXTENSION_PUBLISHING.md](../../../docs/EXTENSION_PUBLISHING.md), recheck current
+store requirements, and inspect the package. Building or preparing a listing
+is not permission to submit/publish. Keep credentials and signing keys outside
+the repository and generated artifacts.

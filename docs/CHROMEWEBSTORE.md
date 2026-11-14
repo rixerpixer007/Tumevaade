@@ -1,8 +1,7 @@
 # Chrome Web Store'i kirje — Tumevaade
 
-> Last updated: 2026-09-26
->
-> Status: Phase 2 draft. Do not submit until every owner-required field and asset below is complete.
+> Listing copy and review notes, not a live dashboard or submission-status ledger.
+> Reconcile assets, owner fields and policies with the current dashboard before updates.
 
 This file is the copy-and-review source for the Chrome Web Store dashboard. The complete release procedure, account requirements, and rollback guidance are in
 [`EXTENSION_PUBLISHING.md`](EXTENSION_PUBLISHING.md).
@@ -19,11 +18,11 @@ Tumevaade on TORG Stuudiumi mitteametlik brauserilaiendus, mis lisab kohandatava
 
 **Detailed description**
 
-Tumevaade on TORGi õpilase loodud mitteametlik brauserilaiendus, mis kohandab päris TORG Stuudiumi välimust ja kasutuskogemust. Vali endale sobiv tume kujundus ning kasuta praktilisi täiustusi otse oma brauseris.
+Tumevaade on TORGi õpilase loodud mitteametlik brauserilaiendus, mis kohandab päris TORG Stuudiumi välimust ja kasutuskogemust. Vali endale sobiv tume või hele kujundus ning kasuta praktilisi täiustusi otse oma brauseris.
 
 OMADUSED
 • Läbimõeldud tume kujundus toetatud TORG Stuudiumi lehtedel.
-• Valik erinevate tumedate kujunduste vahel.
+• Valik tumedate ja heledate kujunduste vahel.
 • Teema seaded otse Stuudiumi peamenüüs.
 • Meelde jääv valik ja võimalus kogu täiendus välja lülitada.
 
@@ -44,8 +43,6 @@ Sinu kooliandmeid ei koguta ega saadeta arendajale. Tumevaade salvestab ainult v
 TUGI
 https://gitlab.com/rixerpixer007/tumevaade/-/boards#/
 
-Versioon 0.1.0 — esimene avalik beeta.
-
 **Category**
 
 Productivity — provisional; the owner must confirm the categories currently offered by the dashboard before submission.
@@ -60,14 +57,14 @@ Estonian.
 
 ## Graphics and assets
 
-| Asset                  | Required dimensions  | Status      | Planned content                                  |
-| ---------------------- | -------------------- | ----------- | ------------------------------------------------ |
-| Store icon             | 128×128 PNG          | Created     | Approved Tumevaade mark; no Stuudium logo used   |
-| Screenshot 1           | 1280×800 or 640×400  | Not created | Themed settings page with no student information |
-| Screenshot 2           | 1280×800 or 640×400  | Not created | Sanitized or demonstration TORG dashboard        |
-| Screenshot 3           | 1280×800 or 640×400  | Optional    | Sanitized responsive view                        |
-| Small promotional tile | 440×280 PNG or JPEG  | Not created | Tumevaade name, tagline, graphite, and mint      |
-| Marquee image          | 1400×560 PNG or JPEG | Optional    | Approved project branding                        |
+| Asset                  | Required dimensions  | Status   | Planned content                                  |
+| ---------------------- | -------------------- | -------- | ------------------------------------------------ |
+| Store icon             | 128×128 PNG          | Created  | Approved Tumevaade mark; no Stuudium logo used   |
+| Screenshot 1           | 1280×800 or 640×400  | Recheck  | Themed settings page with no student information |
+| Screenshot 2           | 1280×800 or 640×400  | Recheck  | Sanitized or demonstration TORG dashboard        |
+| Screenshot 3           | 1280×800 or 640×400  | Optional | Sanitized responsive view                        |
+| Small promotional tile | 440×280 PNG or JPEG  | Recheck  | Tumevaade name, tagline, graphite, and mint      |
+| Marquee image          | 1400×560 PNG or JPEG | Optional | Approved project branding                        |
 
 The extension package contains separate 16×16, 32×32, 48×48, and 128×128 PNG icons generated from the approved dark logo. Every screenshot must avoid names, grades, attendance, messages, schedules, class membership, authentication details, and other student data.
 
@@ -113,13 +110,11 @@ The code recognizes supported routes and the navigation location used for its se
 
 The published policy must match the source and dashboard answers. It must state what the local preference is, that no school or authentication data is collected or transmitted, how uninstalling removes extension-local storage, and how to contact the maintainer. Verify that the final URL is public and not behind a login before submission.
 
-### GitLab migration follow-up
+### Public URL verification
 
-The public support board is available at the GitLab URL above. The repository,
-privacy-policy page, and support board were publicly accessible on 2026-10-20.
-
-Update the Chrome Web Store dashboard's support and privacy-policy URLs to the
-GitLab URLs above. Editing this document does not change the published listing.
+Use the GitLab support and privacy-policy URLs above. Recheck that they are
+public and match the publisher dashboard before a submission; editing this
+file does not change the listing.
 
 ## Distribution
 
@@ -139,22 +134,15 @@ GitLab URLs above. Editing this document does not change the published listing.
 
 Never place store credentials, payment information, recovery codes, identity documents, tokens, or signing keys in this file or repository.
 
-## Version history
+## Review checklist
 
-| Version | Date       | Changes                                                               | Status |
-| ------- | ---------- | --------------------------------------------------------------------- | ------ |
-| 0.1.0   | 2026-09-10 | First Tumevaade beta with selectable dark designs and local settings. | Draft  |
-
-## Review notes
-
-### Known limitations before submission
-
-- Final icons, listing images, public support details, and privacy-policy URL are not yet approved or created.
-- Only `https://torg.ope.ee/*` is supported; other `ope.ee` schools are intentionally not pre-authorized.
-- Automatic system-following and light themes are not included in Phase 2.
-- Chromium requires an open Stuudium page to be refreshed after an unpacked extension is reloaded or re-enabled during development.
-- Chrome and Brave live checks must be complete on the exact production package before submission. Other Chromium-based browsers are not described as independently tested until checked.
-
-### Rejection history
-
-None. No store submission has been made.
+- Check the current icons, listing images, owner fields, support details and
+  privacy-policy URL; source files do not establish dashboard approval.
+- Only `https://torg.ope.ee/*` is supported; other schools are not pre-authorized.
+- Dark and light palettes are implemented; automatic system-following is not.
+- Reload the unpacked extension and open a fresh Stuudium page when checking
+  a production update. Agent development uses the watched headless workflow.
+- Verify the exact production package in Chrome and Brave before making
+  compatibility claims. Recheck store policies/dimensions before submission.
+- Consult the dashboard for current publication/rejection history; no live
+  submission-status history is maintained in this file.

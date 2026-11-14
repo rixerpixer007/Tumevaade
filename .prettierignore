@@ -1,6 +1,8 @@
 .output/
 .wxt/
 node_modules/
+.local/browser/
+.playwright-cli/
 src/generated/
 src/theme/modules/
 package-lock.json

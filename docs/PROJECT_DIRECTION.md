@@ -1,303 +1,75 @@
 # Project direction
 
-Status: agreed direction, Phase 4 Android feasibility prototype implemented locally and awaiting physical-device verification
-
-Last updated: 2026-09-11
-
-## Purpose
-
-Evolve the current CSS-only Stuudium theme into a maintainable enhancement project that can add features such as theme switching while remaining straightforward for ordinary students to install and use.
-
-The project enhances the real Stuudium interface. It is not intended to become an independent Stuudium client, reproduce Stuudium's backend, or proxy student data through a separate server.
-
-## Decision summary
-
-The project will have one shared theme and feature core with different delivery targets:
-
-```text
-Shared enhancement core
-|-- Theme CSS, tokens, and palettes
-|-- Route and DOM adapters
-|-- JavaScript feature modules
-|-- Platform-neutral settings interface
-|
-|-- Desktop: browser extension
-|-- Android: dedicated WebView application
-`-- iOS: dedicated WebView application later
-```
-
-The first public product scope is desktop plus Android. iOS compatibility must be considered from the beginning, but public iOS distribution is deferred until sustainable Apple signing is available.
-
-## Platform plan
-
-| Platform         | Delivery                           | Initial status                | Update direction                                                                       |
-| ---------------- | ---------------------------------- | ----------------------------- | -------------------------------------------------------------------------------------- |
-| Chromium desktop | WXT-based Manifest V3 WebExtension | First public beta target      | Chrome Web Store first; Microsoft Edge Add-ons documented as an optional later channel |
-| Firefox desktop  | WebExtension compatibility build   | Desired follow-up             | Browser-supported distribution                                                         |
-| Safari desktop   | Safari WebExtension port           | Desired follow-up             | Apple-supported distribution                                                           |
-| Android          | Native Kotlin WebView app          | Focused feasibility prototype | Validate first; signed APK releases and updates remain a later release milestone       |
-| iOS              | Dedicated WebView app              | Deferred public target        | Apple-supported signing and distribution after funding or institutional support        |
-
-### iOS decision
-
-Ship desktop and Android first, architect for iOS from day one, privately test iOS with free development signing, and launch iOS publicly only when the real WebView app can be distributed sustainably.
-
-Free Apple Personal Team signing is suitable for development on a small number of personal devices, not public distribution, because its provisioning expires frequently. The preferred eventual route is a school-owned Apple Developer account with an educational fee waiver, or another funded and properly governed account.
-
-An iOS userscript may be produced later for motivated testers, but it is not part of the supported first release. Requiring an unrelated userscript manager, Safari permissions, and manual setup would recreate the installation friction this project is intended to remove.
-
-## Why the targets differ
-
-Desktop browsers support extensions well. An extension lets users keep Stuudium in their normal browser while granting the project narrowly scoped permission to inject CSS and JavaScript.
-
-Mobile browser-extension support is inconsistent. A dedicated WebView app can load the genuine Stuudium site and inject the same enhancement core inside an app designed for phone use.
-
-An independently hosted Progressive Web App is not a substitute. A PWA on another domain can be installed without native signing, but browser same-origin rules prevent it from modifying Stuudium. Stuudium also prevents its mobile application from being embedded in an iframe. Stuudium's own PWA works because Stuudium controls its frontend, authentication flow, API, and allowed origins.
-
-## Shared-core requirements
-
-Feature code must not directly depend on Chrome, Android, or iOS APIs. Platform-specific behavior belongs behind small adapters.
-
-The shared core should contain:
-
-- The existing `--sid-*` design tokens and component styling.
-- Additional palettes for theme switching.
-- Route detection and verified DOM contracts.
-- Independent feature modules with explicit activation and cleanup.
-- A platform-neutral settings contract.
-- Shared validation and diagnostic behavior that does not collect student data.
-
-Platform adapters should provide:
-
-- Preference storage.
-- CSS and script startup.
-- Navigation lifecycle events.
-- Update presentation.
-- Only the minimum native integration required by that platform.
-
-The Phase 1 implementation uses WXT, TypeScript, npm, and small platform
-adapters around WebExtension APIs. Semantic CSS modules under
-`src/theme/modules/` are the canonical theme source. A deterministic build
-generates the activation-gated stylesheet used by the extension and Android
-app.
-
-Supported Stuudium sites are declared in one registry so more verified schools
-can be added deliberately later. The extension currently grants access only to
-`https://torg.ope.ee/*`; it does not pre-authorize every `ope.ee` school.
-
-## First feature after the extension foundation
-
-Theme switching requires JavaScript execution, persistent settings, and a user-facing control. It therefore comes after a minimal desktop extension foundation has proven CSS injection, JavaScript injection, storage, permissions, and startup timing on the live site.
-
-Theme switching is the first product feature built on that foundation because the current stylesheet already centralizes its palette in CSS custom properties.
-
-The Phase 2 implementation:
-
-1. Preserve the existing graphite-and-mint theme as the default.
-2. Select palettes by setting a stable attribute on the document root.
-3. Store only the selected preference.
-4. Apply the preference early enough to avoid a white startup flash.
-5. Avoid duplicating component rules for each palette.
-
-It offers Graphite Mint, Graphite Blue, Obsidian Red, Velvet Mauve, and Midnight
-Amber. Mint preserves the original green-tinted graphite palette; the other
-themes provide complete cool-blue, near-black crimson, mocha-purple, and warm
-amber color systems. Component rules use the same semantic tokens in every
-theme. The catalog records a theme's
-light/dark color-scheme family so a future light theme can replace every
-required token without changing the selection UI or stored preference shape.
-The light family offers Light Mint (Hele münt), Light Blue (Hele sinine), Sand
-(Liiv), and Light Mauve (Hele lillakas). Each owns the complete color system,
-including semantic states, icons, shadows, and the early startup surface.
-Light and dark palettes share the same layout, spacing, typography, and
-interaction behavior; palettes replace colors only. Settings group available
-themes into dark and light families.
-Selection is manual and remembered; a future system-following mode can be added
-alongside the current `manual` mode without changing existing saved choices.
-
-## CSS loading decision
-
-Do not block Stuudium's built-in CSS initially.
-
-The current theme overrides Stuudium's presentation but still relies on the original stylesheet for layout, responsive behavior, component geometry, and new upstream components. Replacing it entirely would turn this project into a fragile fork of Stuudium's frontend.
-
-Prevent the white loading flash with early application instead:
-
-- On authenticated Stuudium documents, inject a tiny critical stylesheet at
-  document start.
-- Set `color-scheme` and the page background before content is displayed.
-- Load the full theme immediately afterward.
-- On mobile, give the native window and WebView the same dark background.
-- Keep the WebView behind a matching dark launch surface until initial styling is active.
-
-A complete replacement stylesheet can be reconsidered only after deliberately implementing and verifying every structural and responsive responsibility currently supplied by Stuudium.
-
-## Security boundaries
-
-The enhancement operates on sensitive school pages. Its default security posture is:
-
-- Limit browser and WebView access to explicitly verified HTTPS Stuudium origins.
-- Let the genuine Stuudium page handle authentication.
-- Exclude signed-out authentication documents from Tumevaate content scripts,
-  styles, feature runtime, and mobile web assets so the native login fields stay
-  entirely under Stuudium's control.
-- Never read, store, proxy, or log passwords.
-- Store preferences, not grades, messages, attendance, or other school data.
-- Do not send analytics or telemetry by default.
-- Do not expose unrestricted native capabilities to remote page JavaScript.
-- Open unrelated domains in the system browser on mobile.
-- Bundle executable project code with each release.
-- Treat cross-origin frames as separate security boundaries.
-
-Any future native bridge must be narrowly scoped, origin-checked where the platform permits it, and justified by a specific feature.
-
-## Delivery and updates
-
-### Desktop extension
-
-The extension bundles the theme, feature runtime, and settings UI. Chrome and
-Brave are the initial Chromium browsers. Chrome Web Store publication is the
-first distribution route because both browsers can install its Chromium
-extensions. Microsoft Edge Add-ons is documented as an optional additional
-channel, but Phase 1 does not create or submit an Edge listing.
-
-The settings surface is a themed options page with a master enable preference
-and a responsive visual theme-card grid. It opens from the extension toolbar
-and from a button added to Stuudium's main overflow menu. The grid is generated
-from the shared theme catalog and is designed to wrap cleanly with roughly ten
-themes rather than hard-coding a two-choice layout.
-
-The existing `Abi` link remains CSS-hidden in Phase 1. Replacing that visual
-hide with JavaScript DOM removal is viable, but it is intentionally deferred
-because Phase 1's bootstrap must not change existing page behavior. Any later
-implementation should use the feature lifecycle's explicit activation and
-cleanup boundaries.
-
-### Android application
-
-The Phase 4 prototype uses a small native Kotlin shell rather than a
-cross-platform UI framework. It embeds the shared web assets but keeps Android
-lifecycle, navigation, storage, and origin enforcement in Kotlin. A future iOS
-shell can implement the same boundaries in Swift without requiring the shared
-TypeScript features or CSS to know which native platform hosts them.
-
-The first prototype deliberately proves feasibility rather than distribution.
-It supports Android 8.0 and newer (`minSdk = 26`) while feature-detecting the
-required Android System WebView document-start and origin-aware messaging APIs.
-If an Android 8 device has an outdated WebView provider, the app requests an
-update and closes instead of using a large, late, or weakly isolated fallback.
-Raise the minimum to Android 10 only if representative Android 8 testing exposes
-a platform limitation whose correct workaround would be disproportionate.
-
-The existing themed settings interface is bundled as a local page inside the
-APK. The genuine Stuudium page can request only that this settings activity be
-opened; it cannot read preferences or call general native methods. The settings
-page has a separate, exact-origin bridge for reading and writing the same small
-preference contract used by the extension.
-
-If Android distribution is approved after the prototype, GitLab Releases will
-provide signed APKs. All releases must retain the same application ID and
-signing key so Android accepts them as updates. The initial updater may simply
-notify users and open the release page; a later version can download the APK and
-hand it to Android's installer for explicit user approval.
-
-Release signing keys must never be committed to the repository.
-
-### iOS application
-
-Development can use free personal-device signing. Public distribution waits for a durable Apple signing arrangement. This constraint must not lead to Android-only assumptions in the shared core.
-
-## Rollout
-
-### Phase 1: Shared source and desktop extension foundation
-
-- Establish a modular source structure without redesigning the theme.
-- Generate an activation-gated stylesheet for the supported delivery targets.
-- Add platform-neutral feature and settings interfaces.
-- Create a minimal Chromium WebExtension with narrowly scoped Stuudium permissions.
-- Inject critical CSS at document start, followed by the complete existing theme.
-- Run a minimal JavaScript bootstrap and confirm it can observe supported Stuudium routes without changing page behavior.
-- Implement extension-backed preference storage and the smallest viable settings surface.
-- Verify that enabling and disabling the extension cleanly applies and removes the enhancement.
-- Confirm that the existing graphite-and-mint theme remains visually equivalent when delivered by the extension.
-
-### Phase 2: First feature
-
-- Implement manual, remembered switching among the catalogued dark themes.
-  **Implemented.**
-- Verify persistence, initial rendering, navigation, and responsive behavior.
-- Keep the existing Graphite Mint theme visually unchanged when selected.
-
-### Phase 3: Desktop extension hardening and release
-
-- Exercise default, interaction, error, and update behavior on representative live Stuudium routes.
-- Complete the approved Chrome Web Store listing and release process.
-- Evaluate Microsoft Edge Add-ons as an additional channel after an Edge-specific live test.
-- Add Firefox and desktop Safari compatibility deliberately rather than assuming equivalence.
-
-### Phase 4: Android app
-
-- Build a focused native Kotlin WebView prototype that reuses the generated
-  theme, feature runtime, settings contract, and settings UI. **Implemented
-  locally; physical-device verification pending.**
-- Verify login, session persistence, navigation, file handling, external links,
-  Tera, responsive behavior, settings persistence, theme startup, and WebView
-  console health on the Samsung S25. **Pending physical-device testing.**
-- Check Android 8 with a maintained System WebView before preserving that public
-  minimum; raise to Android 10 instead of building a disproportionate fallback.
-- Establish signed GitLab releases and the update flow only after the prototype
-  is accepted. **Native notification flow and release signing are implemented.
-  The first beta was distributed through GitHub; migrating release assets to
-  GitLab and end-to-end update verification are pending.**
-
-### Phase 5: iOS preparation and release
-
-- Exercise the same mobile shell privately on physical iPhones using development signing.
-- Resolve platform-specific authentication, navigation, file, and WebView behavior.
-- Pursue school fee-waived or funded signing.
-- Release the dedicated iOS WebView app when distribution is sustainable.
-
-## Explicit non-goals
-
-- Do not build a reverse proxy for Stuudium authentication or student data.
-- Do not reverse-engineer a private Stuudium API into a new client.
-- Do not use a separately hosted PWA as though it could inject into Stuudium.
-- Do not make an iOS userscript a supported first-release product.
-- Do not remove Stuudium's structural CSS merely to reduce the loading flash.
-- Do not introduce a cross-platform framework unless the native Kotlin and later
-  Swift shells demonstrate a concrete duplication problem that outweighs their
-  simple platform boundaries.
-
-## Open decisions
-
-These choices remain intentionally unresolved:
-
-- Whether a later Android updater should download APKs itself; the initial
-  notification-and-browser handoff is implemented.
-- Whether physical Android 8 testing preserves `minSdk = 26` or demonstrates a
-  reason to raise the public minimum to Android 10.
-- Release signing ownership and the final distribution process. The approved
-  release application ID is `io.github.rixerpixer007.stuudium`; debug builds use
-  the `.debug` suffix and debug signing remains development-only.
-- The organization and governance of the eventual Apple developer account.
-- The post-theme-switching feature roadmap.
-- Whether automatic system-following should be added after the manually selected
-  light palettes.
-
-Resolve each through the smallest relevant prototype and live Stuudium verification rather than selecting technology from feature lists alone.
-
-## Context for future contributors and AI agents
-
-Treat the decisions above as product constraints, not permission to implement every target in one batch.
-
-For each change:
-
-1. Inspect the actual rendered Stuudium page, DOM, and winning style cascade.
-2. Make one component or platform hypothesis per batch.
-3. Preserve the current visual language unless a design change is explicitly approved.
-4. Keep shared logic independent of delivery-platform APIs.
-5. Verify affected states, a negative control, and relevant responsive behavior.
-6. Preserve unrelated and uncommitted work.
-7. Do not commit unless explicitly requested.
-
-When reporting work, state the root cause or goal, exact change, platforms and states tested, result, and any unverified limitation.
+This document records lasting product decisions. It is not a release-status
+ledger or a sequence of permission gates for ordinary maintenance.
+
+## Product
+
+Tumevaade enhances the genuine TORG Stuudium interface while retaining its
+structure and behavior. Desktop Chromium and Android are implemented in this
+repository. The README links the distribution channels; source configuration,
+release metadata, and verification of the exact artifact take precedence over
+old milestone descriptions. Do not infer physical-device or published-release
+verification from a local build.
+
+Firefox, Safari, and iOS are future targets, not compatibility claims. Keep the
+shared core portable without implementing a new target unless requested.
+Public iOS distribution needs sustainable Apple signing; private development
+signing does not establish a supported public release.
+
+## Shared core, small platform shells
+
+- Use TypeScript features, semantic CSS tokens, settings, route recognition,
+  and explicit lifecycle boundaries across platforms.
+- Desktop delivery is a WXT Manifest V3 extension. Android uses a native Kotlin
+  WebView shell rather than a separate client or cross-platform framework.
+- Platform adapters own storage, injection, navigation, and native integration;
+  shared features must not import platform APIs.
+- Theme selection is manual and remembered. Each dark or light palette owns a
+  complete semantic color set; layouts and interaction behavior are shared.
+  The current catalog is `src/shared/themes.ts`, not a copied list in guidance.
+
+See [architecture](ARCHITECTURE.md) for source ownership.
+
+## Genuine Stuudium and privacy
+
+Stuudium handles authentication and school data on its own verified HTTPS
+origin. Tumevaade is not an authentication proxy, replacement backend/client,
+private-API clone, or remotely hosted executable-code layer.
+
+- Keep host access limited to the explicitly verified registry in
+  `src/shared/sites.ts`. Do not pre-authorize other schools.
+- Store local preferences, not grades, attendance, messages, or credentials.
+  Do not add analytics or telemetry by default.
+- Leave signed-out authentication documents under Stuudium's control; exclude
+  theme/runtime injection there. Cross-origin frames are separate boundaries.
+- Keep native bridges narrowly scoped and origin-checked. Do not expose general
+  native commands to remote pages; open unrelated mobile destinations externally.
+
+## Rendering
+
+Keep Stuudium's structural CSS. The theme overrides presentation and depends on
+native layout/responsiveness; blocking the native styles would create a fragile
+frontend fork. A separately hosted PWA cannot replace same-origin injection.
+
+Use the small critical surface and early theme selection to avoid a white
+startup flash. Android also coordinates native window/WebView startup colors.
+A full replacement stylesheet or UI redesign requires an explicit task and
+representative verification, not a broad cleanup disguised as maintenance.
+
+## Releases and compatibility
+
+Chrome Web Store is the desktop distribution channel; Edge Add-ons is optional
+and needs its own approval and verification. Android signing, GitLab release
+metadata, and update notification code exist. Treat signing keys as external
+secrets, preserve application ID/signing continuity, and verify updates on the
+exact installed artifact. Do not turn old prototype-phase notes into a ban on
+maintaining already implemented release/update code.
+
+Android's configured minimum is not proof that every supported API level has
+been tested. Keep device/runtime evidence explicit. The same applies to startup
+flash, navigation, file handling, passkeys, and updater behavior.
+
+Building, packaging, publishing, and installing are separate actions. Normal
+work ends with a local production review folder; commits, pushes, store/release
+submissions, and school-data changes require the user's authorization.
