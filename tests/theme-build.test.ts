@@ -240,10 +240,12 @@ describe("generated theme", () => {
       ["obsidian-red", "#0d0d0f", "#ff6b7a", "#f5f0f2"],
       ["velvet-mauve", "#11111b", "#cba6f7", "#cdd6f4"],
       ["midnight-amber", "#11100d", "#f2b84b", "#f3ead7"],
+      ["monochrome-dark", "#101010", "#d6d6d6", "#f2f2f2"],
       ["light-mint", "#edf4ef", "#267458", "#263c32"],
       ["light-blue", "#edf1f8", "#315fa3", "#26354b"],
       ["sand", "#f5efdf", "#7d592b", "#493e2d"],
       ["light-mauve", "#f6eef5", "#864c86", "#443146"],
+      ["monochrome-light", "#f0f0f0", "#484848", "#292929"],
     ] as const;
 
     expect(css).toContain("--sid-accent: #65d6b1");
@@ -269,6 +271,57 @@ describe("generated theme", () => {
     });
     expect(mintFallback).toBeDefined();
   });
+
+  it.each(["monochrome-dark", "monochrome-light"])(
+    "keeps %s neutral except for red danger tokens",
+    (themeId) => {
+      const base = postcss.parse(
+        fs.readFileSync(path.join(projectRoot, "src/theme/modules/01-tokens.css"), "utf8"),
+      );
+      const css = fs.readFileSync(
+        path.join(projectRoot, "src/theme/modules/02-palettes.css"),
+        "utf8",
+      );
+      const palette = findRule(css, `[data-sid-theme="${themeId}"]`);
+      const tokens = new Map<string, string>();
+      palette?.walkDecls((decl) => {
+        tokens.set(decl.prop, decl.value);
+      });
+      base.walkDecls(/^--sid-/, (decl) => {
+        if (!/^--sid-(radius|z-)/.test(decl.prop)) {
+          expect(tokens.has(decl.prop), decl.prop).toBe(true);
+        }
+      });
+      expect(palette).toBeDefined();
+      expect(palette?.nodes.every((node) => node.type === "decl" || node.type === "comment")).toBe(
+        true,
+      );
+      for (const [token, value] of tokens) {
+        if (token.startsWith("--sid-danger")) continue;
+        for (const match of value.matchAll(/(?:#|%23)([0-9a-f]{6})/g)) {
+          const hex = match[1] ?? "";
+          expect(hex.slice(0, 2), token).toBe(hex.slice(2, 4));
+          expect(hex.slice(2, 4), token).toBe(hex.slice(4, 6));
+        }
+        for (const match of value.matchAll(/rgb\((\d+) (\d+) (\d+)/g)) {
+          expect(match[1], token).toBe(match[2]);
+          expect(match[2], token).toBe(match[3]);
+        }
+        expect(value, token).not.toMatch(/sepia|hue-rotate/);
+      }
+      expect(tokens.get("--sid-danger")).toBe(
+        themeId === "monochrome-dark" ? "#ff9696" : "#b33740",
+      );
+      const critical = findRule(
+        fs.readFileSync(path.join(projectRoot, "src/theme/critical.css"), "utf8"),
+        `[data-sid-theme="${themeId}"]`,
+      );
+      expect(critical).toBeDefined();
+      critical?.walkDecls((decl) => {
+        expect(tokens.get(decl.prop)).toBe(decl.value);
+      });
+    },
+  );
 
   it.each(THEMES.filter((theme) => theme.colorScheme === "light"))(
     "$id owns a complete, accessible color system without geometry overrides",
@@ -296,7 +349,9 @@ describe("generated theme", () => {
       expect([...tokens.keys()].sort()).toEqual(colorTokens.sort());
       expect(light?.nodes.every((node) => node.type === "decl")).toBe(true);
       expect(tokens.get("--sid-post-surface")).toBe("var(--sid-surface)");
-      expect(tokens.get("--sid-emphasis")).toBe("#f7ca50");
+      expect(tokens.get("--sid-emphasis")).toBe(
+        theme.id === "monochrome-light" ? "#484848" : "#f7ca50",
+      );
       const critical = findRule(
         fs.readFileSync(path.join(projectRoot, "src/theme/critical.css"), "utf8"),
         `[data-sid-theme="${theme.id}"]`,

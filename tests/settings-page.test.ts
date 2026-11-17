@@ -63,7 +63,7 @@ describe("shared settings page", () => {
     await Promise.resolve();
 
     const themeInputs = document.querySelectorAll<HTMLInputElement>('input[name="theme"]');
-    expect(themeInputs).toHaveLength(9);
+    expect(themeInputs).toHaveLength(11);
     expect(document.querySelector(".theme-option[title]")).toBeNull();
     expect(themeInputs[1]?.checked).toBe(true);
     expect(themeInputs[1]?.getAttribute("aria-label")).toBe("Sinine");
@@ -105,7 +105,7 @@ describe("shared settings page", () => {
     cleanup();
   });
 
-  it.each(["light-mint", "light-blue", "sand", "light-mauve"] as const)(
+  it.each(["light-mint", "light-blue", "sand", "light-mauve", "monochrome-light"] as const)(
     "persists %s in the light group and restores its scheme on remount",
     async (themeId) => {
       const store = createStore();
@@ -115,8 +115,8 @@ describe("shared settings page", () => {
       const light = document.querySelector<HTMLInputElement>(`input[value="${themeId}"]`);
       if (light === null) throw new Error("Light theme control missing");
       expect(light.closest("fieldset")?.querySelector("legend")?.textContent).toBe("Heledad");
-      expect(document.querySelectorAll('[data-theme-family="dark"] input')).toHaveLength(5);
-      expect(document.querySelectorAll('[data-theme-family="light"] input')).toHaveLength(4);
+      expect(document.querySelectorAll('[data-theme-family="dark"] input')).toHaveLength(6);
+      expect(document.querySelectorAll('[data-theme-family="light"] input')).toHaveLength(5);
       light.checked = true;
       light.dispatchEvent(new Event("change"));
       await Promise.resolve();

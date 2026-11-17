@@ -43,10 +43,12 @@ describe("theme catalog", () => {
       "activation-obsidian-red.js",
       "activation-velvet-mauve.js",
       "activation-midnight-amber.js",
+      "activation-monochrome-dark.js",
       "activation-light-mint.js",
       "activation-light-blue.js",
       "activation-sand.js",
       "activation-light-mauve.js",
+      "activation-monochrome-light.js",
     ]);
   });
 });

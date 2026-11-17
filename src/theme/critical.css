@@ -51,3 +51,14 @@
   --sid-canvas: #f6eef5;
   --sid-text-2: #624e65;
 }
+
+:root:where([data-sid-enhancement="enabled"][data-sid-theme="monochrome-dark"]) {
+  --sid-canvas: #101010;
+  --sid-text-2: #c4c4c4;
+}
+
+:root:where([data-sid-enhancement="enabled"][data-sid-theme="monochrome-light"]) {
+  --sid-color-scheme: light;
+  --sid-canvas: #f0f0f0;
+  --sid-text-2: #484848;
+}

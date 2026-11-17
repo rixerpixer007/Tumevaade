@@ -144,10 +144,12 @@ for (const [themeId, canvas, accent] of [
   ["obsidian-red", "#0d0d0f", "#ff6b7a"],
   ["velvet-mauve", "#11111b", "#cba6f7"],
   ["midnight-amber", "#11100d", "#f2b84b"],
+  ["monochrome-dark", "#101010", "#d6d6d6"],
   ["light-mint", "#edf4ef", "#267458"],
   ["light-blue", "#edf1f8", "#315fa3"],
   ["sand", "#f5efdf", "#7d592b"],
   ["light-mauve", "#f6eef5", "#864c86"],
+  ["monochrome-light", "#f0f0f0", "#484848"],
 ]) {
   assert(
     bundledCss.includes(`data-sid-theme=${themeId}]`) &&
@@ -187,10 +189,12 @@ for (const activationScript of [
   "activation-obsidian-red.js",
   "activation-velvet-mauve.js",
   "activation-midnight-amber.js",
+  "activation-monochrome-dark.js",
   "activation-light-mint.js",
   "activation-light-blue.js",
   "activation-sand.js",
   "activation-light-mauve.js",
+  "activation-monochrome-light.js",
 ]) {
   assert(files.includes(activationScript), `Early theme script is missing: ${activationScript}`);
 }

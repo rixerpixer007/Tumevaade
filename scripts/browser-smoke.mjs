@@ -104,6 +104,56 @@ try {
     ),
     "",
   );
+  // Fictional status samples exercise the monochrome palettes without school-data changes.
+  const appearance = await context.newPage();
+  await appearance.goto(`chrome-extension://${identity.id}/${manifest.options_ui.page}`);
+  for (const [themeId, danger] of [
+    ["monochrome-dark", "rgb(255, 150, 150)"],
+    ["monochrome-light", "rgb(179, 55, 64)"],
+  ]) {
+    await appearance.locator(`label.theme-option:has(input[value="${themeId}"])`).click();
+    await assertTheme(page, themeId);
+    await page.reload();
+    await assertTheme(page, themeId);
+    await page.evaluate(() => {
+      document.body.innerHTML = `<main class="page_grades_student">
+      <span class="grade_MA">MA</span><span class="grade_2">2</span>
+      <span class="grade_param_is_notify"><abbr>!</abbr></span>
+      <span class="grade_param_is_no_homework"><abbr>T</abbr></span>
+      <span class="grade_AR">AR</span><span class="grade_5">5</span>
+      <span class="grade_param_is_late">H</span><p class="message-warning">Notice</p>
+    </main><div class="popover absences_popover"><a class="icon close" href="#" aria-label="Close"></a></div>`;
+    });
+    const colors = await page.evaluate(() => {
+      const selectors = [
+        ".grade_MA",
+        ".grade_2",
+        ".grade_param_is_notify abbr",
+        ".grade_param_is_no_homework",
+        ".grade_param_is_no_homework abbr",
+        ".grade_AR",
+        ".grade_5",
+        ".grade_param_is_late",
+        ".message-warning",
+      ];
+      return selectors.map((selector) => getComputedStyle(document.querySelector(selector)).color);
+    });
+    const closePaint = await page.locator(".absences_popover .icon.close").evaluate((element) => {
+      const style = getComputedStyle(element);
+      return { image: style.backgroundImage, filter: style.filter };
+    });
+    assert.ok(closePaint.image.includes("data:image/svg+xml"));
+    assert.equal(closePaint.filter, "none");
+    assert.deepEqual(colors.slice(0, 3), Array(3).fill(danger));
+    for (const color of colors.slice(3)) {
+      const channels = color.match(/\d+/g);
+      assert.equal(channels[0], channels[1], `Expected neutral status: ${color}`);
+      assert.equal(channels[1], channels[2], `Expected neutral status: ${color}`);
+    }
+  }
+  await appearance.locator('label.theme-option:has(input[value="graphite-blue"])').click();
+  await assertTheme(page, "graphite-blue");
+  await appearance.close();
   await page.goto("https://torg.ope.ee/auth");
   assert.equal(await page.getAttribute("html", "data-sid-enhancement"), null);
   await page.goto("https://example.org/");
