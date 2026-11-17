@@ -83,6 +83,20 @@ export const THEMES = [
     },
   },
   {
+    id: "monochrome-dark",
+    name: "Tume monokroom",
+    shortName: "Monokroom",
+    description:
+      "Mustad ja hallid toonid heledate aktsentidega. Veateated ja negatiivsed hinded jäävad punaseks.",
+    colorScheme: "dark",
+    preview: {
+      canvas: "#101010",
+      surface: "#282828",
+      accent: "#d6d6d6",
+      text: "#f2f2f2",
+    },
+  },
+  {
     id: "light-mint",
     name: "Hele münt",
     shortName: "Hele münt",
@@ -132,6 +146,20 @@ export const THEMES = [
       surface: "#fffafd",
       accent: "#864c86",
       text: "#443146",
+    },
+  },
+  {
+    id: "monochrome-light",
+    name: "Hele monokroom",
+    shortName: "Hele monokroom",
+    description:
+      "Valged ja hallid toonid tumedate aktsentidega. Veateated ja negatiivsed hinded jäävad punaseks.",
+    colorScheme: "light",
+    preview: {
+      canvas: "#f0f0f0",
+      surface: "#ffffff",
+      accent: "#484848",
+      text: "#292929",
     },
   },
 ] as const satisfies readonly ThemeDefinition[];

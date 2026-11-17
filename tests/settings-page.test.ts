@@ -64,7 +64,7 @@ describe("shared settings page", () => {
     await Promise.resolve();
 
     const themeInputs = document.querySelectorAll<HTMLInputElement>('input[name="theme"]');
-    expect(themeInputs).toHaveLength(9);
+    expect(themeInputs).toHaveLength(THEMES.length);
     expect(document.querySelector(".theme-option[title]")).toBeNull();
     expect(themeInputs[1]?.checked).toBe(true);
     expect(themeInputs[1]?.getAttribute("aria-label")).toBe("Sinine");
