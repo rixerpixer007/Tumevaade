@@ -60,7 +60,7 @@ representative verification, not a broad cleanup disguised as maintenance.
 ## Releases and compatibility
 
 Chrome Web Store is the desktop distribution channel; Edge Add-ons is optional
-and needs its own approval and verification. Android signing, GitLab release
+and needs its own approval and verification. Android signing, GitHub release
 metadata, and update notification code exist. Treat signing keys as external
 secrets, preserve application ID/signing continuity, and verify updates on the
 exact installed artifact. Do not turn old prototype-phase notes into a ban on

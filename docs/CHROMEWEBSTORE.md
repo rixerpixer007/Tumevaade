@@ -41,7 +41,7 @@ Sinu kooliandmeid ei koguta ega saadeta arendajale. Tumevaade salvestab ainult v
 • Skripti registreerimine võimaldab salvestatud valiku rakendada toetatud lehe laadimise alguses.
 
 TUGI
-https://gitlab.com/rixerpixer007/tumevaade/-/boards#/
+https://github.com/rixerpixer007/Tumevaade/issues
 
 **Category**
 
@@ -106,13 +106,13 @@ The code recognizes supported routes and the navigation location used for its se
 
 ## Privacy policy
 
-**Public privacy-policy URL:** `https://gitlab.com/rixerpixer007/tumevaade/-/blob/main/docs/PRIVACY.md`
+**Public privacy-policy URL:** `https://github.com/rixerpixer007/Tumevaade/blob/main/docs/PRIVACY.md`
 
 The published policy must match the source and dashboard answers. It must state what the local preference is, that no school or authentication data is collected or transmitted, how uninstalling removes extension-local storage, and how to contact the maintainer. Verify that the final URL is public and not behind a login before submission.
 
 ### Public URL verification
 
-Use the GitLab support and privacy-policy URLs above. Recheck that they are
+Use the GitHub support and privacy-policy URLs above. Recheck that they are
 public and match the publisher dashboard before a submission; editing this
 file does not change the listing.
 

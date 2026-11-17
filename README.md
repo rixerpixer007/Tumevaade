@@ -8,7 +8,7 @@
 ## Installimine
 
 <div align="center" style="width:100%">
-  <a href="https://gitlab.com/rixerpixer007/tumevaade/-/releases">
+  <a href="https://github.com/rixerpixer007/Tumevaade/releases">
     <img src="assets/readme/download.svg" alt="Laadi Tumevaade Androidile alla" width="258">
   </a>
     <a href="https://chromewebstore.google.com/detail/tumevaade/kiehioimhdfibljnljfghimnmjckdoio">
@@ -65,7 +65,7 @@ Täpsem selgitus on [privaatsuspoliitikas](docs/PRIVACY.md).
 
 ## Tagasiside ja panustamine
 
-Probleemidest ja ettepanekutest saab teada anda [GitLabi probleemide tahvli kaudu](https://gitlab.com/rixerpixer007/tumevaade/-/boards#/).
+Probleemidest ja ettepanekutest saab teada anda [GitHubi probleemide lehe kaudu](https://github.com/rixerpixer007/Tumevaade/issues).
 
 <details>
   <summary>Arendajale</summary>

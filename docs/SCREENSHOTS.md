@@ -9,7 +9,7 @@ See dokument on Tumevaate README visuaalide kehtiv tootmisspetsifikatsioon. Libr
 | ID      | Fail                                                          | Sisu                                                 | Mõõt        | Maht      |
 | ------- | ------------------------------------------------------------- | ---------------------------------------------------- | ----------- | --------- |
 | VIS-01  | `assets/readme/banner.webp`                                   | README päisebänner                                   | 3240 × 1080 | 50 664 B  |
-| VIS-02A | `assets/readme/download.svg`                                  | GitLab Releasesi allalaadimisnupp                    | 646 × 250   | —         |
+| VIS-02A | `assets/readme/download.svg`                                  | GitHub Releasesi allalaadimisnupp                    | 646 × 250   | —         |
 | VIS-02B | `assets/readme/download-google-play.png`                      | Google Play allalaadimisnupp tulevase poeviite jaoks | 646 × 250   | 16 279 B  |
 | VIS-02C | `assets/readme/download-chrome-web-store.png`                 | Chrome Web Store'i nupp tulevase poeviite jaoks      | 646 × 250   | 15 975 B  |
 | VIS-02D | `assets/readme/download-app-store.png`                        | App Store'i nupp tulevase poeviite jaoks             | 646 × 250   | 16 016 B  |
@@ -26,14 +26,14 @@ See dokument on Tumevaate README visuaalide kehtiv tootmisspetsifikatsioon. Libr
 
 Kõik failid on sRGB-värviruumis ja ilma EXIF- või XMP-metaandmeteta. Kinnitatud cross-device seeria kasutab stabiilseid failinimesid. Galerii viis pilti asuvad juurkausta `SCREEN_SHOT.md` lehel ning iga pilt avaneb sealt täissuuruses.
 
-VIS-02B, VIS-02D ja VIS-02E hoitakse valmis tulevaste ametlike poelehtede jaoks. Neid ei lisata README-sse ega lingita enne, kui vastav Tumevaate avalik poeleht on päriselt olemas. README kasutab VIS-02A nuppu GitLab Releasesi jaoks ning VIS-02C nuppu avaliku Chrome Web Store’i lehe jaoks.
+VIS-02B, VIS-02D ja VIS-02E hoitakse valmis tulevaste ametlike poelehtede jaoks. Neid ei lisata README-sse ega lingita enne, kui vastav Tumevaate avalik poeleht on päriselt olemas. README kasutab VIS-02A nuppu GitHub Releasesi jaoks ning VIS-02C nuppu avaliku Chrome Web Store’i lehe jaoks.
 
 ## README kompositsioon
 
 README kasutab varasid järgmises järjestuses:
 
 1. VIS-01 kuvatakse lehe ülaosas täislaiuses.
-2. VIS-02A kuvatakse installimise jaotises ning viib GitLab Releasesi lehele.
+2. VIS-02A kuvatakse installimise jaotises ning viib GitHub Releasesi lehele.
 3. Esimene täislaiuses `<picture>` kuvab põhivaate: üle 600 px laiuses VIS-06 ja kuni 600 px laiuses VIS-07.
 4. Teine täislaiuses `<picture>` kuvab kujunduse valimise: üle 600 px laiuses VIS-08 ja kuni 600 px laiuses VIS-09.
 5. Ekraanipiltide jaotise lõpus viib link `SCREEN_SHOT.md` galeriisse, kus VIS-10 kuni VIS-14 paiknevad ühtses üheveerulises fotoseinas.
@@ -164,7 +164,7 @@ VIS-01 on originaalne 3 : 1 kompositsioon, mis kasutab muutmata faili `assets/br
 
 ## Allalaadimisnupud
 
-Kõik viis nuppu kasutavad sama mõõtu, sisemist rütmi ja tumedat Tumevaate stiili. GitLabi väljalasete nupp kasutab üldist allalaadimisikooni. Poodide märgid säilitavad oma tavapärase kuju ja värvikäsitluse; nende ümber ei lisata valget taustaplaati ega pöörata märgi värve ümber.
+Kõik viis nuppu kasutavad sama mõõtu, sisemist rütmi ja tumedat Tumevaate stiili. GitHubi väljalasete nupp kasutab üldist allalaadimisikooni. Poodide märgid säilitavad oma tavapärase kuju ja värvikäsitluse; nende ümber ei lisata valget taustaplaati ega pöörata märgi värve ümber.
 
 Nupud on navigeerimisvarad, mitte väide, et rakendus on igas poes juba saadaval. VIS-02C viib avalikule Chrome Web Store’i lehele. VIS-02B, VIS-02D ja VIS-02E aktiveeritakse alles vastava ametliku poe-URL-i olemasolul.
 
@@ -173,7 +173,7 @@ Nupud on navigeerimisvarad, mitte väide, et rakendus on igas poes juba saadaval
 | Vara               | Alt-tekst                                                             |
 | ------------------ | --------------------------------------------------------------------- |
 | VIS-01             | `Tumevaade – tuttav keskkond, uus vaade.`                             |
-| VIS-02A            | `Laadi Tumevaade GitLabist alla`                                      |
+| VIS-02A            | `Laadi Tumevaade GitHubist alla`                                      |
 | VIS-06 ja VIS-07   | `Tumevaate põhivaade arvutis ja telefonis Graphite Minti kujundusega` |
 | VIS-08 ja VIS-09   | `Tumevaate kujunduse valimine arvutis ja telefonis`                   |
 | VIS-10 kuni VIS-14 | `Tumevaate põhivaade kujundusega „[teema nimi]”`                      |

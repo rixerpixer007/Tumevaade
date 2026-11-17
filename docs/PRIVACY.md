@@ -54,4 +54,4 @@ Kui tulevane funktsioon muudab andmekäitlust või vajalikke õigusi, uuendataks
 
 ## Kontakt
 
-Privaatsusega seotud küsimuse saab esitada [GitLabi probleemide tahvli kaudu](https://gitlab.com/rixerpixer007/tumevaade/-/boards#/). Ära lisa avalikku küsimusse nime, hindeid, sõnumeid, sisselogimisandmeid ega muud privaatset kooliinfot.
+Privaatsusega seotud küsimuse saab esitada [GitHubi probleemide lehe kaudu](https://github.com/rixerpixer007/Tumevaade/issues). Ära lisa avalikku küsimusse nime, hindeid, sõnumeid, sisselogimisandmeid ega muud privaatset kooliinfot.

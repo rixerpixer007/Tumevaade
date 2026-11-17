@@ -8,11 +8,11 @@ import org.junit.Test
 
 class AppUpdateClientTest {
     @Test
-    fun acceptsThisProjectsGitLabReleaseUrls() {
-        val base = "https://gitlab.com/rixerpixer007/tumevaade/-/releases"
+    fun acceptsThisProjectsGitHubReleaseUrls() {
+        val base = "https://github.com/rixerpixer007/Tumevaade/releases"
 
         assertTrue(AppUpdateClient.isTrustedReleaseUrl(base))
-        assertTrue(AppUpdateClient.isTrustedReleaseUrl("$base/android-v0.1.4"))
+        assertTrue(AppUpdateClient.isTrustedReleaseUrl("$base/tag/android-v0.1.4"))
     }
 
     @Test
@@ -36,18 +36,18 @@ class AppUpdateClientTest {
     fun rejectsUntrustedReleaseUrls() {
         val urls =
             listOf(
-                "http://gitlab.com/rixerpixer007/tumevaade/-/releases/android-v1",
-                "https://example.com/rixerpixer007/tumevaade/-/releases/android-v1",
-                "https://gitlab.com/other/tumevaade/-/releases/android-v1",
-                "https://gitlab.com/rixerpixer007/tumevaade/-/issues",
-                "https://gitlab.com/rixerpixer007/tumevaade/-/releases/../issues",
-                "https://gitlab.com/rixerpixer007/tumevaade/-/releases/%2e%2e/issues",
-                "https://gitlab.com@evil.example/rixerpixer007/tumevaade/-/releases",
-                "https://gitlab.com/rixerpixer007/tumevaade/-/releases-evil/android-v1",
-                "https://gitlab.com:8443/rixerpixer007/tumevaade/-/releases/android-v1",
-                "https://gitlab.com/rixerpixer007/tumevaade/-/releases/android-v1?redirect=evil",
-                "https://gitlab.com/rixerpixer007/tumevaade/-/releases/android-v1#fragment",
-                "https://github.com/rixerpixer007/Tumevaade/releases/tag/android-v0.1.3",
+                "http://github.com/rixerpixer007/Tumevaade/releases/tag/android-v1",
+                "https://example.com/rixerpixer007/Tumevaade/releases/tag/android-v1",
+                "https://github.com/other/Tumevaade/releases/tag/android-v1",
+                "https://github.com/rixerpixer007/Tumevaade/issues",
+                "https://github.com/rixerpixer007/Tumevaade/releases/../issues",
+                "https://github.com/rixerpixer007/Tumevaade/releases/%2e%2e/issues",
+                "https://github.com@evil.example/rixerpixer007/Tumevaade/releases",
+                "https://github.com/rixerpixer007/Tumevaade/releases-evil/android-v1",
+                "https://github.com:8443/rixerpixer007/Tumevaade/releases/tag/android-v1",
+                "https://github.com/rixerpixer007/Tumevaade/releases/tag/android-v1?redirect=evil",
+                "https://github.com/rixerpixer007/Tumevaade/releases/tag/android-v1#fragment",
+                "https://gitlab.com/rixerpixer007/tumevaade/-/releases/android-v0.1.6",
             )
 
         urls.forEach { url -> assertFalse(url, AppUpdateClient.isTrustedReleaseUrl(url)) }
@@ -83,7 +83,7 @@ class AppUpdateClientTest {
         versionCode: Long = 2L,
         versionName: String = "0.1.1-beta",
         releaseUrl: String =
-            "https://gitlab.com/rixerpixer007/tumevaade/-/releases/android-v0.1.1-beta",
+            "https://github.com/rixerpixer007/Tumevaade/releases/tag/android-v0.1.1-beta",
         sha256: String = "a".repeat(64),
     ): AppUpdate? =
         AppUpdateClient.createCandidate(
