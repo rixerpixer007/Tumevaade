@@ -1,6 +1,14 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { runInNewContext } from "node:vm";
+
+import postcss from "postcss";
+import selectorParser from "postcss-selector-parser";
+
+import { loadThemeConfiguration } from "./load-theme-catalog.mjs";
+
+const { THEMES: themes, DEFAULT_THEME_ID } = await loadThemeConfiguration();
 
 const SCRIPT_DIRECTORY = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(SCRIPT_DIRECTORY, "..");
@@ -138,24 +146,39 @@ assert(
   bundledCss.includes("data-sid-enhancement=enabled]"),
   "Theme CSS is not gated by the extension activation attribute",
 );
-assert(bundledCss.includes("--sid-canvas:#0f1311"), "Full graphite theme is missing");
-for (const [themeId, canvas, accent] of [
-  ["graphite-blue", "#0c1118", "#75a7ff"],
-  ["obsidian-red", "#0d0d0f", "#ff6b7a"],
-  ["velvet-mauve", "#11111b", "#cba6f7"],
-  ["midnight-amber", "#11100d", "#f2b84b"],
-  ["light-mint", "#edf4ef", "#267458"],
-  ["light-blue", "#edf1f8", "#315fa3"],
-  ["sand", "#f5efdf", "#7d592b"],
-  ["light-mauve", "#f6eef5", "#864c86"],
-]) {
-  assert(
-    bundledCss.includes(`data-sid-theme=${themeId}]`) &&
-      bundledCss.includes(`--sid-accent:${accent}`) &&
-      bundledCss.includes(`--sid-canvas:${canvas}`),
-    `${themeId} theme is missing`,
-  );
+const packagedPalettes = new Map();
+postcss.parse(bundledCss).walkRules((rule) => {
+  const tokens = new Map();
+  rule.walkDecls(/^--sid-/, (decl) => tokens.set(decl.prop, decl.value));
+  if (!tokens.has("--sid-canvas") || !tokens.has("--sid-accent")) return;
+  let themeId = DEFAULT_THEME_ID;
+  selectorParser()
+    .astSync(rule.selector)
+    .walkAttributes((attribute) => {
+      if (attribute.attribute === "data-sid-theme") themeId = attribute.value;
+    });
+  packagedPalettes.set(themeId, tokens);
+});
+
+function normalizeColor(value) {
+  // CSS minifiers may shorten #ffffff to #fff.
+  return value?.toLowerCase().replace(/^#([a-f0-9])([a-f0-9])([a-f0-9])$/, "#$1$1$2$2$3$3");
 }
+
+for (const theme of themes) {
+  const palette = packagedPalettes.get(theme.id);
+  for (const [preview, token] of [
+    ["canvas", "--sid-canvas"],
+    ["accent", "--sid-accent"],
+    ["text", "--sid-text"],
+  ]) {
+    assert(
+      normalizeColor(palette?.get(token)) === normalizeColor(theme.preview[preview]),
+      `${theme.id} packaged palette has a missing or incorrect ${token}`,
+    );
+  }
+}
+
 assert(
   bundledCss.includes("sid-extension-settings-menu-item"),
   "In-page settings menu styling is missing",
@@ -181,18 +204,33 @@ assert(
   "Early activation does not preserve the authentication-page exclusion",
 );
 
-for (const activationScript of [
-  "activation-graphite-mint.js",
-  "activation-graphite-blue.js",
-  "activation-obsidian-red.js",
-  "activation-velvet-mauve.js",
-  "activation-midnight-amber.js",
-  "activation-light-mint.js",
-  "activation-light-blue.js",
-  "activation-sand.js",
-  "activation-light-mauve.js",
-]) {
+for (const theme of themes) {
+  const activationScript = `activation-${theme.id}.js`;
   assert(files.includes(activationScript), `Early theme script is missing: ${activationScript}`);
+  const code = fs.readFileSync(path.join(BUILD_DIRECTORY, activationScript), "utf8");
+  for (const [url, authenticationDocument] of [
+    ["https://torg.ope.ee/", false],
+    ["https://torg.ope.ee/auth", false],
+    ["https://torg.ope.ee/", true],
+  ]) {
+    const attributes = new Map(authenticationDocument ? [["data-track-url", "/auth"]] : []);
+    runInNewContext(code, {
+      URL,
+      window: { location: { href: url } },
+      document: {
+        documentElement: {
+          getAttribute: (name) => attributes.get(name) ?? null,
+          setAttribute: (name, value) => attributes.set(name, value),
+        },
+      },
+    });
+    const excluded = authenticationDocument || new URL(url).pathname.startsWith("/auth");
+    assert(
+      attributes.get("data-sid-theme") === (excluded ? undefined : theme.id) &&
+        attributes.get("data-sid-enhancement") === (excluded ? undefined : "enabled"),
+      `${activationScript} must activate synchronously and preserve signed-out documents`,
+    );
+  }
 }
 
 console.log(`Validated Manifest V3 production build with ${files.length} packaged files.`);

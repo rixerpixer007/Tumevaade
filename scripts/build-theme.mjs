@@ -6,11 +6,15 @@ import { fileURLToPath } from "node:url";
 import postcss from "postcss";
 import selectorParser from "postcss-selector-parser";
 
+import { loadThemeConfiguration } from "./load-theme-catalog.mjs";
+import { buildCriticalTheme, readThemePalettes } from "./theme-palettes.mjs";
+
 const SCRIPT_DIRECTORY = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(SCRIPT_DIRECTORY, "..");
 const MODULE_DIRECTORY = path.join(PROJECT_ROOT, "src/theme/modules");
 const GENERATED_DIRECTORY = path.join(PROJECT_ROOT, "src/generated");
 const EXTENSION_THEME_PATH = path.join(GENERATED_DIRECTORY, "theme.css");
+const CRITICAL_THEME_PATH = path.join(GENERATED_DIRECTORY, "critical.css");
 
 const ACTIVATION_ATTRIBUTE = "data-sid-enhancement";
 const ACTIVATION_VALUE = "enabled";
@@ -95,14 +99,22 @@ function buildExtensionTheme(themeSource) {
   return `${GENERATED_EXTENSION_NOTICE}\n\n${root.toString().trimEnd()}\n`;
 }
 
-function buildOutputs() {
+async function buildOutputs() {
   const modules = readThemeModules();
   const themeSource = modules.map(({ source }) => source).join("");
 
   postcss.parse(themeSource, { from: "src/theme/modules" });
+  const { THEMES, DEFAULT_THEME_ID } = await loadThemeConfiguration();
+  const palettes = readThemePalettes(
+    THEMES,
+    DEFAULT_THEME_ID,
+    modules.find(({ name }) => name === "01-tokens.css").source,
+    modules.find(({ name }) => name === "02-palettes.css").source,
+  );
 
   return {
     extensionTheme: buildExtensionTheme(themeSource),
+    criticalTheme: buildCriticalTheme(palettes, DEFAULT_THEME_ID),
     moduleNames: modules.map(({ name }) => name),
   };
 }
@@ -118,19 +130,21 @@ function assertCurrent(filePath, expected) {
   }
 }
 
-function main() {
+async function main() {
   const checkOnly = process.argv.includes("--check");
-  const outputs = buildOutputs();
+  const outputs = await buildOutputs();
 
   if (checkOnly) {
     assertCurrent(EXTENSION_THEME_PATH, outputs.extensionTheme);
+    assertCurrent(CRITICAL_THEME_PATH, outputs.criticalTheme);
     console.log(`Theme check passed: generated CSS matches ${outputs.moduleNames.length} modules.`);
     return;
   }
 
   fs.mkdirSync(GENERATED_DIRECTORY, { recursive: true });
   fs.writeFileSync(EXTENSION_THEME_PATH, outputs.extensionTheme);
+  fs.writeFileSync(CRITICAL_THEME_PATH, outputs.criticalTheme);
   console.log(`Built generated theme CSS from ${outputs.moduleNames.length} modules.`);
 }
 
-main();
+await main();

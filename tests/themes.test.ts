@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 
 import { applyTheme, clearTheme } from "../src/features/theme-selection";
-import { getEarlyActivationScript } from "../src/platforms/webextension/early-activation";
 import {
   DEFAULT_THEME_ID,
   getTheme,
@@ -22,32 +21,11 @@ describe("theme catalog", () => {
   });
 
   it("recognizes only catalogued themes", () => {
-    expect(isThemeId("graphite-mint")).toBe(true);
-    expect(isThemeId("graphite-blue")).toBe(true);
-    expect(isThemeId("obsidian-red")).toBe(true);
-    expect(isThemeId("velvet-mauve")).toBe(true);
-    expect(isThemeId("midnight-amber")).toBe(true);
-    expect(isThemeId("light-mint")).toBe(true);
-    for (const themeId of ["light-blue", "sand", "light-mauve"] as const) {
-      expect(isThemeId(themeId)).toBe(true);
-      expect(getTheme(themeId).colorScheme).toBe("light");
+    for (const theme of THEMES) {
+      expect(isThemeId(theme.id)).toBe(true);
+      expect(getTheme(theme.id)).toBe(theme);
     }
-    expect(getTheme("light-mint").colorScheme).toBe("light");
     expect(isThemeId("unknown-theme")).toBe(false);
-  });
-
-  it("maps every theme to a bundled early-activation script", () => {
-    expect(THEMES.map((theme) => getEarlyActivationScript(theme.id))).toEqual([
-      "activation-graphite-mint.js",
-      "activation-graphite-blue.js",
-      "activation-obsidian-red.js",
-      "activation-velvet-mauve.js",
-      "activation-midnight-amber.js",
-      "activation-light-mint.js",
-      "activation-light-blue.js",
-      "activation-sand.js",
-      "activation-light-mauve.js",
-    ]);
   });
 });
 

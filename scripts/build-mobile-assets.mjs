@@ -117,7 +117,7 @@ async function buildBootstrap(outputDirectory) {
 
   const injectionDirectory = path.join(outputDirectory, "injection");
   fs.copyFileSync(
-    path.join(PROJECT_ROOT, "src/theme/critical.css"),
+    path.join(PROJECT_ROOT, "src/generated/critical.css"),
     path.join(injectionDirectory, "critical.css"),
   );
   fs.copyFileSync(
