@@ -130,16 +130,20 @@ The canonical source is `src/theme/modules/*.css`.
 
 ### `npm run build:theme`
 
-Parses the canonical modules in filename order and writes
+Validates palette/catalog consistency, parses the canonical modules in filename order, and writes
 `src/generated/theme.css`, the ignored, activation-gated stylesheet used by the
 extension and mobile asset builds.
 
 Run it after changing a canonical theme module unless `npm run dev` is already
 watching those files.
 
+The build also writes `src/generated/critical.css`, deriving startup color scheme,
+canvas and secondary text colors from the same palette tokens. Theme metadata
+lives in `src/shared/themes.ts`; no separate startup color list is maintained.
+
 ### `npm run watch:theme`
 
-Watches the canonical theme modules, then reruns the theme build after a change.
+Watches the canonical theme modules and theme catalog, then reruns the theme build after a change.
 It stays active until stopped with `Control+C`.
 
 This command does not perform an initial build. Use `npm run build:theme` first
@@ -149,7 +153,7 @@ initial build with this watcher.
 ### `npm run check:theme`
 
 Rebuilds the expected theme content in memory and compares it with
-`src/generated/theme.css`. It does not write files. A failure means the
+`src/generated/theme.css` and `src/generated/critical.css`. It does not write files. A failure means a
 generated stylesheet is missing or stale and should be regenerated with
 `npm run build:theme`.
 

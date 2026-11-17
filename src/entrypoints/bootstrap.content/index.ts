@@ -1,4 +1,4 @@
-import "../../theme/critical.css";
+import "../../generated/critical.css";
 import "../../generated/theme.css";
 import "../../platforms/webextension/settings-menu.css";
 

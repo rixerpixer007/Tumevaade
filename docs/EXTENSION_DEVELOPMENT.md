@@ -76,12 +76,11 @@ complete command behavior and requirements are documented in
 src/
 |-- theme/
 |   |-- modules/                   Canonical theme CSS and palettes, in source order
-|   |-- critical.css               Tiny earliest dark page surface
 |-- shared/                        Browser-independent settings, themes, routes, lifecycle
 |-- features/                      DOM features with activate/cleanup boundaries
 |-- platforms/webextension/        WebExtension API and page-shell adapters
 |-- entrypoints/                   Background, content script, and settings page
-`-- generated/theme.css            Generated, ignored extension theme CSS
+`-- generated/                     Generated, ignored complete theme and startup CSS
 scripts/                            Build and artifact validation programs
 tests/                              Fast behavior and generation tests
 wxt.config.ts                       Extension metadata and narrow permissions

@@ -9,7 +9,7 @@ DOM features. See [project direction](PROJECT_DIRECTION.md) for product boundari
 | `src/theme/modules/*.css`           | Canonical complete theme, in filename order                          |
 | `src/theme/modules/01-tokens.css`   | Default semantic palette                                             |
 | `src/theme/modules/02-palettes.css` | Complete attribute-gated palette overrides                           |
-| `src/theme/critical.css`            | Minimal early surface, not replacement structural CSS                |
+| `src/generated/critical.css`        | Generated early surface from canonical palette tokens                |
 | `src/shared/`                       | Settings/theme contracts, routes, sites, lifecycle; no platform APIs |
 | `src/features/`                     | Reusable DOM features with activation and cleanup                    |
 | `src/platforms/webextension/`       | Extension storage/runtime adapters                                   |
@@ -23,7 +23,28 @@ DOM features. See [project direction](PROJECT_DIRECTION.md) for product boundari
 
 ## Generated artifacts
 
+### Adding a theme
+
+Add its metadata to `src/shared/themes.ts` and its complete semantic palette to
+`src/theme/modules/02-palettes.css` (the default palette lives in `01-tokens.css`).
+Startup colors are generated from those palette tokens; do not maintain a separate
+startup palette. The build rejects missing or unknown palettes, mismatched preview
+colors, and incomplete light palettes.
+The catalog drives settings and mobile configuration. WXT's `entrypoints:found`
+hook also generates early activation entrypoints in `.wxt/theme-activation/`
+for both development and production. Each calls the shared activation function
+in `src/platforms/webextension/early-activation.ts` with its theme ID.
+
+Separate `activation-<id>.js` output bundles let Chrome apply the selected palette
+synchronously at `document_start`, with no asynchronous preference read. Their
+names remain stable across upgrades. Do not maintain per-theme entrypoint source
+files or filename maps. After changing the catalog, restart the development
+watcher so WXT discovers the new entrypoint set.
+
+### Output directories
+
 - `src/generated/theme.css`: activation-gated CSS from canonical modules.
+- `src/generated/critical.css`: minimal activation-gated startup colors from the same palettes.
 - `.output/chrome-mv3-dev/`: watched development extension.
 - `.output/chrome-mv3/`: one-time production extension, used for user review.
 - `apps/android/app/src/main/assets/mobile/`: generated mobile bundles and

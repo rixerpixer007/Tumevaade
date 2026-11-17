@@ -8,6 +8,7 @@ const SCRIPT_DIRECTORY = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(SCRIPT_DIRECTORY, "..");
 const MODULE_DIRECTORY = path.join(PROJECT_ROOT, "src/theme/modules");
 const BUILD_SCRIPT = path.join(SCRIPT_DIRECTORY, "build-theme.mjs");
+const CATALOG_PATH = path.join(PROJECT_ROOT, "src/shared/themes.ts");
 
 let timer;
 let building = false;
@@ -44,7 +45,7 @@ function sourceFingerprint() {
     .filter((file) => file.endsWith(".css"))
     .map((file) => path.join(MODULE_DIRECTORY, file));
 
-  return files
+  return [...files, CATALOG_PATH]
     .map((file) => {
       const stats = fs.statSync(file);
       return `${file}:${stats.mtimeMs}:${stats.size}`;

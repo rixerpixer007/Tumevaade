@@ -4,6 +4,8 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { chromium } from "playwright";
 
+import { loadThemeCatalog } from "./load-theme-catalog.mjs";
+
 import {
   browserDirectory,
   getExtensionDirectory,
@@ -20,6 +22,7 @@ const profile = await mkdtemp(path.join(browserDirectory, "smoke-profile-"));
 const output = await privateDirectory(path.join(browserDirectory, "smoke-results"));
 await rm(path.join(output, "report.json"), { force: true });
 const errors = [];
+const themes = await loadThemeCatalog();
 let context;
 
 async function launch() {
@@ -36,7 +39,7 @@ async function launch() {
   await browser.route("https://torg.ope.ee/**", (route) =>
     route.fulfill({
       contentType: "text/html",
-      body: "<!doctype html><html><head><title>Fictional extension smoke page</title></head><body><main><h1>Fictional smoke page</h1></main></body></html>",
+      body: `<!doctype html><html><head><script>window.earlyTheme = document.documentElement.getAttribute("data-sid-theme");</script><title>Fictional extension smoke page</title></head><body><main><h1>Fictional smoke page</h1></main></body></html>`,
     }),
   );
   await browser.route("https://example.org/**", (route) =>
@@ -88,6 +91,30 @@ try {
   );
 
   const page = context.pages()[0] ?? (await context.newPage());
+  const contentPage = await context.newPage();
+  for (const theme of themes) {
+    await page.goto(`chrome-extension://${identity.id}/${manifest.options_ui.page}`);
+    await page.locator(`label.theme-option:has(input[value="${theme.id}"])`).click();
+    await page.waitForFunction(async (themeId) => {
+      const [script] = await globalThis.chrome.scripting.getRegisteredContentScripts({
+        ids: ["sid-early-activation"],
+      });
+      return script?.js?.[0] === `activation-${themeId}.js`;
+    }, theme.id);
+    await contentPage.goto("https://torg.ope.ee/");
+    assert.equal(
+      await contentPage.evaluate(() => window.earlyTheme),
+      theme.id,
+      `${theme.id} must activate before the first page script`,
+    );
+    await assertTheme(contentPage, theme.id);
+    const colors = await contentPage.evaluate(() => {
+      const style = getComputedStyle(document.documentElement);
+      return { canvas: style.getPropertyValue("--sid-canvas").trim(), scheme: style.colorScheme };
+    });
+    assert.deepEqual(colors, { canvas: theme.preview.canvas, scheme: theme.colorScheme });
+  }
+  await contentPage.close();
   await page.goto(`chrome-extension://${identity.id}/${manifest.options_ui.page}`);
   await page.locator('label.theme-option:has(input[value="graphite-blue"])').click();
   await assertTheme(page, "graphite-blue");
@@ -203,6 +230,7 @@ try {
     extension: identity,
     checks: [
       "exact local build",
+      "every catalog theme activates before the first page script",
       "settings interaction",
       "desktop and mobile screenshots",
       "synthetic content injection",

@@ -4,7 +4,7 @@ import path from "node:path";
 import postcss from "postcss";
 import { describe, expect, it } from "vitest";
 
-import { THEMES } from "../src/shared/themes";
+import { DEFAULT_THEME_ID, THEMES } from "../src/shared/themes";
 
 describe("generated theme", () => {
   const projectRoot = path.resolve(import.meta.dirname, "..");
@@ -232,44 +232,43 @@ describe("generated theme", () => {
     });
   });
 
-  it("includes every gated selectable palette while retaining Mint as the fallback", () => {
+  it.each(THEMES)("includes $id with matching preview and startup colors", (theme) => {
     const css = fs.readFileSync(path.join(projectRoot, "src/generated/theme.css"), "utf8");
-    const mintFallback = findRule(css, ":root:where([data-sid-enhancement");
-    const palettes = [
-      ["graphite-blue", "#0c1118", "#75a7ff", "#eef2f8"],
-      ["obsidian-red", "#0d0d0f", "#ff6b7a", "#f5f0f2"],
-      ["velvet-mauve", "#11111b", "#cba6f7", "#cdd6f4"],
-      ["midnight-amber", "#11100d", "#f2b84b", "#f3ead7"],
-      ["monochrome-dark", "#101010", "#d6d6d6", "#f2f2f2"],
-      ["light-mint", "#edf4ef", "#267458", "#263c32"],
-      ["light-blue", "#edf1f8", "#315fa3", "#26354b"],
-      ["sand", "#f5efdf", "#7d592b", "#493e2d"],
-      ["light-mauve", "#f6eef5", "#864c86", "#443146"],
-      ["monochrome-light", "#f0f0f0", "#484848", "#292929"],
-    ] as const;
-
-    expect(css).toContain("--sid-accent: #65d6b1");
-    palettes.forEach(([themeId, canvas, accent, text]) => {
-      const palette = findRule(css, `[data-sid-theme="${themeId}"]`);
-      expect(palette?.selector).toContain('data-sid-enhancement="enabled"');
-      expect(palette?.selector).toContain(`data-sid-theme="${themeId}"`);
-      expect(
-        palette?.nodes.some(
-          (node) => node.type === "decl" && node.prop === "--sid-accent" && node.value === accent,
-        ),
-      ).toBe(true);
-      expect(
-        palette?.nodes.some(
-          (node) => node.type === "decl" && node.prop === "--sid-canvas" && node.value === canvas,
-        ),
-      ).toBe(true);
-      expect(
-        palette?.nodes.some(
-          (node) => node.type === "decl" && node.prop === "--sid-text" && node.value === text,
-        ),
-      ).toBe(true);
+    const criticalCss = fs.readFileSync(
+      path.join(projectRoot, "src/generated/critical.css"),
+      "utf8",
+    );
+    const selector =
+      theme.id === DEFAULT_THEME_ID
+        ? ':root:where([data-sid-enhancement="enabled"])'
+        : `[data-sid-theme="${theme.id}"]`;
+    const palette = findRule(css, selector);
+    expect(palette?.selector).toContain('data-sid-enhancement="enabled"');
+    const values = new Map<string, string>();
+    palette?.walkDecls((decl) => {
+      values.set(decl.prop, decl.value);
     });
-    expect(mintFallback).toBeDefined();
+    expect(values.get("--sid-canvas")).toBe(theme.preview.canvas);
+    expect(values.get("--sid-accent")).toBe(theme.preview.accent);
+    expect(values.get("--sid-text")).toBe(theme.preview.text);
+    let critical: postcss.Rule | undefined;
+    postcss.parse(criticalCss).walkRules((rule) => {
+      if (
+        rule.selector === selector ||
+        (theme.id !== DEFAULT_THEME_ID && rule.selector.includes(selector))
+      ) {
+        if (rule.nodes.some((node) => node.type === "decl" && node.prop === "--sid-canvas"))
+          critical = rule;
+      }
+    });
+    expect(critical).toBeDefined();
+    const startup = new Map<string, string>();
+    critical?.walkDecls((decl) => {
+      startup.set(decl.prop, decl.value);
+    });
+    expect(startup.get("--sid-canvas")).toBe(theme.preview.canvas);
+    expect(startup.get("--sid-text-2")).toBe(values.get("--sid-text-2"));
+    expect(startup.get("--sid-color-scheme")).toBe(theme.colorScheme);
   });
 
   it.each(["monochrome-dark", "monochrome-light"])(
@@ -313,7 +312,7 @@ describe("generated theme", () => {
         themeId === "monochrome-dark" ? "#ff9696" : "#b33740",
       );
       const critical = findRule(
-        fs.readFileSync(path.join(projectRoot, "src/theme/critical.css"), "utf8"),
+        fs.readFileSync(path.join(projectRoot, "src/generated/critical.css"), "utf8"),
         `[data-sid-theme="${themeId}"]`,
       );
       expect(critical).toBeDefined();
@@ -353,7 +352,7 @@ describe("generated theme", () => {
         theme.id === "monochrome-light" ? "#484848" : "#f7ca50",
       );
       const critical = findRule(
-        fs.readFileSync(path.join(projectRoot, "src/theme/critical.css"), "utf8"),
+        fs.readFileSync(path.join(projectRoot, "src/generated/critical.css"), "utf8"),
         `[data-sid-theme="${theme.id}"]`,
       );
       critical?.walkDecls((decl) => {

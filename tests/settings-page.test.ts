@@ -3,6 +3,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { mountSettingsPage } from "../src/features/settings-page";
+import { THEMES } from "../src/shared/themes";
 import type { ExtensionSettings, SettingsStore } from "../src/shared/settings";
 
 function createStore(): SettingsStore & { value: ExtensionSettings } {
@@ -63,7 +64,7 @@ describe("shared settings page", () => {
     await Promise.resolve();
 
     const themeInputs = document.querySelectorAll<HTMLInputElement>('input[name="theme"]');
-    expect(themeInputs).toHaveLength(11);
+    expect(themeInputs).toHaveLength(THEMES.length);
     expect(document.querySelector(".theme-option[title]")).toBeNull();
     expect(themeInputs[1]?.checked).toBe(true);
     expect(themeInputs[1]?.getAttribute("aria-label")).toBe("Sinine");
@@ -105,7 +106,7 @@ describe("shared settings page", () => {
     cleanup();
   });
 
-  it.each(["light-mint", "light-blue", "sand", "light-mauve", "monochrome-light"] as const)(
+  it.each(THEMES.filter((theme) => theme.colorScheme === "light").map((theme) => theme.id))(
     "persists %s in the light group and restores its scheme on remount",
     async (themeId) => {
       const store = createStore();
@@ -115,8 +116,12 @@ describe("shared settings page", () => {
       const light = document.querySelector<HTMLInputElement>(`input[value="${themeId}"]`);
       if (light === null) throw new Error("Light theme control missing");
       expect(light.closest("fieldset")?.querySelector("legend")?.textContent).toBe("Heledad");
-      expect(document.querySelectorAll('[data-theme-family="dark"] input')).toHaveLength(6);
-      expect(document.querySelectorAll('[data-theme-family="light"] input')).toHaveLength(5);
+      expect(document.querySelectorAll('[data-theme-family="dark"] input')).toHaveLength(
+        THEMES.filter((theme) => theme.colorScheme === "dark").length,
+      );
+      expect(document.querySelectorAll('[data-theme-family="light"] input')).toHaveLength(
+        THEMES.filter((theme) => theme.colorScheme === "light").length,
+      );
       light.checked = true;
       light.dispatchEvent(new Event("change"));
       await Promise.resolve();
