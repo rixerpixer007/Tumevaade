@@ -50,10 +50,17 @@ fs.writeFileSync('capture.json', JSON.stringify({ args, body: fs.readFileSync(ar
     ]);
     expect(args).toContain("--draft");
     expect(args.some((arg) => /\.sha256$|android\.json$/.test(arg))).toBe(false);
-    expect(body).toContain("## Muudatused\n\n<!-- Lisa siia muudatused punktidena. -->");
+    expect(body).toContain("**Muudatused**\n\n<!-- Lisa siia muudatused punktidena. -->");
     expect(body).toContain(
-      "[⬇️ Laadi APK alla](https://github.com/rixerpixer007/Tumevaade/releases/download/android-v0.1.8/tumevaade-v0.1.8.apk)",
+      'href="https://github.com/rixerpixer007/Tumevaade/releases/download/android-v0.1.8/tumevaade-v0.1.8.apk"',
     );
+    expect(body).toContain(
+      `src="https://raw.githubusercontent.com/rixerpixer007/Tumevaade/${"a".repeat(40)}/assets/readme/download.svg"`,
+    );
+    expect(body).toContain('alt="Laadi Tumevaade Androidile alla" width="258"');
+    expect(body).not.toMatch("Ava allalaaditud");
+    expect(body).not.toMatch("## Muudatused");
+    expect(body).not.toMatch("Uued teemad"); // Future drafts stay blank for the maintainer.
     expect(body).not.toMatch(/SHA-?256|What's new|Installation|\{\{/i);
   } finally {
     fs.rmSync(root, { recursive: true, force: true });

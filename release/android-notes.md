@@ -1,12 +1,5 @@
-## Muudatused
+**Muudatused**
 
 <!-- Lisa siia muudatused punktidena. -->
 
-## [⬇️ Laadi APK alla]({{downloadUrl}})
-
-Ava allalaaditud APK-fail oma Androidi telefonis. Kui Android küsib paigaldusluba,
-luba rakenduste paigaldamine kasutatud brauseri või failihalduri kaudu ja vali
-**Paigalda**.
-
-Uuendamiseks paigalda uus versioon olemasoleva Tumevaate peale. Vana rakendust pole
-vaja eemaldada — nii säilivad sinu seaded ja sisselogimine.
+<a href="{{downloadUrl}}"><img src="{{downloadButtonUrl}}" alt="Laadi Tumevaade Androidile alla" width="258"></a>

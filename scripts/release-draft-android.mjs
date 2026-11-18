@@ -7,9 +7,11 @@ const tag = `android-v${versions.androidVersionName}`;
 const gh = (args) => execFileSync("gh", args, { encoding: "utf8" });
 const apk = `tumevaade-v${versions.androidVersionName}.apk`;
 const downloadUrl = `https://github.com/${process.env.GITHUB_REPOSITORY}/releases/download/${tag}/${apk}`;
+const downloadButtonUrl = `https://raw.githubusercontent.com/${process.env.GITHUB_REPOSITORY}/${process.env.GITHUB_SHA}/assets/readme/download.svg`;
+const values = { downloadUrl, downloadButtonUrl };
 const notes = fs
   .readFileSync("release/android-notes.md", "utf8")
-  .replaceAll("{{downloadUrl}}", downloadUrl);
+  .replace(/\{\{(downloadUrl|downloadButtonUrl)\}\}/g, (_, key) => values[key]);
 fs.writeFileSync(".output/release/android/notes.md", notes);
 gh([
   "release",

@@ -547,7 +547,8 @@ continues describing the last published APK.
 GitHub validates and builds without signing secrets, signs on a separate runner,
 and creates an `Android v<VERSION>` draft with only the APK as an uploaded asset.
 The Estonian template in `release/android-notes.md` leaves the changes section
-blank for the maintainer and includes a direct APK download link. Review the
+blank for the maintainer and uses the README's Android download button linked
+directly to the APK. The button image is pinned to the build commit. Review the
 draft, write the change bullets, and test the APK, then click **Publish release**.
 The publication workflow checks the public APK against GitHub's asset digest,
 verifies its embedded version and certificate, and generates `release/android.json`
