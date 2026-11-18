@@ -57,7 +57,11 @@ jobs:
         with:
           distribution: temurin
           java-version: 25
-      - run: sdkmanager 'platforms;android-37' 'build-tools;37.0.0'
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
+        with:
+          packages: platforms;android-37 build-tools;37.0.0
+          log-accepted-android-sdk-licenses: false
       - run: npm ci
       - run: npm run build:mobile:web
       - run: npm run validate
@@ -88,7 +92,11 @@ jobs:
         with:
           distribution: temurin
           java-version: 25
-      - run: sdkmanager 'build-tools;37.0.0'
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
+        with:
+          packages: build-tools;37.0.0
+          log-accepted-android-sdk-licenses: false
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: unsigned-android
