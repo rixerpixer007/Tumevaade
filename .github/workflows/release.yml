@@ -58,9 +58,10 @@ jobs:
           distribution: temurin
           java-version: 25
       - name: Set up Android SDK
-        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
+        uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4.0.4
         with:
-          packages: platforms;android-37 build-tools;37.0.0
+          cmdline-tools-version: "16111833"
+          packages: platforms;android-37.0 build-tools;37.0.0
           log-accepted-android-sdk-licenses: false
       - run: npm ci
       - run: npm run build:mobile:web
@@ -93,8 +94,9 @@ jobs:
           distribution: temurin
           java-version: 25
       - name: Set up Android SDK
-        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
+        uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4.0.4
         with:
+          cmdline-tools-version: "16111833"
           packages: build-tools;37.0.0
           log-accepted-android-sdk-licenses: false
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
