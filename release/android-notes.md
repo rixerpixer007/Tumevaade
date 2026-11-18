@@ -1,16 +1,12 @@
-## Mis on uut / What's new
+## Muudatused
 
-{{changes}}
+<!-- Lisa siia muudatused punktidena. -->
 
-## Paigaldamine / Installation
+## [⬇️ Laadi APK alla]({{downloadUrl}})
 
-Laadi alla **{{apk}}** ja ava see Androidis. Uuendamiseks paigalda see olemasoleva
-Tumevaate peale. Rakendus on allkirjastatud sama võtmega nagu varasemad väljalasked.
+Ava allalaaditud APK-fail oma Androidi telefonis. Kui Android küsib paigaldusluba,
+luba rakenduste paigaldamine kasutatud brauseri või failihalduri kaudu ja vali
+**Paigalda**.
 
-Download **{{apk}}** and open it on Android. Install it over your existing
-Tumevaade app to update.
-
-**Version:** {{version}} · **Android version code:** {{code}}
-
-The attached `.sha256` file contains the APK checksum. `android.json` is update
-metadata for the app; you only need the APK to install it.
+Uuendamiseks paigalda uus versioon olemasoleva Tumevaate peale. Vana rakendust pole
+vaja eemaldada — nii säilivad sinu seaded ja sisselogimine.

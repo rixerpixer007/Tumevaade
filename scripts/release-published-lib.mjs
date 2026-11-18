@@ -1,32 +1,38 @@
 import { createHash } from "node:crypto";
 import { validateVersion } from "./release-lib.mjs";
 
-export function validatePublishedAndroid({ tag, metadata, versions, apkBytes, checksum, current }) {
+export function createPublishedAndroidMetadata({ tag, versions, apkBytes, assetDigest, current }) {
   const version = tag.replace(/^android-v/, "");
   validateVersion(version);
   if (
     tag !== `android-v${version}` ||
-    metadata.schemaVersion !== 1 ||
-    metadata.published !== true ||
-    metadata.versionName !== version ||
-    metadata.versionName !== versions.androidVersionName ||
-    metadata.versionCode !== versions.androidVersionCode ||
-    metadata.releaseUrl !== `https://github.com/rixerpixer007/Tumevaade/releases/tag/${tag}`
+    version !== versions.androidVersionName ||
+    !Number.isInteger(versions.androidVersionCode) ||
+    versions.androidVersionCode <= 0
   ) {
-    throw new Error("Published release metadata does not match its tag and source version.");
+    throw new Error("Published release tag does not match its source version.");
   }
-  const digest = createHash("sha256").update(apkBytes).digest("hex");
-  if (metadata.sha256 !== digest || checksum.trim() !== `${digest}  tumevaade-v${version}.apk`) {
-    throw new Error("Published APK/checksum does not match update metadata.");
+  const sha256 = createHash("sha256").update(apkBytes).digest("hex");
+  if (assetDigest !== `sha256:${sha256}`) {
+    throw new Error("Downloaded APK does not match GitHub's release asset digest.");
   }
-  if (metadata.versionCode < current.versionCode) return false;
+  const metadata = {
+    schemaVersion: 1,
+    published: true,
+    versionCode: versions.androidVersionCode,
+    versionName: version,
+    releaseUrl: `https://github.com/rixerpixer007/Tumevaade/releases/tag/${tag}`,
+    sha256,
+  };
+  if (metadata.versionCode < current.versionCode) return null;
   if (metadata.versionCode === current.versionCode) {
     if (
       Object.keys(metadata).length !== Object.keys(current).length ||
       Object.entries(metadata).some(([key, value]) => current[key] !== value)
-    )
+    ) {
       throw new Error("Published version conflicts with active metadata.");
-    return false;
+    }
+    return null;
   }
-  return true;
+  return metadata;
 }

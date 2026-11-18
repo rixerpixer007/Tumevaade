@@ -5,7 +5,7 @@ import { createHash } from "node:crypto";
 import { execFileSync, spawnSync } from "node:child_process";
 import { afterEach, expect, test } from "vitest";
 import { formatVersions } from "../scripts/release-lib.mjs";
-import { validatePublishedAndroid } from "../scripts/release-published-lib.mjs";
+import { createPublishedAndroidMetadata } from "../scripts/release-published-lib.mjs";
 
 const roots = [];
 afterEach(() => {
@@ -24,31 +24,30 @@ const candidate = {
 };
 const args = {
   tag: "android-v0.1.7",
-  metadata: candidate,
   versions,
   apkBytes,
-  checksum: `${sha256}  tumevaade-v0.1.7.apk\n`,
+  assetDigest: `sha256:${sha256}`,
   current: { versionCode: 10 },
 };
 
-test("activation accepts exact published files and never downgrades newer metadata", () => {
-  expect(validatePublishedAndroid(args)).toBe(true);
-  expect(validatePublishedAndroid({ ...args, current: candidate })).toBe(false);
-  expect(validatePublishedAndroid({ ...args, current: { versionCode: 12 } })).toBe(false);
+test("activation generates metadata from the APK and never downgrades active releases", () => {
+  expect(createPublishedAndroidMetadata(args)).toEqual(candidate);
+  expect(createPublishedAndroidMetadata({ ...args, current: candidate })).toBeNull();
+  expect(createPublishedAndroidMetadata({ ...args, current: { versionCode: 12 } })).toBeNull();
 });
 
-test("activation rejects mismatched bytes, checksum, tag, source, URL and conflicting active release", () => {
+test("activation rejects mismatched downloads, invalid tag/source, and conflicting active releases", () => {
   const cases = [
     { apkBytes: Buffer.from("modified APK") },
-    { checksum: "wrong" },
+    { assetDigest: "wrong" },
+    { assetDigest: null },
     { tag: "android-v0.1.8" },
-    { versions: { ...versions, androidVersionCode: 12 } },
-    { metadata: { ...candidate, releaseUrl: "https://example.com/download" } },
-    { metadata: { ...candidate, published: false } },
+    { versions: { ...versions, androidVersionCode: 0 } },
+    { versions: { ...versions, androidVersionName: "0.1.8" } },
     { current: { ...candidate, sha256: "b".repeat(64) } },
   ];
   for (const change of cases)
-    expect(() => validatePublishedAndroid({ ...args, ...change })).toThrow();
+    expect(() => createPublishedAndroidMetadata({ ...args, ...change })).toThrow();
 });
 
 function fixture(previous = { ...versions, androidVersionName: "0.1.6", androidVersionCode: 10 }) {

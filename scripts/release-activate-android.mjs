@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { parseVersions, readVersions, validateVersion } from "./release-lib.mjs";
-import { validatePublishedAndroid } from "./release-published-lib.mjs";
+import { createPublishedAndroidMetadata } from "./release-published-lib.mjs";
 import { verifyAndroidApk } from "./android-apk.mjs";
 
 const repo = "rixerpixer007/Tumevaade";
@@ -36,40 +36,36 @@ if (versions.androidVersionCode > source.androidVersionCode)
 const output = path.resolve(".output/release/published");
 fs.mkdirSync(output, { recursive: true });
 const apkName = `tumevaade-v${version}.apk`;
-for (const name of [apkName, `${apkName}.sha256`, "android.json"]) {
-  const assets = release.assets.filter((asset) => asset.name === name);
-  const limit = name === apkName ? 200 * 1024 * 1024 : 8192;
-  if (assets.length !== 1 || assets[0].size <= 0 || assets[0].size > limit)
-    throw new Error(`Missing or invalid release asset: ${name}`);
-  const descriptor = fs.openSync(path.join(output, name), "w");
-  try {
-    gh(
-      [
-        "api",
-        `repos/${repo}/releases/assets/${assets[0].id}`,
-        "-H",
-        "Accept: application/octet-stream",
-      ],
-      { encoding: null, stdio: ["ignore", descriptor, "pipe"] },
-    );
-  } finally {
-    fs.closeSync(descriptor);
-  }
+const assets = release.assets.filter((asset) => asset.name === apkName);
+if (assets.length !== 1 || assets[0].size <= 0 || assets[0].size > 200 * 1024 * 1024) {
+  throw new Error(`Missing or invalid release asset: ${apkName}`);
 }
-const candidate = JSON.parse(fs.readFileSync(path.join(output, "android.json"), "utf8"));
+const descriptor = fs.openSync(path.join(output, apkName), "w");
+try {
+  gh(
+    [
+      "api",
+      `repos/${repo}/releases/assets/${assets[0].id}`,
+      "-H",
+      "Accept: application/octet-stream",
+    ],
+    { encoding: null, stdio: ["ignore", descriptor, "pipe"] },
+  );
+} finally {
+  fs.closeSync(descriptor);
+}
 // Read the latest file/sha from GitHub; API update is atomic and refuses concurrent edits.
 const remote = JSON.parse(gh(["api", `repos/${repo}/contents/release/android.json?ref=main`]));
 const current = JSON.parse(Buffer.from(remote.content, "base64").toString("utf8"));
-const shouldActivate = validatePublishedAndroid({
+const candidate = createPublishedAndroidMetadata({
   tag,
-  metadata: candidate,
   versions,
   apkBytes: fs.readFileSync(path.join(output, apkName)),
-  checksum: fs.readFileSync(path.join(output, `${apkName}.sha256`), "utf8"),
+  assetDigest: assets[0].digest,
   current,
 });
 verifyAndroidApk(path.join(output, apkName), versions);
-if (!shouldActivate) {
+if (!candidate) {
   console.log("Release is already active or has been superseded; no metadata change.");
   process.exit(0);
 }

@@ -48,23 +48,15 @@ beforeEach(() => {
   git("commit", "--quiet", "-m", "Release source");
   git("tag", "android-v0.1.7");
   const bytes = Buffer.from("public APK bytes");
-  const digest = createHash("sha256").update(bytes).digest("hex");
-  const metadata = {
-    schemaVersion: 1,
-    published: true,
-    versionCode: 11,
-    versionName: "0.1.7",
-    releaseUrl: "https://github.com/rixerpixer007/Tumevaade/releases/tag/android-v0.1.7",
-    sha256: digest,
-  };
-  const assets = [
-    ["tumevaade-v0.1.7.apk", bytes],
-    ["tumevaade-v0.1.7.apk.sha256", `${digest}  tumevaade-v0.1.7.apk\n`],
-    ["android.json", JSON.stringify(metadata)],
-  ];
+  const assets = [["tumevaade-v0.1.7.apk", bytes]];
   const assetData = assets.map(([name, bytes], i) => {
     fs.writeFileSync(path.join(root, `asset-${i + 1}`), bytes);
-    return { id: i + 1, name, size: Buffer.byteLength(bytes) };
+    return {
+      id: i + 1,
+      name,
+      size: Buffer.byteLength(bytes),
+      digest: `sha256:${createHash("sha256").update(bytes).digest("hex")}`,
+    };
   });
   fs.writeFileSync(
     path.join(root, "release-response.json"),
@@ -127,7 +119,7 @@ function run(certificate = fingerprint) {
   });
 }
 
-test("publication verifies the downloaded release and updates only the expected metadata file on main", () => {
+test("publication needs only the APK asset and updates the expected metadata file on main", () => {
   const result = run();
   expect(result.status, result.stderr).toBe(0);
   const request = JSON.parse(fs.readFileSync(path.join(root, "api-update.json")));

@@ -416,8 +416,8 @@ https://raw.githubusercontent.com/rixerpixer007/Tumevaade/main/release/android.j
 ```
 
 This does not require GitHub Pages or a separately hosted website. Set
-`"published": true` only when the matching signed APK, checksum, and release
-notes are available on GitHub. While preparing the next release, leave this
+`"published": true` only when the matching signed APK and release notes are
+available on GitHub. While preparing the next release, leave this
 file describing the previous available release.
 
 The updater reads this explicit metadata so the maintainer can choose which
@@ -441,12 +441,12 @@ Release in this order so users are never directed to an incomplete download:
 1. Run `npm run release:bump -- <next-version> android` (or omit `android` to
    bump both platforms). See [automated releases](#15-automated-android-releases).
 2. Build, sign, and validate the release APK with the permanent release key.
-3. Create the GitHub Release and upload the signed APK, checksum, and notes.
+3. Create the GitHub Release, upload the signed APK, and write the release notes.
 4. Download the uploaded APK and confirm its application ID, version, signing
    certificate, and SHA-256 digest.
-5. The publication workflow verifies the public signed APK and activates its
-   candidate as `release/android.json`. For manual releases/recovery, deploy
-   that exact candidate metadata last.
+5. The publication workflow verifies the public signed APK and generates
+   `release/android.json` from that APK and the tagged source version. For manual
+   releases/recovery, generate and deploy metadata from that exact APK last.
 
 The update checker accepts only HTTPS release URLs under this repository's
 `/rixerpixer007/Tumevaade/releases` path, validates the manifest schema and checksum shape, and compares
@@ -545,17 +545,22 @@ build. `release/version.properties` is the source, while `release/android.json`
 continues describing the last published APK.
 
 GitHub validates and builds without signing secrets, signs on a separate runner,
-and creates a draft with the APK, checksum, candidate metadata, and notes from
-`release/android-notes.md` plus generated changes. Review the draft and test the
-APK, then click **Publish release**. The publication workflow verifies the public
-APK's hash, version and certificate before updating only `release/android.json`
+and creates an `Android v<VERSION>` draft with only the APK as an uploaded asset.
+The Estonian template in `release/android-notes.md` leaves the changes section
+blank for the maintainer and includes a direct APK download link. Review the
+draft, write the change bullets, and test the APK, then click **Publish release**.
+The publication workflow checks the public APK against GitHub's asset digest,
+verifies its embedded version and certificate, and generates `release/android.json`
 on `main`. Check that this activation succeeds. Prereleases do not activate
 stable update metadata; older releases cannot downgrade it.
 
 **Run workflow** on `main` retries preparation. Existing release tags are not
 overwritten. Activation can be retried with its manual numeric release-ID input.
-For manual recovery, verify the public APK and commit its exact attached
-`android.json` as `release/android.json`.
+For manual recovery, download and verify the published APK, then run
+`npm run release:android:metadata -- <downloaded.apk>` from its matching source
+revision. Commit the resulting manifest as `release/android.json` only after
+checking that it does not replace a newer active update. Internal Actions
+artifacts may contain verification files; only the APK is attached to the release.
 
 ### Signing configuration
 
