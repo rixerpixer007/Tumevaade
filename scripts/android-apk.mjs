@@ -44,16 +44,25 @@ export function verifyAndroidApk(
   });
   // Optional continuity check against the fingerprint recorded from the permanent key.
   if (expectedCertificate) {
-    const certificates = [
-      ...signing.matchAll(/^Signer #\d+ certificate SHA-256 digest: ([a-f0-9]+)$/gim),
-    ];
+    // Newer SDKs label v3 signers by their supported SDK range instead of #1.
+    // The same certificate can be repeated for multiple APK signature schemes.
+    const certificates = new Set(
+      [
+        ...signing.matchAll(
+          /^Signer (?:#\d+|\(minSdkVersion=[^\r\n]+\)) certificate SHA-256 digest: ([a-f0-9]{64})\s*$/gim,
+        ),
+      ].map((match) => match[1].toLowerCase()),
+    );
     const normalized = expectedCertificate.replace(/:/g, "").toLowerCase();
     if (
       !/^[a-f0-9]{64}$/.test(normalized) ||
-      certificates.length !== 1 ||
-      certificates[0][1].toLowerCase() !== normalized
+      certificates.size !== 1 ||
+      !certificates.has(normalized)
     ) {
-      throw new Error("APK signing certificate differs from ANDROID_SIGNING_CERT_SHA256.");
+      const actual = [...certificates].join(", ") || "unrecognized signer output";
+      throw new Error(
+        `APK signing certificate differs from ANDROID_SIGNING_CERT_SHA256. Expected ${normalized}; found ${actual}.`,
+      );
     }
   }
 }

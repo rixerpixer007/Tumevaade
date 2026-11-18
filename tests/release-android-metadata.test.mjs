@@ -166,3 +166,24 @@ test("signing wrapper removes its temporary key directory even when signing fail
   expect(fs.readdirSync(path.join(root, "runner-temp"))).toEqual([]);
   expect(fs.existsSync(path.join(root, ".output/release/android"))).toBe(false);
 });
+
+test("accepts current SDK signer-range labels and repeated identical certificates", () => {
+  setTool(
+    "apksigner",
+    `printf '%s\\n' \
+    'Signer (minSdkVersion=28, maxSdkVersion=32) certificate SHA-256 digest: ${fingerprint}' \
+    'Signer (minSdkVersion=33, maxSdkVersion=2147483647) certificate SHA-256 digest: ${fingerprint}'`,
+  );
+  expect(run().status).toBe(0);
+});
+
+test("rejects a different certificate within any signer range", () => {
+  setTool(
+    "apksigner",
+    `printf '%s\\n' \
+    'Signer (minSdkVersion=28, maxSdkVersion=32) certificate SHA-256 digest: ${fingerprint}' \
+    'Signer (minSdkVersion=33, maxSdkVersion=2147483647) certificate SHA-256 digest: ${"b".repeat(64)}'`,
+  );
+  expect(run().status).not.toBe(0);
+  expect(fs.existsSync(path.join(root, ".output"))).toBe(false);
+});
