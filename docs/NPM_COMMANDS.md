@@ -214,11 +214,21 @@ extension.
 
 ### Update the project version
 
-`npm version <version> --no-git-tag-version` updates the version in both
-`package.json` and `package-lock.json` without creating a Git commit or tag.
-Use only an approved release version and inspect both changed files before
-building. This is an npm utility command used by this project's extension
-release workflow, not a named script from `package.json`.
+`npm run release:bump -- <version> [all|extension|android]` updates the central
+`release/version.properties` and npm version mirrors. The default target is
+`all`; selecting Android also increments its version code. This creates no
+commit/tag and leaves public update metadata unchanged.
+
+`npm run version:check` detects invalid versions or stale npm mirrors without
+writing files. `npm run version:sync` repairs npm mirrors after a manual edit to
+the central file. Extension and mobile builds check versions automatically.
+
+`npm run release:android:metadata -- <signed.apk>` verifies the APK package,
+version and signature using Android SDK tools and prepares the APK, checksum,
+and candidate updater manifest in `.output/release/android/`. It does not
+change `release/android.json`. See
+[Android releases](MOBILE_DEVELOPMENT.md#15-automated-android-releases) for the
+automated workflow and signing configuration.
 
 ## Android web-asset commands
 

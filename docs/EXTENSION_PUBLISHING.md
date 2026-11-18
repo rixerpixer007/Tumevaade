@@ -173,8 +173,9 @@ code, policy, and disclosures together before submission.
 
 ## 4. Choose and update the version
 
-The source of the extension version is the top-level `version` in
-`package.json`. WXT writes it into the generated manifest and artifact name.
+The source of the extension version is `release/version.properties`. The bump
+command mirrors it into `package.json` and `package-lock.json`; WXT uses the
+package version for the generated manifest and artifact name.
 
 Use three numeric parts for this project:
 
@@ -191,16 +192,15 @@ current [manifest version
 format](https://developer.chrome.com/docs/extensions/reference/manifest/version)
 before changing conventions.
 
-Update the version with npm so `package.json` and `package-lock.json` stay in
-sync:
+Update the version through the shared release command:
 
 ```sh
-npm version 0.1.1 --no-git-tag-version
+npm run release:bump -- 0.1.8 extension
 ```
 
-Replace `0.1.1` with the approved release version. See
-[Project npm commands](NPM_COMMANDS.md#update-the-project-version)
-for the exact behavior, then inspect both files before building.
+Replace `0.1.8` with the next release version. Omit `extension` to bump both
+platforms. See [version commands](NPM_COMMANDS.md#update-the-project-version)
+for central version ownership. Review the changed files before building.
 
 ## 5. Create a reproducible production package
 

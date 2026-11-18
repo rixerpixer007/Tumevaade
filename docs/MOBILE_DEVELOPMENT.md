@@ -417,7 +417,8 @@ https://raw.githubusercontent.com/rixerpixer007/Tumevaade/main/release/android.j
 
 This does not require GitHub Pages or a separately hosted website. Set
 `"published": true` only when the matching signed APK, checksum, and release
-notes are available on GitHub. Keep it `false` while preparing a release.
+notes are available on GitHub. While preparing the next release, leave this
+file describing the previous available release.
 
 The updater reads this explicit metadata so the maintainer can choose which
 stable or beta Android release to offer independently of the newest tag.
@@ -437,13 +438,15 @@ For a real release, publish metadata in this shape:
 
 Release in this order so users are never directed to an incomplete download:
 
-1. Increment `versionCode` and update the human-facing `versionName`.
+1. Run `npm run release:bump -- <next-version> android` (or omit `android` to
+   bump both platforms). See [automated releases](#15-automated-android-releases).
 2. Build, sign, and validate the release APK with the permanent release key.
 3. Create the GitHub Release and upload the signed APK, checksum, and notes.
 4. Download the uploaded APK and confirm its application ID, version, signing
    certificate, and SHA-256 digest.
-5. Change `published` to `true`, copy the exact values and release URL into the
-   metadata file, and deploy that small metadata change last.
+5. The publication workflow verifies the public signed APK and activates its
+   candidate as `release/android.json`. For manual releases/recovery, deploy
+   that exact candidate metadata last.
 
 The update checker accepts only HTTPS release URLs under this repository's
 `/rixerpixer007/Tumevaade/releases` path, validates the manifest schema and checksum shape, and compares
@@ -532,3 +535,55 @@ debugging authorizations, reconnect the cable, and approve the new fingerprint.
 Update **Android System WebView** and **Google Chrome** in Google Play, reboot the
 phone if Android requests it, and reopen the app. The app deliberately
 does not use the unsafe legacy bridge as a fallback.
+
+## 15. Automated Android releases
+
+Run `npm run release:bump -- <next-version> android` (omit `android` to bump both
+platforms), then commit and push to `main`. The workflow checks Android's version
+name/code across the whole push; comments and extension-only changes skip the
+build. `release/version.properties` is the source, while `release/android.json`
+continues describing the last published APK.
+
+GitHub validates and builds without signing secrets, signs on a separate runner,
+and creates a draft with the APK, checksum, candidate metadata, and notes from
+`release/android-notes.md` plus generated changes. Review the draft and test the
+APK, then click **Publish release**. The publication workflow verifies the public
+APK's hash, version and certificate before updating only `release/android.json`
+on `main`. Check that this activation succeeds. Prereleases do not activate
+stable update metadata; older releases cannot downgrade it.
+
+**Run workflow** on `main` retries preparation. Existing release tags are not
+overwritten. Activation can be retried with its manual numeric release-ID input.
+For manual recovery, verify the public APK and commit its exact attached
+`android.json` as `release/android.json`.
+
+### Signing configuration
+
+The GitHub environment **android-release** must use selected deployment branches
+with exactly one rule: branch `main`, and no tag rules. This restricts access to
+the environment secrets. Add these secrets inside that environment:
+
+| Secret                      | Value                                                       |
+| --------------------------- | ----------------------------------------------------------- |
+| `ANDROID_KEYSTORE_BASE64`   | Base64 encoding of the existing permanent release keystore. |
+| `ANDROID_KEYSTORE_PASSWORD` | Keystore password.                                          |
+| `ANDROID_KEY_ALIAS`         | Existing signing alias.                                     |
+| `ANDROID_KEY_PASSWORD`      | Key password; omit if identical to the keystore password.   |
+
+Add **repository variable** `ANDROID_SIGNING_CERT_SHA256` under Settings →
+Secrets and variables → Actions → Variables. Use the public certificate SHA-256
+fingerprint from `apksigner verify --print-certs <known-release.apk>`, not the APK
+file checksum. Both signing and publication check it.
+
+GitHub encrypts secrets; base64 itself is only an encoding. The signing step
+uses a private temporary key directory and removes it on exit. No dependency
+installation or Gradle runs in that job, and uploaded artifacts exclude the key.
+Keep an offline backup and never put private signing material in Git or chat.
+Anyone able to modify authorized workflow/signing code on `main` can potentially
+extract its secrets, so limit write access and review those changes.
+
+Workflows must be pushed before they can run. They use the built-in
+`GITHUB_TOKEN`; no personal token is needed. Repository rules must permit the
+publication workflow's metadata commit; rejection leaves the previous metadata
+active. Local tests do not establish hosted signing, publication or device
+verification. See [GitHub environment controls](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/control-deployments).

@@ -1,0 +1,49 @@
+name: Activate published Android update
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_id:
+        description: Numeric published release ID to retry activation
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: activate-android-update
+  cancel-in-progress: false
+
+jobs:
+  activate:
+    if: >-
+      github.repository == 'rixerpixer007/Tumevaade' &&
+      ((github.event_name == 'release' && startsWith(github.event.release.tag_name, 'android-v') && !github.event.release.prerelease) ||
+       (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # Run trusted main tooling. Tagged release files are inspected only as data.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6
+        with:
+          distribution: temurin
+          java-version: 25
+      - run: sdkmanager 'build-tools;37.0.0'
+      - name: Verify public APK and activate updater metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_ID: ${{ inputs.release_id }}
+          ANDROID_SIGNING_CERT_SHA256: ${{ vars.ANDROID_SIGNING_CERT_SHA256 }}
+        run: node scripts/release-activate-android.mjs

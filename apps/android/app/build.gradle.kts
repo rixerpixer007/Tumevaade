@@ -1,11 +1,28 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
+}
+
+// Read the shared source directly; Android Studio builds need no Node sync step.
+val releaseVersions = Properties().apply {
+    rootProject.file("../../release/version.properties").inputStream().use { load(it) }
+}
+val sourceVersionCode = releaseVersions.getProperty("androidVersionCode").toInt()
+require(sourceVersionCode in 1..2100000000) { "Invalid androidVersionCode" }
+val sourceVersionName = releaseVersions.getProperty("androidVersionName")
+require(Regex("(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)").matches(sourceVersionName)) {
+    "Invalid androidVersionName"
 }
 
 val releaseBuildRequested =
     gradle.startParameter.taskNames.any { taskName ->
         taskName.substringAfterLast(':').contains("Release", ignoreCase = true)
     }
+
+// CI builds unsigned on a runner with no access to the permanent signing key.
+val releaseSigningRequested = releaseBuildRequested &&
+    !providers.gradleProperty("tumevaadeUnsignedRelease").orElse("false").get().toBooleanStrict()
 
 val releaseKeystorePath = providers.environmentVariable("SINU_STUUDIUM_KEYSTORE_PATH").orNull
 val releaseKeystorePassword =
@@ -16,7 +33,7 @@ val releaseKeyPassword =
     providers.environmentVariable("SINU_STUUDIUM_KEY_PASSWORD").orNull
         ?: releaseKeystorePassword
 
-if (releaseBuildRequested) {
+if (releaseSigningRequested) {
     val missingVariables =
         buildList {
             if (releaseKeystorePath.isNullOrBlank()) add("SINU_STUUDIUM_KEYSTORE_PATH")
@@ -44,12 +61,12 @@ android {
         applicationId = "io.github.rixerpixer007.stuudium"
         minSdk = 26
         targetSdk = 37
-        versionCode = 10
-        versionName = "0.1.6"
+        versionCode = sourceVersionCode
+        versionName = sourceVersionName
     }
 
     signingConfigs {
-        if (releaseBuildRequested) {
+        if (releaseSigningRequested) {
             create("release") {
                 storeFile = file(requireNotNull(releaseKeystorePath))
                 storePassword = requireNotNull(releaseKeystorePassword)
@@ -65,7 +82,7 @@ android {
         }
 
         release {
-            if (releaseBuildRequested) {
+            if (releaseSigningRequested) {
                 signingConfig = signingConfigs.getByName("release")
             }
             isMinifyEnabled = false
