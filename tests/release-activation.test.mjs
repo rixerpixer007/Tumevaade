@@ -1,12 +1,16 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { createHash } from "node:crypto";
+import { createHash, X509Certificate } from "node:crypto";
 import { execFileSync, spawnSync } from "node:child_process";
 import { afterEach, beforeEach, expect, test } from "vitest";
 
 let root;
-const fingerprint = "a".repeat(64);
+const certificate = fs.readFileSync(
+  new URL("./fixtures/android-signing-cert.pem", import.meta.url),
+  "utf8",
+);
+const fingerprint = new X509Certificate(certificate).fingerprint256.replace(/:/g, "").toLowerCase();
 beforeEach(() => {
   root = fs.mkdtempSync(path.join(os.tmpdir(), "tumevaade-activate-"));
   for (const dir of ["scripts", "release", "bin", "sdk/build-tools/37.0.0"])
@@ -102,7 +106,7 @@ if (args.includes('PUT')) {
   );
   fs.writeFileSync(
     path.join(root, "sdk/build-tools/37.0.0/apksigner"),
-    `#!/bin/sh\nprintf '%s\\n' 'Signer #1 certificate SHA-256 digest: ${fingerprint}'\n`,
+    `#!/bin/sh\nprintf '%s\\n' '${certificate}'\n`,
     { mode: 0o700 },
   );
 });

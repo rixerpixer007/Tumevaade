@@ -2,6 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
+import { X509Certificate } from "node:crypto";
 
 export function verifyAndroidApk(
   apk,
@@ -38,20 +39,21 @@ export function verifyAndroidApk(
   ) {
     throw new Error("APK application ID/version does not match the Android release source.");
   }
-  const signing = execFileSync(path.join(tools, "apksigner"), ["verify", "--print-certs", apk], {
-    encoding: "utf8",
-    env,
-  });
+  const signing = execFileSync(
+    path.join(tools, "apksigner"),
+    ["verify", "--print-certs-pem", apk],
+    {
+      encoding: "utf8",
+      env,
+    },
+  );
   // Optional continuity check against the fingerprint recorded from the permanent key.
   if (expectedCertificate) {
-    // Newer SDKs label v3 signers by their supported SDK range instead of #1.
-    // The same certificate can be repeated for multiple APK signature schemes.
+    // Read the certificates themselves; human-readable signer labels vary by SDK.
     const certificates = new Set(
-      [
-        ...signing.matchAll(
-          /^Signer (?:#\d+|\(minSdkVersion=[^\r\n]+\)) certificate SHA-256 digest: ([a-f0-9]{64})\s*$/gim,
-        ),
-      ].map((match) => match[1].toLowerCase()),
+      [...signing.matchAll(/-----BEGIN CERTIFICATE-----[\s\S]*?-----END CERTIFICATE-----/g)].map(
+        ([pem]) => new X509Certificate(pem).fingerprint256.replace(/:/g, "").toLowerCase(),
+      ),
     );
     const normalized = expectedCertificate.replace(/:/g, "").toLowerCase();
     if (
@@ -59,7 +61,7 @@ export function verifyAndroidApk(
       certificates.size !== 1 ||
       !certificates.has(normalized)
     ) {
-      const actual = [...certificates].join(", ") || "unrecognized signer output";
+      const actual = [...certificates].join(", ") || "no PEM signing certificate";
       throw new Error(
         `APK signing certificate differs from ANDROID_SIGNING_CERT_SHA256. Expected ${normalized}; found ${actual}.`,
       );

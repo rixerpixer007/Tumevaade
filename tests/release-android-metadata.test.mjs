@@ -1,14 +1,18 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { createHash } from "node:crypto";
+import { createHash, X509Certificate } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { afterEach, beforeEach, expect, test } from "vitest";
 
 let root;
 let tools;
 let apk;
-const fingerprint = "a".repeat(64);
+const certificate = fs.readFileSync(
+  new URL("./fixtures/android-signing-cert.pem", import.meta.url),
+  "utf8",
+);
+const fingerprint = new X509Certificate(certificate).fingerprint256.replace(/:/g, "").toLowerCase();
 const published = JSON.stringify({ versionCode: 10, versionName: "0.1.6", published: true });
 // Stub only the external SDK commands. Exercise the real CLI's validation and file writes.
 beforeEach(() => {
@@ -34,7 +38,7 @@ beforeEach(() => {
     "aapt",
     "printf '%s\\n' \"package: name='io.github.rixerpixer007.stuudium' versionCode='11' versionName='0.1.7'\"",
   );
-  setTool("apksigner", `printf '%s\\n' 'Signer #1 certificate SHA-256 digest: ${fingerprint}'`);
+  setTool("apksigner", `printf '%s\\n' '${certificate}'`);
 });
 afterEach(() => {
   fs.rmSync(root, { recursive: true, force: true });
@@ -147,7 +151,7 @@ test("signing wrapper prepares APK and removes its temporary key directory on su
     done
     cp "$input" "$output"
   else
-    printf '%s\\n' 'Signer #1 certificate SHA-256 digest: ${fingerprint}'
+    printf '%s\\n' '${certificate}'
   fi`,
   );
   const result = runSigning();
@@ -167,23 +171,16 @@ test("signing wrapper removes its temporary key directory even when signing fail
   expect(fs.existsSync(path.join(root, ".output/release/android"))).toBe(false);
 });
 
-test("accepts current SDK signer-range labels and repeated identical certificates", () => {
+test("accepts PEM certificates independently of signer labels and deduplicates repeated certificates", () => {
   setTool(
     "apksigner",
-    `printf '%s\\n' \
-    'Signer (minSdkVersion=28, maxSdkVersion=32) certificate SHA-256 digest: ${fingerprint}' \
-    'Signer (minSdkVersion=33, maxSdkVersion=2147483647) certificate SHA-256 digest: ${fingerprint}'`,
+    `printf '%s\\n' 'SDK-specific signer labels' '${certificate}' '${certificate}'`,
   );
   expect(run().status).toBe(0);
 });
 
-test("rejects a different certificate within any signer range", () => {
-  setTool(
-    "apksigner",
-    `printf '%s\\n' \
-    'Signer (minSdkVersion=28, maxSdkVersion=32) certificate SHA-256 digest: ${fingerprint}' \
-    'Signer (minSdkVersion=33, maxSdkVersion=2147483647) certificate SHA-256 digest: ${"b".repeat(64)}'`,
-  );
+test("rejects output without an actual certificate even if it contains the expected fingerprint", () => {
+  setTool("apksigner", `printf '%s\\n' 'Signer #1 certificate SHA-256 digest: ${fingerprint}'`);
   expect(run().status).not.toBe(0);
   expect(fs.existsSync(path.join(root, ".output"))).toBe(false);
 });
