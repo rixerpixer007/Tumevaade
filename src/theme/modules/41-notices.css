@@ -30,6 +30,15 @@
   line-height: inherit !important;
 }
 
+/* Site-wide reminders, including the request to confirm profile details. */
+.header-message-v2 > div {
+  color: var(--sid-text-2) !important;
+  background: var(--sid-accent-soft) !important;
+  border-color: var(--sid-accent-border) !important;
+  border-radius: var(--sid-radius-sm) !important;
+  box-shadow: none !important;
+}
+
 :where(.section-infomessage, .st-message, .message-help, .inline-help-message, .help-message, .new_message.info) {
   box-sizing: border-box;
   padding: 6px 8px !important;
